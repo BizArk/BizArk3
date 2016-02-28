@@ -11,7 +11,7 @@ namespace BizArk.Core.Tests
     ///This is a test class for XmlExtTest and is intended
     ///to contain all XmlExtTest Unit Tests
     ///</summary>
-[TestFixture]
+	[TestFixture]
     public class XmlExtTests
     {
         private TestContext testContextInstance;

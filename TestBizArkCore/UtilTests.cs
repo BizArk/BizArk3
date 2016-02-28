@@ -26,7 +26,7 @@ namespace BizArk.Core.Tests
 			Assert.IsFalse(range2.Includes("g"));
 		}
 
-		[Test, Ignore]
+		[Test, Ignore("Not sure.")]
 		public void RemoteTimeTest()
 		{
 			var remote = new RemoteDateTime(DateTime.Now);

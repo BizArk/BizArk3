@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using BizArk.Core.Template;
 using NUnit.Framework;
+using BizArk.Core.Util;
 
 namespace BizArk.Core.Tests
 {
