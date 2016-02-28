@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BizArk.ConsoleApp.CmdLineOptions">
+    <Position X="6.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAADAAAAAAAAAAQAAAAACAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>CmdLineOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BizArk.ConsoleApp.BaCon">
+    <Position X="2" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAACAAAAAIQAAAAAAAAAAAAAAAgEAEAAAAAAA=</HashCode>
+      <FileName>BaCon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BizArk.ConsoleApp.BaConStartOptions">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAgAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BaConStartOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BizArk.ConsoleApp.CmdLineArgException">
+    <Position X="9.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CmdLineException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

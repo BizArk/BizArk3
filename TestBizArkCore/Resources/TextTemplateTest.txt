@@ -1,0 +1,8 @@
+Dear ${name},
+
+Thank you for purchasing a ${product}. We received your order on ${orderdate:g} and billed your credit card ${total} on ${billdate}. 
+
+The order ${shipped:has|hasn't} been shipped.
+
+Sincerely,
+${repname}

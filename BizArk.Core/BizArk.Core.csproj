@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8D3E6472-7E47-4266-947B-659F17F641F1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BizArk.Core</RootNamespace>
+    <AssemblyName>BizArk.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuSpecFile>BizArkCore.nuspec</NuSpecFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\BizArk.Core.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\BizArk.Core.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>BizArk.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application.cs" />
+    <Compile Include="Collections\HashList.cs" />
+    <Compile Include="Convert\ConvertEx.cs" />
+    <Compile Include="Convert\ConvertStrategyMgr.cs" />
+    <Compile Include="Convert\Strategies\ByteArrayImageConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\ByteArrayStringConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\ConvertibleConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\ConvertMethodConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\CtorConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\DefaultValueConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\EnumConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\IConvertStrategy.cs" />
+    <Compile Include="Convert\Strategies\NoConvertConvesionStrategy.cs" />
+    <Compile Include="Convert\Strategies\SqlDbTypeConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\StaticMethodConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\StringToBoolConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\TypeConverterConversionStrategy.cs" />
+    <Compile Include="DataAnnotations\SetAttribute.cs" />
+    <Compile Include="Email\Message.cs" />
+    <Compile Include="Email\MAPI32.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\ArrayExt.cs" />
+    <Compile Include="Extensions\AttributeExt.cs" />
+    <Compile Include="Util\Bitmask.cs" />
+    <Compile Include="Util\Cache.cs" />
+    <Compile Include="Util\ClassFactory.cs" />
+    <Compile Include="Util\EqualityComparer.cs" />
+    <Compile Include="Util\FontUtil.cs" />
+    <Compile Include="Extensions\FormatExt.cs" />
+    <Compile Include="Extensions\DataExt.cs" />
+    <Compile Include="Extensions\DateExt.cs" />
+    <Compile Include="Extensions\MathExt.cs" />
+    <Compile Include="Util\MemSize.cs" />
+    <Compile Include="Util\MimeMap.cs" />
+    <Compile Include="Util\NameValue.cs" />
+    <Compile Include="Util\Range.cs" />
+    <Compile Include="Util\RemoteDateTime.cs" />
+    <Compile Include="Util\StreamExt.cs" />
+    <Compile Include="Util\StringWriterEx.cs" />
+    <Compile Include="Util\TempFile.cs" />
+    <Compile Include="Extensions\WebExt.cs" />
+    <Compile Include="Util\WebUtil.cs" />
+    <Compile Include="Extensions\XmlExt.cs" />
+    <Compile Include="Extensions\DrawingExt.cs">
+    </Compile>
+    <Compile Include="Extensions\ExceptionExt.cs" />
+    <Compile Include="Util\FileUtil.cs" />
+    <Compile Include="Extensions\ImageExt.cs" />
+    <Compile Include="Extensions\ObjectExt.cs" />
+    <Compile Include="Extensions\StringExt.cs" />
+    <Compile Include="Extensions\TypeExt.cs" />
+    <Compile Include="Web\ContentType.cs" />
+    <Compile Include="Web\MimePart.cs" />
+    <Compile Include="Web\Support.cs" />
+    <Compile Include="Web\UploadFile.cs" />
+    <Compile Include="Web\UrlBuilder.cs" />
+    <Compile Include="Web\WebHelper.cs" />
+    <Compile Include="Web\WebHelperEventArgs.cs" />
+    <Compile Include="Web\WebHelperOptions.cs" />
+    <Compile Include="Web\WebHelperResponse.cs" />
+    <Compile Include="Web\WebParameters.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BizArk.snk" />
+    <None Include="BizArkCore.nuspec" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\Mime.Types" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
