@@ -1,15 +1,15 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BizArk.ConsoleApp.Parser;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using NUnit.Framework;
 
 namespace BizArk.ConsoleApp.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class CmdLineParserTest
 	{
-		[TestMethod]
+		[Test]
 		public void BasicInstanceWithDefaultOptionsTest()
 		{
 			// Make sure the defaults aren't changed. The defaults are used
@@ -22,7 +22,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual(null, parser.Options.ArraySeparator);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseStandardCmdLineTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -65,7 +65,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual(false, obj.HasHair);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseCmdLineAssignmentOpTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -98,7 +98,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual(PersonType.Father, obj.PersonType);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseCmdLineWithArrayTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -146,7 +146,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("Betty", obj.Children[2]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseCmdLineValidationTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -164,7 +164,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("Job name too long.", results.Errors[1]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseCmdLineParseErrorTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -181,7 +181,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("Name is required.", results.Errors[2]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseCmdLineWithAliasTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -207,7 +207,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("Betty", obj.Children[2]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseCmdLineWithDefaultTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -253,7 +253,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("Betty", obj.Children[2]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetCmdLinePropertiesTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -280,7 +280,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual(23, obj.Age);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParseQueryStringTest()
 		{
 			var options = new CmdLineOptions();
@@ -376,7 +376,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("\"Aardvarks lurk, OK?\"", args[1]);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TransformAssignedArgsTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();

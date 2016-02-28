@@ -1,17 +1,17 @@
 ﻿using BizArk.ConsoleApp.CmdLineHelpGenerator;
 using BizArk.ConsoleApp.Parser;
 using BizArk.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.ComponentModel.DataAnnotations;
 using cm = System.ComponentModel;
 
 namespace BizArk.ConsoleApp.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class CmdLineHelpTest
 	{
 
-		[TestMethod]
+		[Test]
 		public void GenerateUsageTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -23,7 +23,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("test.exe <Name|String> [/Type <Father|Mother|Child>]", usage);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GeneratePropHelpTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();

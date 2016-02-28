@@ -1,8 +1,8 @@
 ﻿using BizArk.Core.Extensions.FormatExt;
 using BizArk.Core.Extensions.StringExt;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
+using NUnit.Framework;
 
 namespace BizArk.ConsoleApp.Tests
 {
