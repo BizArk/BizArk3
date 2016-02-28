@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp.Sample", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp.Tests", "BizArk.ConsoleApp.Tests\BizArk.ConsoleApp.Tests.csproj", "{E4CFBB86-ABAA-46FC-BB3C-A0D9B5895D1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Core.Tests", "TestBizArkCore\BizArk.Core.Tests.csproj", "{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Core.Tests", "BizArk.Core.Tests\BizArk.Core.Tests.csproj", "{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
