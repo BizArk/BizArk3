@@ -106,7 +106,7 @@ namespace BizArk.Core.Extensions.ArrayExt
 
             Array retArr = Array.CreateInstance(elementType, arr.Length);
             for (int i = 0; i < arr.Length; i++)
-                retArr.SetValue(ConvertEx.ChangeType(arr.GetValue(i), elementType), i);
+                retArr.SetValue(ConvertEx.To(arr.GetValue(i), elementType), i);
             return retArr;
         }
 

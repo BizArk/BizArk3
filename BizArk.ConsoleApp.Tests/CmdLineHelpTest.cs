@@ -52,6 +52,7 @@ namespace BizArk.ConsoleApp.Tests
 
 			public TestCmdLineObj()
 			{
+				PersonType = PersonType.Father;
 				Children = new string[] { "One", "Two", "Three" };
 			}
 

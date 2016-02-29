@@ -59,7 +59,7 @@ namespace BizArk.Core.Extensions.XmlExt
         {
             var val = GetString(node, name, null);
             if (val == null) return dfltVal;
-            return ConvertEx.ToInteger(val);
+            return ConvertEx.ToInt(val);
         }
 
         /// <summary>

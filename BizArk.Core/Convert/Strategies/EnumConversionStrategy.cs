@@ -3,68 +3,109 @@ using BizArk.Core.Extensions.TypeExt;
 
 namespace BizArk.Core.Convert.Strategies
 {
-    /// <summary>
-    /// Converts to enumeration values.
-    /// </summary>
-    public class EnumConversionStrategy
-        : IConvertStrategy
-    {
+	/// <summary>
+	/// Converts to enumeration values.
+	/// </summary>
+	public class EnumConversionStrategy
+		: IConvertStrategy
+	{
 
-        /// <summary>
-        /// Changes the type of the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="value"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public object Convert(Type from, Type to, object value, IFormatProvider provider)
-        {
-            var cfrom = from.GetTrueType();
-            var cto = to.GetTrueType();
-            var val = GetTrueValue(value);
+		/// <summary>
+		/// Changes the type of the value.
+		/// </summary>
+		/// <param name="value">The object to convert.</param>
+		/// <param name="to">The type to convert the value to.</param>
+		/// <param name="convertedValue">Return the value if converted.</param>
+		/// <returns>True if able to convert the value.</returns>
+		public bool TryConvert(object value, Type to, out object convertedValue)
+		{
+			convertedValue = null;
+			if (value == null) return false;
 
-            if (cto.IsEnum)
-            {
-                string s = val as string;
-                if (s != null) return Enum.Parse(cto, s);
-                return Enum.ToObject(cto, val);
-            }
-            else if (cfrom.IsEnum)
-                return System.Convert.ChangeType(val, cto);
-            else
-                throw new InvalidCastException(string.Format("Cannot convert from {0} to {1}.", from.Name, to.Name));
+			if (to.IsEnum)
+			{
 
-        }
+				var str = value as string;
+				if (str != null)
+				{
+					str = str.Trim();
+					var name = GetName(to, str);
+					if (name == null)
+					{
+						// Check to see if we can convert the string to a numeric value. Use a long 
+						// since that has the best chance of catching any of the valid enum types.
+						// We do this because string parsing is very common and we want to ensure we
+						// can convert to the enumerated value.
+						long longVal;
+						if (long.TryParse(str, out longVal))
+							value = longVal; // Set the value so it can be checked below.
+						else
+							return false;
+					}
+					else
+					{
+						convertedValue = Enum.Parse(to, name);
+						return true;
+					}
+				}
 
-        /// <summary>
-        /// Determines whether this converter can convert the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool CanConvert(Type from, Type to)
-        {
-            var cfrom = from.GetTrueType();
-            var cto = to.GetTrueType();
+				var enumType = Enum.GetUnderlyingType(to);
+				convertedValue = ConvertEx.To(value, enumType);
+				if (Enum.IsDefined(to, convertedValue))
+				{
+					convertedValue = Enum.ToObject(to, convertedValue);
+					return true;
+				}
+			}
 
-            if (cfrom.IsEnum && (cto.IsNumericType() || cto == typeof(string))) return true;
-            if (cto.IsEnum && (cfrom.IsNumericType() || cfrom == typeof(string))) return true;
+			var from = value.GetType();
+			if (from.IsEnum)
+			{
 
-            return false;
-        }
+				if (to == typeof(string))
+				{
+					convertedValue = Enum.GetName(from, value);
+					return true;
+				}
 
-        private static object GetTrueValue(object val)
-        {
-            // I'm not sure if this method is necessary. It seems that nullable values
-            // are sent in with the actual value or null, not as Nullable<?>.
+				try
+				{
+					convertedValue = (value as IConvertible).ToType(to, null);
+					return true;
+				}
+				catch (InvalidCastException) { } // Ignore exceptions, keep searching for a successful strategy.
 
-            if (val == null) return null;
-            if (!val.GetType().IsDerivedFromGenericType(typeof(Nullable<>))) return val;
+				//if (to == typeof(int))
+				//{
+				//	convertedValue = (int)value;
+				//	return true;
+				//}
+				//if (to == typeof(byte))
+				//{
 
-            var prop = val.GetType().GetProperty("Value");
-            return prop.GetValue(val, null);
-        }
+				//	convertedValue = (byte)value;
+				//	return true;
+				//}
+				//if (to == typeof(long))
+				//{
+				//	convertedValue = (long)value;
+				//	return true;
+				//}
+			}
 
-    }
+
+			return false;
+		}
+
+		private string GetName(Type to, string value)
+		{
+			foreach (var name in Enum.GetNames(to))
+			{
+				if (name.Equals(value, StringComparison.InvariantCultureIgnoreCase))
+					return name;
+			}
+			return null;
+		}
+
+	}
 }

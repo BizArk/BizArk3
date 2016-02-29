@@ -116,7 +116,7 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 				sb.AppendFormat("\n\t{0}", prop.Description);
 
 			object dflt = prop.DefaultValue;
-			if (!ConvertEx.IsEmpty(dflt))
+			if (!ConvertEx.IsEmpty(dflt) || prop.PropertyType.IsEnum)
 			{
 				var arr = dflt as Array;
 				if (arr != null)

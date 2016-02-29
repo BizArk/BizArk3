@@ -159,7 +159,7 @@ namespace BizArk.Core.Extensions.StringExt
                 var retVals = new T[vals.Length];
                 for (i = 0; i < vals.Length; i++)
                 {
-                    retVals[i] = ConvertEx.ChangeType<T>(vals[i].Trim());
+                    retVals[i] = ConvertEx.To<T>(vals[i].Trim());
                 }
                 return retVals;
             }

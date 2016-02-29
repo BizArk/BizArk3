@@ -5,311 +5,367 @@ using System.Threading;
 using BizArk.Core.Convert.Strategies;
 using BizArk.Core.Tests.Properties;
 using NUnit.Framework;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace BizArk.Core.Tests
 {
-    [TestFixture]
-    public class ConversionStrategyTests
-    {
-        [Test]
-        public void ByteArrayImageConversionStrategyTest()
-        {
-            var strategy = new ByteArrayImageConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (string), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (byte[]), typeof (Image)));
-            Assert.IsTrue(strategy.CanConvert(typeof (Image), typeof (byte[])));
-
-            var bytes =
-                strategy.Convert(typeof (Image), typeof (byte[]), Resources.TestImg, Thread.CurrentThread.CurrentCulture)
-                    as byte[];
-            Assert.IsNotNull(bytes);
-            Assert.IsTrue(bytes.Length > 0);
-
-            var img =
-                strategy.Convert(typeof (byte[]), typeof (Image), bytes, Thread.CurrentThread.CurrentCulture) as Image;
-            Assert.IsNotNull(img);
-            Assert.AreEqual(Resources.TestImg.Width, img.Width);
-            Assert.AreEqual(Resources.TestImg.Height, img.Height);
-        }
-
-        [Test]
-        public void ByteArrayStringConversionStrategyTest()
-        {
-            var strategy = new ByteArrayStringConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (int), typeof (int)));
-            Assert.IsTrue(strategy.CanConvert(typeof (byte[]), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (string), typeof (byte[])));
-
-            var bytes =
-                strategy.Convert(typeof (string), typeof (byte[]), "hello", Thread.CurrentThread.CurrentCulture) as
-                    byte[];
-            Assert.IsNotNull(bytes);
-            Assert.AreEqual(5, bytes.Length);
-
-            var str = strategy.Convert(typeof (byte[]), typeof (string), bytes, Thread.CurrentThread.CurrentCulture);
-            Assert.AreEqual("hello", str);
-        }
-
-        [Test]
-        public void ConvertibleConversionStrategyTest()
-        {
-            var strategy = new ConvertibleConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (int), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (string), typeof (int)));
-            Assert.IsTrue(strategy.CanConvert(typeof (int?), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (string), typeof (int?)));
-
-            var intVal = (int) strategy.Convert(typeof (string), typeof (int), "5", Thread.CurrentThread.CurrentCulture);
-            Assert.AreEqual(5, intVal);
-
-            var strVal =
-                strategy.Convert(typeof (int), typeof (string), 5, Thread.CurrentThread.CurrentCulture) as string;
-            Assert.AreEqual("5", strVal);
-
-            int? nullIntVal = null;
-            nullIntVal =
-                (int?) strategy.Convert(typeof (string), typeof (int?), "5", Thread.CurrentThread.CurrentCulture);
-            Assert.AreEqual(5, nullIntVal);
-
-            strVal =
-                strategy.Convert(typeof (int), typeof (string), nullIntVal, Thread.CurrentThread.CurrentCulture) as
-                    string;
-            Assert.AreEqual("5", strVal);
-        }
-
-        [Test]
-        public void ConvertMethodConversionStrategyTest()
-        {
-            var strategy = new ConvertMethodConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (ConvertTest), typeof (int)));
-            Assert.IsFalse(strategy.CanConvert(typeof (int), typeof (ConvertTest)));
-
-            var val = strategy.Convert(typeof (ConvertTest), typeof (int), new ConvertTest(42), null);
-            Assert.AreEqual(42, val);
-        }
-
-        [Test]
-        public void CtorConversionStrategyTest()
-        {
-            var strategy = new CtorConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsFalse(strategy.CanConvert(typeof (ConvertTest), typeof (int)));
-            Assert.IsTrue(strategy.CanConvert(typeof (int), typeof (ConvertTest)));
-
-            var val = strategy.Convert(typeof (int), typeof (ConvertTest), 42, null) as ConvertTest;
-            Assert.IsNotNull(val);
-            Assert.AreEqual(42, val.Value);
-        }
-
-        [Test]
-        public void DefaultValueConversionStrategyTest()
-        {
-            var strategy = new DefaultValueConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (ConvertTest), null));
-            Assert.IsTrue(strategy.CanConvert(null, typeof (ConvertTest)));
-            Assert.IsTrue(strategy.CanConvert(null, typeof (int)));
-
-            var val = strategy.Convert(typeof (ConvertTest), null, new ConvertTest(1), null);
-            Assert.IsNull(val);
-
-            val = strategy.Convert(null, null, new ConvertTest(1), null);
-            Assert.IsNull(val);
-
-            val = strategy.Convert(null, typeof (int), new ConvertTest(1), null);
-            Assert.AreEqual(int.MinValue, val);
-
-            val = strategy.Convert(null, typeof (int?), new ConvertTest(1), null);
-            Assert.IsNull(val);
-        }
-
-        [Test]
-        public void EnumConversionStrategyTest()
-        {
-            var strategy = new EnumConversionStrategy();
+	[TestFixture]
+	public class ConversionStrategyTests
+	{
 
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (ConvertEnumTest), typeof (int)));
-            Assert.IsTrue(strategy.CanConvert(typeof (int), typeof (ConvertEnumTest)));
-            Assert.IsTrue(strategy.CanConvert(typeof (ConvertEnumTest), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (string), typeof (ConvertEnumTest)));
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (ConvertEnumTest)));
-
-            var val = strategy.Convert(typeof (ConvertEnumTest), typeof (int), ConvertEnumTest.Two, null);
-            Assert.AreEqual(2, val);
-
-            val = strategy.Convert(typeof (ConvertEnumTest), typeof (string), ConvertEnumTest.Two, null);
-            Assert.AreEqual("Two", val);
+		[Test]
+		public void DefaultValueConversionTest()
+		{
+			var strategy = new NullValueConversionStrategy();
+			object newValue;
 
-            val = strategy.Convert(typeof (int), typeof (ConvertEnumTest), 2, null);
-            Assert.AreEqual(ConvertEnumTest.Two, val);
+			Assert.IsTrue(strategy.TryConvert(null, typeof(object), out newValue));
+			Assert.IsNull(newValue);
 
-            val = strategy.Convert(typeof (string), typeof (ConvertEnumTest), "Two", null);
-            Assert.AreEqual(ConvertEnumTest.Two, val);
-        }
-
-        [Test]
-        public void NoConvertConversionStrategyTest()
-        {
-            var strategy = new NoConvertConversionStrategy();
+			Assert.IsTrue(strategy.TryConvert(null, typeof(int), out newValue));
+			Assert.AreEqual(0, newValue);
 
-            Assert.IsFalse(strategy.CanConvert(typeof (ConvertTest), typeof (NoConvertTest)));
-            Assert.IsTrue(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (NoConvertTest), typeof (ConvertTest)));
-
-            // No further tests necessary, the Convert method always returns the value sent in.
-        }
-
-        [Test]
-        public void SqlDBTypeConversionStrategyTest()
-        {
-            var strategy = new SqlDBTypeConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (SqlDbType), typeof (Type)));
-            Assert.IsTrue(strategy.CanConvert(typeof (Type), typeof (SqlDbType)));
-
-            var val = strategy.Convert(typeof (SqlDbType), typeof (Type), SqlDbType.Int, null);
-            Assert.AreEqual(typeof (int), val);
-
-            val = strategy.Convert(typeof (Type), typeof (SqlDbType), typeof (int), null);
-            Assert.AreEqual(SqlDbType.Int, val);
-        }
-
-        [Test]
-        public void StaticMethodConversionStrategyTest()
-        {
-            var strategy = new StaticMethodConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (ConvertTest), typeof (int)));
-            Assert.IsTrue(strategy.CanConvert(typeof (int), typeof (ConvertTest)));
-            Assert.IsFalse(strategy.CanConvert(typeof (ConvertTest), typeof (string)));
-            Assert.IsFalse(strategy.CanConvert(typeof (string), typeof (ConvertTest)));
-
-            var val = strategy.Convert(typeof (ConvertTest), typeof (int), new ConvertTest(42), null);
-            Assert.AreEqual(42, val);
-
-            var cval = strategy.Convert(typeof (int), typeof (ConvertTest), 42, null) as ConvertTest;
-            Assert.IsNotNull(cval);
-            Assert.AreEqual(42, cval.Value);
-
-            val = strategy.Convert(typeof (ConvertTest2), typeof (int), new ConvertTest2(42), null);
-            Assert.AreEqual(42, val);
-
-            var cval2 = strategy.Convert(typeof (int), typeof (ConvertTest2), 42, null) as ConvertTest2;
-            Assert.IsNotNull(cval2);
-            Assert.AreEqual(42, cval2.Value);
-        }
-
-        [Test]
-        public void StringToBoolConversionStrategyTest()
-        {
-            var strategy = new StringToBoolConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsFalse(strategy.CanConvert(typeof (bool), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (string), typeof (bool)));
-
-            var val = strategy.Convert(typeof (string), typeof (bool), "true", null);
-            Assert.AreEqual(true, val);
-
-            val = strategy.Convert(typeof (string), typeof (bool), "false", null);
-            Assert.AreEqual(false, val);
-
-            val = strategy.Convert(typeof (string), typeof (bool), "TrUe", null);
-            Assert.AreEqual(true, val);
-
-            val = strategy.Convert(typeof (string), typeof (bool), "yes", null);
-            Assert.AreEqual(true, val);
-
-            val = strategy.Convert(typeof (string), typeof (bool), "ok", null);
-            Assert.AreEqual(true, val);
-        }
-
-        [Test]
-        public void TypeConverterConversionStrategyTest()
-        {
-            var strategy = new TypeConverterConversionStrategy();
-
-            Assert.IsFalse(strategy.CanConvert(typeof (object), typeof (object)));
-            Assert.IsTrue(strategy.CanConvert(typeof (bool), typeof (string)));
-            Assert.IsTrue(strategy.CanConvert(typeof (string), typeof (bool)));
-
-            var val = strategy.Convert(typeof (string), typeof (bool), "true", null);
-            Assert.AreEqual(true, val);
-
-            val = strategy.Convert(typeof (string), typeof (bool), "false", null);
-            Assert.AreEqual(false, val);
-        }
-
-        private class ConvertTest
-        {
-            public ConvertTest(int val)
-            {
-                Value = val;
-            }
-
-            public int Value { get; set; }
-
-            public int ToInt()
-            {
-                return Value;
-            }
-
-            public static implicit operator int(ConvertTest test)
-            {
-                return test.Value;
-            }
-
-            public static explicit operator ConvertTest(int val)
-            {
-                return new ConvertTest(val);
-            }
-        }
-
-        private class NoConvertTest
-            : ConvertTest
-        {
-            public NoConvertTest()
-                : base(0)
-            {
-            }
-        }
-
-        private class ConvertTest2
-        {
-            public ConvertTest2(int val)
-            {
-                Value = val;
-            }
-
-            public int Value { get; set; }
-
-            public static int ToInt(ConvertTest2 val)
-            {
-                return val.Value;
-            }
-
-            public static ConvertTest2 ToConvert(int val)
-            {
-                return new ConvertTest2(val);
-            }
-        }
-
-        private enum ConvertEnumTest
-        {
-            One = 1,
-            Two = 2,
-            Three = 3
-        }
-    }
+			Assert.IsTrue(strategy.TryConvert(null, typeof(char), out newValue));
+			Assert.AreEqual('\0', newValue);
+
+			Assert.IsTrue(strategy.TryConvert(null, typeof(bool), out newValue));
+			Assert.AreEqual(false, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(null, typeof(ConvertEnumTest), out newValue));
+			Assert.AreEqual((ConvertEnumTest)0, newValue);
+
+		}
+
+		[Test]
+		public void AssignableFromConversionStrategyTest()
+		{
+			var strategy = new AssignableFromConversionStrategy();
+			object newValue;
+			object value;
+
+			value = new object();
+			Assert.IsTrue(strategy.TryConvert(value, typeof(object), out newValue));
+			Assert.AreSame(value, newValue);
+
+			value = new NoConvertTest();
+			Assert.IsTrue(strategy.TryConvert(value, typeof(ConvertTest), out newValue));
+			Assert.AreSame(value, newValue);
+
+			Assert.IsFalse(strategy.TryConvert(new ConvertTest(0), typeof(NoConvertTest), out newValue));
+			Assert.IsFalse(strategy.TryConvert(0m, typeof(NoConvertTest), out newValue));
+			Assert.IsFalse(strategy.TryConvert(0m, typeof(int), out newValue));
+			Assert.IsFalse(strategy.TryConvert(0, typeof(decimal), out newValue));
+
+			// Make sure it works with enums.
+			value = ConvertEnumTest.Two;
+			Assert.IsTrue(strategy.TryConvert(value, typeof(ConvertEnumTest), out newValue));
+			Assert.AreSame(value, newValue);
+
+		}
+
+		[Test]
+		public void ConvertibleConversionStrategyTest()
+		{
+			var strategy = new ConvertibleConversionStrategy();
+			object newValue;
+
+			Assert.IsFalse(strategy.TryConvert(new object(), typeof(object), out newValue));
+
+			Assert.IsTrue(strategy.TryConvert(1, typeof(string), out newValue));
+			Assert.AreEqual("1", newValue);
+
+			Assert.IsTrue(strategy.TryConvert("2", typeof(int), out newValue));
+			Assert.AreEqual(2, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(new int?(3), typeof(string), out newValue));
+			Assert.AreEqual("3", newValue);
+
+			Assert.IsTrue(strategy.TryConvert("4", typeof(int?), out newValue));
+			Assert.AreEqual(4, newValue);
+
+			Assert.IsFalse(strategy.TryConvert("Hello", typeof(int), out newValue));
+
+		}
+
+		[Test]
+		public void StringToBoolConversionStrategyTest()
+		{
+			var strategy = new StringToBoolConversionStrategy();
+			object newValue;
+
+			Assert.IsFalse(strategy.TryConvert(new object(), typeof(object), out newValue));
+			Assert.IsFalse(strategy.TryConvert(true, typeof(string), out newValue));
+			Assert.IsFalse(strategy.TryConvert(null, typeof(bool), out newValue));
+			Assert.IsFalse(strategy.TryConvert(5, typeof(bool), out newValue));
+
+			Assert.IsTrue(strategy.TryConvert("true", typeof(bool), out newValue));
+			Assert.AreEqual(true, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(" true ", typeof(bool), out newValue));
+			Assert.AreEqual(true, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("false", typeof(bool), out newValue));
+			Assert.AreEqual(false, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("TrUe", typeof(bool), out newValue));
+			Assert.AreEqual(true, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("yes", typeof(bool), out newValue));
+			Assert.AreEqual(true, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("ok", typeof(bool), out newValue));
+			Assert.AreEqual(true, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("hello", typeof(bool), out newValue));
+			Assert.AreEqual(false, newValue);
+		}
+
+		[Test]
+		public void EnumConversionStrategyTest()
+		{
+			var strategy = new EnumConversionStrategy();
+			object newValue;
+
+
+			Assert.IsFalse(strategy.TryConvert(new object(), typeof(object), out newValue));
+
+
+			// String to Enum
+
+			Assert.IsFalse(strategy.TryConvert("XXX", typeof(ConvertEnumTest), out newValue));
+
+			Assert.IsTrue(strategy.TryConvert("One", typeof(ConvertEnumTest), out newValue));
+			Assert.AreEqual(ConvertEnumTest.One, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("Two", typeof(ConvertEnumTest), out newValue));
+			Assert.AreEqual(ConvertEnumTest.Two, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(" THREE ", typeof(ConvertEnumTest), out newValue));
+			Assert.AreEqual(ConvertEnumTest.Three, newValue);
+
+
+			// Int to Enum
+
+			Assert.IsFalse(strategy.TryConvert(5, typeof(ConvertEnumTest), out newValue));
+
+			Assert.IsTrue(strategy.TryConvert(1, typeof(ConvertEnumTest), out newValue));
+			Assert.AreEqual(ConvertEnumTest.One, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(2, typeof(ConvertEnumTest), out newValue));
+			Assert.AreEqual(ConvertEnumTest.Two, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(2, typeof(ConvertEnumTest2), out newValue));
+			Assert.AreEqual(ConvertEnumTest2.Two, newValue);
+
+
+			// Enum to Xxx
+
+			Assert.IsFalse(strategy.TryConvert(ConvertEnumTest.One, typeof(DateTime), out newValue));
+
+			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(decimal), out newValue));
+			Assert.AreEqual(1m, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(string), out newValue));
+			Assert.AreEqual("One", newValue);
+
+			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(int), out newValue));
+			Assert.AreEqual(1, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(byte), out newValue));
+			Assert.AreEqual(1, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(long), out newValue));
+			Assert.AreEqual(1, newValue);
+
+		}
+
+		[Test]
+		public void TypeConverterConversionStrategyTest()
+		{
+			var strategy = new TypeConverterConversionStrategy();
+			object newValue;
+
+			Assert.IsTrue(strategy.TryConvert("true", typeof(bool), out newValue));
+			Assert.AreEqual(true, newValue);
+
+			Assert.IsTrue(strategy.TryConvert("false", typeof(bool), out newValue));
+			Assert.AreEqual(false, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(99, typeof(ConvertTest), out newValue));
+			var ctest = newValue as ConvertTest;
+			Assert.IsNotNull(ctest);
+			Assert.AreEqual(99, ctest.Value);
+		}
+
+		[Test]
+		public void StaticMethodConversionStrategyTest()
+		{
+			var strategy = new StaticMethodConversionStrategy();
+			object newValue;
+
+			Assert.IsFalse(strategy.TryConvert(new ConvertTest(42), typeof(DateTime), out newValue));
+
+			// Tests cast operator
+			Assert.IsTrue(strategy.TryConvert(new ConvertTest(42), typeof(int), out newValue));
+			Assert.AreEqual(42, newValue);
+
+			// Tests cast operator
+			Assert.IsTrue(strategy.TryConvert(42, typeof(ConvertTest), out newValue));
+			var cval = newValue as ConvertTest;
+			Assert.IsNotNull(cval);
+			Assert.AreEqual(42, cval.Value);
+
+			Assert.IsTrue(strategy.TryConvert(new ConvertTest2(42), typeof(int), out newValue));
+			Assert.AreEqual(42, newValue);
+
+			Assert.IsTrue(strategy.TryConvert(42, typeof(ConvertTest2), out newValue));
+			var cval2 = newValue as ConvertTest2;
+			Assert.IsNotNull(cval2);
+			Assert.AreEqual(42, cval2.Value);
+		}
+
+		[Test]
+		public void CtorConversionStrategyTest()
+		{
+			var strategy = new CtorConversionStrategy();
+			object newValue;
+
+			Assert.IsFalse(strategy.TryConvert("ASDF", typeof(ConvertTest), out newValue));
+
+			Assert.IsTrue(strategy.TryConvert(42, typeof(ConvertTest), out newValue));
+			var cval = newValue as ConvertTest;
+			Assert.IsNotNull(cval);
+			Assert.AreEqual(42, cval.Value);
+		}
+
+		[Test]
+		public void ConvertMethodConversionStrategyTest()
+		{
+			var strategy = new ConvertMethodConversionStrategy();
+			object newValue;
+
+			Assert.IsTrue(strategy.TryConvert(new ConvertTest(42), typeof(int), out newValue));
+			Assert.AreEqual(42, newValue);
+		}
+
+		[Test]
+		public void ByteArrayStringConversionStrategyTest()
+		{
+			var strategy = new ByteArrayStringConversionStrategy();
+			object newValue;
+
+			Assert.IsTrue(strategy.TryConvert("hello", typeof(byte[]), out newValue));
+			var bytes = newValue as byte[];
+			Assert.IsNotNull(bytes);
+			Assert.AreEqual(5, bytes.Length);
+
+			Assert.IsTrue(strategy.TryConvert(bytes, typeof(string), out newValue));
+			Assert.AreEqual("hello", newValue);
+		}
+
+		[Test]
+		public void ByteArrayImageConversionStrategyTest()
+		{
+			var strategy = new ByteArrayImageConversionStrategy();
+			object newValue;
+
+			Assert.IsTrue(strategy.TryConvert(Resources.TestImg, typeof(byte[]), out newValue));
+			var bytes = newValue as byte[];
+			Assert.IsNotNull(bytes);
+			Assert.IsTrue(bytes.Length > 0);
+
+			Assert.IsTrue(strategy.TryConvert(bytes, typeof(Image), out newValue));
+			var img = newValue as Image;
+			Assert.IsNotNull(img);
+			Assert.AreEqual(Resources.TestImg.Width, img.Width);
+			Assert.AreEqual(Resources.TestImg.Height, img.Height);
+		}
+
+		[TypeConverter(typeof(ConvertTestTypeConverter))]
+		private class ConvertTest
+		{
+			public ConvertTest(int val)
+			{
+				Value = val;
+			}
+
+			public int Value { get; set; }
+
+			public int ToInt()
+			{
+				return Value;
+			}
+
+			public static implicit operator int(ConvertTest test)
+			{
+				return test.Value;
+			}
+
+			public static explicit operator ConvertTest(int val)
+			{
+				return new ConvertTest(val);
+			}
+		}
+
+		private class NoConvertTest
+			: ConvertTest
+		{
+			public NoConvertTest()
+				: base(0)
+			{
+			}
+		}
+
+		private class ConvertTest2
+		{
+			public ConvertTest2(int val)
+			{
+				Value = val;
+			}
+
+			public int Value { get; set; }
+
+			public static int ToInt(ConvertTest2 val)
+			{
+				return val.Value;
+			}
+
+			public static ConvertTest2 ToConvert(int val)
+			{
+				return new ConvertTest2(val);
+			}
+		}
+
+		private class ConvertTestTypeConverter : TypeConverter
+		{
+			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+			{
+				return sourceType == typeof(int);
+			}
+
+			public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+			{
+				if (value == null || value.GetType() != typeof(int))
+					return base.ConvertFrom(context, culture, value);
+
+				var ival = (int)value;
+				return new ConvertTest(ival);
+			}
+		}
+
+		private enum ConvertEnumTest
+		{
+			One = 1,
+			Two = 2,
+			Three = 3
+		}
+
+		private enum ConvertEnumTest2 : byte
+		{
+			One = 1,
+			Two = 2,
+			Three = 3
+		}
+	}
 }

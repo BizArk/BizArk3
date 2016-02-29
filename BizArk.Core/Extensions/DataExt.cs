@@ -157,7 +157,7 @@ namespace BizArk.Core.Extensions.DataExt
         /// <returns></returns>
         public static T GetValue<T>(this DataRow row, string fieldName)
         {
-            return ConvertEx.ChangeType<T>(row[fieldName]);
+            return ConvertEx.To<T>(row[fieldName]);
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace BizArk.Core.Extensions.DataExt
         public static T GetValue<T>(this DataRow row, string fieldName, T dfltVal)
         {
             if (row.IsNull(fieldName)) return dfltVal;
-            return ConvertEx.ChangeType<T>(row[fieldName]);
+            return ConvertEx.To<T>(row[fieldName]);
         }
 
         /// <summary>
@@ -321,7 +321,7 @@ namespace BizArk.Core.Extensions.DataExt
         /// <returns></returns>
         public static T GetValue<T>(this DataRowView row, string fieldName)
         {
-            return ConvertEx.ChangeType<T>(row[fieldName]);
+            return ConvertEx.To<T>(row[fieldName]);
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace BizArk.Core.Extensions.DataExt
         public static T GetValue<T>(this DataRowView row, string fieldName, T dfltVal)
         {
             if (row.IsNull(fieldName)) return dfltVal;
-            return ConvertEx.ChangeType<T>(row[fieldName]);
+            return ConvertEx.To<T>(row[fieldName]);
         }
 
         /// <summary>
@@ -545,7 +545,7 @@ namespace BizArk.Core.Extensions.DataExt
         /// <returns></returns>
         public static T GetValue<T>(this IDataReader row, string fieldName)
         {
-            return ConvertEx.ChangeType<T>(row[fieldName]);
+            return ConvertEx.To<T>(row[fieldName]);
         }
 
         /// <summary>
@@ -560,7 +560,7 @@ namespace BizArk.Core.Extensions.DataExt
         {
             var i = row.GetOrdinal(fieldName);
             if (row.IsDBNull(i)) return dfltVal;
-            return ConvertEx.ChangeType<T>(row[i]);
+            return ConvertEx.To<T>(row[i]);
         }
 
         /// <summary>
@@ -573,7 +573,7 @@ namespace BizArk.Core.Extensions.DataExt
         public static object GetValue(this IDataReader row, string fieldName, Type type)
         {
             var i = row.GetOrdinal(fieldName);
-            return ConvertEx.ChangeType(row[i], type);
+            return ConvertEx.To(row[i], type);
         }
 
         /// <summary>

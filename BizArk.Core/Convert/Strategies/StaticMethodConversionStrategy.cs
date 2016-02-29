@@ -11,30 +11,31 @@ namespace BizArk.Core.Convert.Strategies
          : IConvertStrategy
     {
 
-        /// <summary>
-        /// Changes the type of the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="value"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public object Convert(Type from, Type to, object value, IFormatProvider provider)
-        {
-            var mi = GetStaticConvertMethod(from, to);
-            return mi.Invoke(null, new object[] { value });
-        }
+		/// <summary>
+		/// Changes the type of the value.
+		/// </summary>
+		/// <param name="value">The object to convert.</param>
+		/// <param name="to">The type to convert the value to.</param>
+		/// <param name="convertedValue">Return the value if converted.</param>
+		/// <returns>True if able to convert the value.</returns>
+		public bool TryConvert(object value, Type to, out object convertedValue)
+		{
+			convertedValue = null;
+			if (value == null) return false;
 
-        /// <summary>
-        /// Determines whether this converter can convert the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool CanConvert(Type from, Type to)
-        {
-            return (GetStaticConvertMethod(from, to) != null);
-        }
+			var from = value.GetType();
+			var mi = GetStaticConvertMethod(from, to);
+			if (mi == null) return false;
+
+			try
+			{
+				convertedValue = mi.Invoke(null, new object[] { value });
+				return true;
+			}
+			catch (Exception) { } // Ignore exceptions
+
+			return false;
+		}
 
         private static MethodInfo GetStaticConvertMethod(Type from, Type to)
         {

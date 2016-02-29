@@ -83,7 +83,7 @@ namespace BizArk.Core.Web
         /// <returns></returns>
         public Image ResultToImage()
         {
-            return ConvertEx.ChangeType<Image>(Result);
+            return ConvertEx.To<Image>(Result);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace BizArk.Core.Web
         public T ConvertResult<T>() where T : struct
         {
             var result = ResultToString();
-            return ConvertEx.ChangeType<T>(result);
+            return ConvertEx.To<T>(result);
         }
 
         private const int cBytesToRead = 1024;

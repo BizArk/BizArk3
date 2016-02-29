@@ -10,55 +10,46 @@ namespace BizArk.Core.Convert.Strategies
         : IConvertStrategy
     {
 
-        static StringToBoolConversionStrategy()
-        {
-            TrueValues = new List<string>() { "true", "t", "yes", "ok" };
-        }
+		/// <summary>
+		/// Changes the type of the value.
+		/// </summary>
+		/// <param name="value">The object to convert.</param>
+		/// <param name="to">The type to convert the value to.</param>
+		/// <param name="convertedValue">Return the value if converted.</param>
+		/// <returns>True if able to convert the value.</returns>
+		public bool TryConvert(object value, Type to, out object convertedValue)
+		{
+			convertedValue = false;
+			if (to != typeof(bool)) return false;
 
-        /// <summary>
-        /// Gets the list of values that will equate to True. Everything else is false.
-        /// </summary>
-        public static List<string> TrueValues { get; private set; }
+			var str = value as string;
+			if (str == null) return false;
+			str = str.Trim();
 
-        /// <summary>
-        /// Changes the type of the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="value"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public object Convert(Type from, Type to, object value, IFormatProvider provider)
-        {
-            string strVal = value as string;
-            if (strVal == null) return false;
-            
-            int i;
-            if (int.TryParse(strVal, out i))
-                return i != 0; // only false if i == 0.
+			int i;
+			if (int.TryParse(str, out i))
+			{
+				convertedValue = i != 0; // only false if i == 0.
+				return true;
+			}
 
-            foreach (var trueVal in TrueValues)
-            {
-                if (trueVal.Equals(strVal, StringComparison.InvariantCultureIgnoreCase))
-                    return true;
-            }
+			foreach (var trueVal in TrueValues)
+			{
+				if (trueVal.Equals(str, StringComparison.InvariantCultureIgnoreCase))
+				{
+					convertedValue = true;
+					return true;
+				}
+			}
 
-            // Everything else is false.
-            return false;
-        }
+			convertedValue = false;
+			return true;
+		}
 
-        /// <summary>
-        /// Determines whether this converter can convert the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool CanConvert(Type from, Type to)
-        {
-            if (from != typeof(string)) return false;
-            if(to != typeof(bool)) return false;
-            return true;
-        }
+		/// <summary>
+		/// Gets the list of values that will equate to True. Everything else is false.
+		/// </summary>
+		public string[] TrueValues { get; set; } = new string[] { "true", "t", "yes", "ok", "aye", "yep", "yea" };
 
     }
 }

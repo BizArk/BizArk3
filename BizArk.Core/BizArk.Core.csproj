@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="Collections\HashList.cs" />
+    <Compile Include="Convert\BaConverter.cs" />
     <Compile Include="Convert\ConvertEx.cs" />
     <Compile Include="Convert\ConvertStrategyMgr.cs" />
     <Compile Include="Convert\Strategies\ByteArrayImageConversionStrategy.cs" />
@@ -94,11 +95,10 @@
     <Compile Include="Convert\Strategies\ConvertibleConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\ConvertMethodConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\CtorConversionStrategy.cs" />
-    <Compile Include="Convert\Strategies\DefaultValueConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\EnumConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\NullValueConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\IConvertStrategy.cs" />
-    <Compile Include="Convert\Strategies\NoConvertConvesionStrategy.cs" />
-    <Compile Include="Convert\Strategies\SqlDbTypeConversionStrategy.cs" />
+    <Compile Include="Convert\Strategies\AssignableFromConvesionStrategy.cs" />
     <Compile Include="Convert\Strategies\StaticMethodConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\StringToBoolConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\TypeConverterConversionStrategy.cs" />

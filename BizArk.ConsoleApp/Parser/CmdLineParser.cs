@@ -282,7 +282,7 @@ namespace BizArk.ConsoleApp.Parser
 
 			// Standard type conversion.
 			else if (val != null)
-				value = ConvertEx.ChangeType(val, prop.PropertyType);
+				value = ConvertEx.To(val, prop.PropertyType);
 
 			// Flag with no additional values is true.
 			else if (prop.PropertyType == typeof(bool))

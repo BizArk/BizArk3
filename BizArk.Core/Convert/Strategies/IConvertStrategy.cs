@@ -11,20 +11,11 @@ namespace BizArk.Core.Convert.Strategies
         /// <summary>
         /// Changes the type of the value.
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="value"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        object Convert(Type from, Type to, object value, IFormatProvider provider);
-
-        /// <summary>
-        /// Determines whether this converter can convert the value.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        bool CanConvert(Type from, Type to);
+        /// <param name="value">The object to convert.</param>
+        /// <param name="to">The type to convert the value to.</param>
+		/// <param name="convertedValue">Return the value if converted.</param>
+        /// <returns>True if able to convert the value.</returns>
+        bool TryConvert(object value, Type to, out object convertedValue);
 
     }
 }

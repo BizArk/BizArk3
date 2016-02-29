@@ -250,7 +250,7 @@ namespace BizArk.Core.Extensions.DrawingExt
         {
             //var sz = img.Height * img.Width;
             //return sz*4;
-            var imgBytes = ConvertEx.ChangeType<byte[]>(img);
+            var imgBytes = ConvertEx.To<byte[]>(img);
             return imgBytes.LongLength;
         }
 

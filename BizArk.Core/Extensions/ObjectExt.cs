@@ -15,7 +15,7 @@ namespace BizArk.Core.Extensions.ObjectExt
         /// <summary>
         /// Converts the value to the specified type. 
         /// Checks for a TypeConverter, conversion methods, 
-        /// and the IConvertible interface. Uses <see cref="BizArk.Core.ConvertEx.ChangeType(object, Type, IFormatProvider)"/>.
+        /// and the IConvertible interface. Uses <see cref="BizArk.Core.ConvertEx.To(object, Type, IFormatProvider)"/>.
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
         /// <param name="obj">The value to convert from.</param>
@@ -24,7 +24,7 @@ namespace BizArk.Core.Extensions.ObjectExt
         /// <exception cref="System.ArgumentNullException">conversionType is null.</exception>
         public static T Convert<T>(this object obj)
         {
-            return ConvertEx.ChangeType<T>(obj);
+            return ConvertEx.To<T>(obj);
         }
 
         /// <summary>
