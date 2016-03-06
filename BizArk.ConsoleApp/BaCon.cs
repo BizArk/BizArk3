@@ -44,6 +44,9 @@ namespace BizArk.ConsoleApp
 					WriteLine(results.Title, AppTitleColor);
 				if (results.Description.HasValue())
 					WriteLine(results.Description, AppDescriptionColor);
+				if(results.Copyright.HasValue())
+					WriteLine(results.Copyright.Replace("©", "(c)"), AppDescriptionColor); // The © doesn't show up correctly in the console.
+
 				WriteLine(); // Put a line between the title and rest of the information.
 
 				// Validate only after checking to see if they requested help

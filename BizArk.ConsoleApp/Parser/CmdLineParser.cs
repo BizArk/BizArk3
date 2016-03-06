@@ -167,6 +167,9 @@ namespace BizArk.ConsoleApp.Parser
 			else
 				results.Title = string.Format("{0} ver. {1}", Application.Title, Application.Version);
 
+			if (Application.Copyright.HasValue())
+				results.Copyright = Application.Copyright;
+
 			// Get the app description.
 			var att = this.GetAttribute<DescriptionAttribute>(true);
 			if (att != null)
@@ -413,6 +416,12 @@ namespace BizArk.ConsoleApp.Parser
 		/// Gets the file name of the console application.
 		/// </summary>
 		public string ApplicationFileName { get; internal set; }
+
+		/// <summary>
+		/// Gets the copyright notice of the console application.
+		/// </summary>
+		public string Copyright { get; internal set; }
+
 	}
 
 	/// <summary>
@@ -435,5 +444,6 @@ namespace BizArk.ConsoleApp.Parser
 		/// Gets the command-line object that contains the results of the parser.
 		/// </summary>
 		public T CmdLineObj { get; internal set; }
+
 	}
 }
