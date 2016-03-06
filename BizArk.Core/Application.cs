@@ -139,7 +139,7 @@ namespace BizArk.Core
         {
             var tempPath = GetTempPath();
             if (!Directory.Exists(tempPath)) return;
-            FileUtil.RemoveDirectory(tempPath);
+            FileEx.RemoveDirectory(tempPath);
         }
 
         /// <summary>

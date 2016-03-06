@@ -9,7 +9,7 @@ namespace BizArk.Core.Util
     /// <summary>
     /// Provides methods that are useful when working with files and directories.
     /// </summary>
-    public static class FileUtil
+    public static class FileEx
     {
 
         /// <summary>

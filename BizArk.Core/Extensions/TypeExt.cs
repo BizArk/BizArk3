@@ -164,5 +164,16 @@ namespace BizArk.Core.Extensions.TypeExt
             return flds.ToArray();
         }
 
+		/// <summary>
+		/// Determines if the type supports null.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static bool AllowNull(this Type type)
+		{
+			if (!type.IsValueType) return true;
+			return Nullable.GetUnderlyingType(type) == null;
+		}
+
     }
 }

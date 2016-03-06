@@ -103,6 +103,9 @@
     <Compile Include="Convert\Strategies\StringToBoolConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\TypeConverterConversionStrategy.cs" />
     <Compile Include="DataAnnotations\SetAttribute.cs" />
+    <Compile Include="Data\BaField.cs" />
+    <Compile Include="Data\BaFieldList.cs" />
+    <Compile Include="Data\BaObjectOptions.cs" />
     <Compile Include="Email\Message.cs" />
     <Compile Include="Email\MAPI32.cs" />
     <Compile Include="Enums.cs" />
@@ -120,6 +123,7 @@
     </Compile>
     <Compile Include="Extensions\ArrayExt.cs" />
     <Compile Include="Extensions\AttributeExt.cs" />
+    <Compile Include="Data\BaObject.cs" />
     <Compile Include="Util\Bitmask.cs" />
     <Compile Include="Util\Cache.cs" />
     <Compile Include="Util\ClassFactory.cs" />
@@ -132,9 +136,10 @@
     <Compile Include="Util\MemSize.cs" />
     <Compile Include="Util\MimeMap.cs" />
     <Compile Include="Util\NameValue.cs" />
+    <Compile Include="Util\ObjectUtil.cs" />
     <Compile Include="Util\Range.cs" />
     <Compile Include="Util\RemoteDateTime.cs" />
-    <Compile Include="Util\StreamExt.cs" />
+    <Compile Include="Extensions\StreamExt.cs" />
     <Compile Include="Util\StringTemplate.cs" />
     <Compile Include="Util\StringWriterEx.cs" />
     <Compile Include="Util\TempFile.cs" />
@@ -144,7 +149,7 @@
     <Compile Include="Extensions\DrawingExt.cs">
     </Compile>
     <Compile Include="Extensions\ExceptionExt.cs" />
-    <Compile Include="Util\FileUtil.cs" />
+    <Compile Include="Util\FileEx.cs" />
     <Compile Include="Extensions\ImageExt.cs" />
     <Compile Include="Extensions\ObjectExt.cs" />
     <Compile Include="Extensions\StringExt.cs" />

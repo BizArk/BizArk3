@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertEx.cs" />
+    <Compile Include="BaObjectTest.cs" />
     <Compile Include="ConversionStrategyTests.cs" />
     <Compile Include="ConvertExTests.cs" />
     <Compile Include="UtilTests.cs" />

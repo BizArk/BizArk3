@@ -18,7 +18,7 @@ namespace BizArk.Core.Util
         /// </summary>
         public TempFile()
         {
-            mTempPath = FileUtil.GetUniqueFileName();
+            mTempPath = FileEx.GetUniqueFileName();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace BizArk.Core.Util
         /// <param name="ext">The extension for the file.</param>
         public TempFile(string ext)
         {
-            mTempPath = FileUtil.GetUniqueFileName(ext);
+            mTempPath = FileEx.GetUniqueFileName(ext);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace BizArk.Core.Util
         /// <param name="template">The template for the file name. Place a {0} where the counter should go (ex, MyPicture{0}.jpg).</param>
         public TempFile(string dir, string template)
         {
-            mTempPath = FileUtil.GetUniqueFileName(dir, template);
+            mTempPath = FileEx.GetUniqueFileName(dir, template);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace BizArk.Core.Util
         /// </summary>
         public void Delete()
         {
-            FileUtil.DeleteFile(mTempPath);
+            FileEx.DeleteFile(mTempPath);
         }
 
         #endregion

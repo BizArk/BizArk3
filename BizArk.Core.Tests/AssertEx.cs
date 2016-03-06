@@ -2,6 +2,7 @@
 using BizArk.Core.Extensions.DateExt;
 using BizArk.Core.Extensions.FormatExt;
 using NUnit.Framework;
+using System.Diagnostics;
 
 namespace BizArk.Core.Tests
 {
@@ -42,8 +43,9 @@ namespace BizArk.Core.Tests
                 action();
                 Assert.Fail("Expected exception '{0}' not thrown.", typeof(T).Name);
             }
-            catch (T)
+            catch (T ex)
             {
+				Debug.WriteLine(ex.Message);
             }
         }
 
