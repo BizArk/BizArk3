@@ -39,14 +39,12 @@ namespace BizArk.Core.Data
 		{
 			Options = options ?? new BaObjectOptions();
 
-			if (Options.Schema != null)
-			{
-				if (!InitFromDataRow(Options.Schema as DataRow)
-					&& !InitFromDataReader(Options.Schema as IDataReader))
-				{
-					InitSchemaFromObject(Options.Schema, true);
-				}
-			}
+			if (Options.Schema != null
+				&& !InitFromDataRow(Options.Schema as DataRow)
+				&& !InitFromDataReader(Options.Schema as IDataReader)
+				&& !InitSchemaFromObject(Options.Schema, true))
+			{ } // Just a simple way to call the init schema methods without a bunch of if/else statements. 
+
 		}
 
 		/// <summary>
@@ -54,7 +52,7 @@ namespace BizArk.Core.Data
 		/// </summary>
 		/// <param name="schema">The object used to discover the schema.</param>
 		/// <param name="setDflt">Determines if we will get the default value from the schema or not.</param>
-		protected void InitSchemaFromObject(object schema, bool setDflt)
+		protected bool InitSchemaFromObject(object schema, bool setDflt)
 		{
 			foreach (PropertyDescriptor propDesc in TypeDescriptor.GetProperties(schema))
 			{
@@ -63,6 +61,7 @@ namespace BizArk.Core.Data
 					dflt = propDesc.GetValue(schema);
 				Add(propDesc.Name, propDesc.PropertyType, dflt);
 			}
+			return true;
 		}
 
 		/// <summary>
@@ -117,6 +116,22 @@ namespace BizArk.Core.Data
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Adds the field to the object.
+		/// </summary>
+		/// <typeparam name="T">The datatype for the field.</typeparam>
+		/// <param name="fldName">Name of the field.</param>
+		/// <param name="dflt">Default value for the field. Used to determine if the field has changed.</param>
+		/// <returns></returns>
+		public BaField Add<T>(string fldName, T dflt)
+		{
+			if (Fields.ContainsField(fldName))
+				throw new ArgumentException("A field already exists with this field name.");
+			var fld = new BaField(this, fldName, typeof(T), dflt);
+			Fields.Add(fld);
+			return fld;
+		}
 
 		/// <summary>
 		/// Adds the field to the object.
@@ -202,6 +217,18 @@ namespace BizArk.Core.Data
 			return changes;
 		}
 
+		/// <summary>
+		/// Updates the default value to be the same as value so that the fields show up as not changed.
+		/// </summary>
+		public void ResetChanges()
+		{
+			foreach (var fld in Fields)
+			{
+				if (fld.IsSet) // If it's not set, Value returns the DefaultValue.
+					fld.DefaultValue = fld.Value;
+			}
+		}
+
 		#endregion
 
 		#region IDictionary
@@ -224,7 +251,7 @@ namespace BizArk.Core.Data
 			}
 			set
 			{
-				// TrySet only returns false if strict is off.
+				// TrySet only returns false if strict is on.
 				if (!TrySet(fldName, value))
 					throw new ArgumentOutOfRangeException("key", $"Field [{fldName}] not found.");
 			}

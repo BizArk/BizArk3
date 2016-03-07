@@ -18,7 +18,7 @@ namespace BizArk.Core.Tests
 		public void CreateStrictBaObject()
 		{
 			var obj = new BaObject(true);
-			var fld = obj.Add("Test", typeof(int), 123);
+			var fld = obj.Add("Test", 123);
 			Assert.AreEqual("Test", fld.Name);
 			Assert.AreEqual(123, fld.Value);
 			Assert.AreEqual(123, fld.DefaultValue);
@@ -27,7 +27,7 @@ namespace BizArk.Core.Tests
 			Assert.IsFalse(fld.IsSet);
 			fld.Value = fld.Value;
 			Assert.IsTrue(fld.IsSet); // Even though we are setting it to itself, it should still be set now (just not changed).
-			Assert.IsFalse(fld.IsChanged); 
+			Assert.IsFalse(fld.IsChanged);
 			fld.Value = 321;
 			Assert.IsTrue(fld.IsChanged);
 
@@ -108,6 +108,20 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(1, changes.Count);
 			Assert.IsFalse(changes.ContainsKey("Greeting"));
 
+			obj.ResetChanges();
+			changes = obj.GetChanges();
+			Assert.AreEqual(0, changes.Count);
+
+		}
+
+		[Test]
+		public void SetValueToDifferentType()
+		{
+			var obj = new BaObject(true, new { Str = "", Base = new MyBaseObject(), Derived = new MyDerivedObject() });
+
+			AssertEx.Throws<InvalidOperationException>(() => { obj["Str"] = 123; });
+			obj["Base"] = new MyDerivedObject();
+			AssertEx.Throws<InvalidOperationException>(() => { obj["Derived"] = new MyBaseObject(); });
 		}
 
 		[Test]
@@ -131,15 +145,15 @@ namespace BizArk.Core.Tests
 		public void PropertyChangedEvent()
 		{
 			var obj = new BaObject(true, new { Name = (string)null, Greeting = (string)null });
-			var changed = false;
+			var lastChanged = (string)null;
 			obj.PropertyChanged += (sender, e) =>
 			{
-				changed = true;
+				lastChanged = e.PropertyName;
 				Debug.WriteLine($"Field '{e.PropertyName}' changed.");
 			};
 
 			obj["Name"] = "John";
-			Assert.IsTrue(changed);
+			Assert.AreEqual("Name", lastChanged);
 		}
 
 		#region MyObject
@@ -165,6 +179,20 @@ namespace BizArk.Core.Tests
 				get { return (string)this[nameof(Greeting)]; }
 				set { this[nameof(Greeting)] = value; }
 			}
+
+		}
+
+		#endregion
+
+		#region Inherited Classes
+
+		private class MyBaseObject
+		{
+
+		}
+
+		private class MyDerivedObject: MyBaseObject
+		{
 
 		}
 
