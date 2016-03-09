@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 using BizArk.Core.Extensions.StringExt;
 using Microsoft.Win32;
 using My = BizArk.Core.Properties;
+using System.Reflection;
+using System.Diagnostics;
+using System.IO;
 
 namespace BizArk.Core.Util
 {
@@ -30,7 +33,10 @@ namespace BizArk.Core.Util
                 System.Diagnostics.Debug.WriteLine("Failed to initialize MimeMap from the Registry. Error: {0}", ex.Message);
             }
 
-            Initialize(My.Resources.Mime_Types);
+			var localDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var mimePath = Path.Combine(localDir, "Mime.Types");
+			if (File.Exists(mimePath))
+				Initialize(File.ReadAllText(mimePath));
         }
 
         /// <summary>

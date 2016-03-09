@@ -43,21 +43,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\BizArk.Core.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\BizArk.Core.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\BizArk.Core.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\BizArk.Core.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
@@ -106,9 +106,22 @@
     <Compile Include="Data\BaField.cs" />
     <Compile Include="Data\BaFieldList.cs" />
     <Compile Include="Data\BaObjectOptions.cs" />
-    <Compile Include="Email\Message.cs" />
-    <Compile Include="Email\MAPI32.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Extensions\ArrayExt.cs" />
+    <Compile Include="Extensions\AttributeExt.cs" />
+    <Compile Include="Extensions\DataExt.cs" />
+    <Compile Include="Extensions\DateExt.cs" />
+    <Compile Include="Extensions\DrawingExt.cs" />
+    <Compile Include="Extensions\ExceptionExt.cs" />
+    <Compile Include="Extensions\FormatExt.cs" />
+    <Compile Include="Extensions\ImageExt.cs" />
+    <Compile Include="Extensions\MathExt.cs" />
+    <Compile Include="Extensions\ObjectExt.cs" />
+    <Compile Include="Extensions\StreamExt.cs" />
+    <Compile Include="Extensions\StringExt.cs" />
+    <Compile Include="Extensions\TypeExt.cs" />
+    <Compile Include="Extensions\WebExt.cs" />
+    <Compile Include="Extensions\XmlExt.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -121,49 +134,23 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\ArrayExt.cs" />
-    <Compile Include="Extensions\AttributeExt.cs" />
     <Compile Include="Data\BaObject.cs" />
     <Compile Include="Util\Bitmask.cs" />
     <Compile Include="Util\Cache.cs" />
     <Compile Include="Util\ClassFactory.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\FontUtil.cs" />
-    <Compile Include="Extensions\FormatExt.cs" />
-    <Compile Include="Extensions\DataExt.cs" />
-    <Compile Include="Extensions\DateExt.cs" />
-    <Compile Include="Extensions\MathExt.cs" />
     <Compile Include="Util\MemSize.cs" />
     <Compile Include="Util\MimeMap.cs" />
     <Compile Include="Util\NameValue.cs" />
     <Compile Include="Util\ObjectUtil.cs" />
     <Compile Include="Util\Range.cs" />
     <Compile Include="Util\RemoteDateTime.cs" />
-    <Compile Include="Extensions\StreamExt.cs" />
     <Compile Include="Util\StringTemplate.cs" />
     <Compile Include="Util\StringWriterEx.cs" />
     <Compile Include="Util\TempFile.cs" />
-    <Compile Include="Extensions\WebExt.cs" />
     <Compile Include="Util\WebUtil.cs" />
-    <Compile Include="Extensions\XmlExt.cs" />
-    <Compile Include="Extensions\DrawingExt.cs">
-    </Compile>
-    <Compile Include="Extensions\ExceptionExt.cs" />
     <Compile Include="Util\FileEx.cs" />
-    <Compile Include="Extensions\ImageExt.cs" />
-    <Compile Include="Extensions\ObjectExt.cs" />
-    <Compile Include="Extensions\StringExt.cs" />
-    <Compile Include="Extensions\TypeExt.cs" />
-    <Compile Include="Web\ContentType.cs" />
-    <Compile Include="Web\MimePart.cs" />
-    <Compile Include="Web\Support.cs" />
-    <Compile Include="Web\UploadFile.cs" />
-    <Compile Include="Web\UrlBuilder.cs" />
-    <Compile Include="Web\WebHelper.cs" />
-    <Compile Include="Web\WebHelperEventArgs.cs" />
-    <Compile Include="Web\WebHelperOptions.cs" />
-    <Compile Include="Web\WebHelperResponse.cs" />
-    <Compile Include="Web\WebParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -175,11 +162,13 @@
   <ItemGroup>
     <None Include="BizArk.snk" />
     <None Include="BizArkCore.nuspec" />
+    <None Include="Mime.Types">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\Mime.Types" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

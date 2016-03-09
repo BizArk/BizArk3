@@ -53,12 +53,12 @@ namespace BizArk.Core.Util
 			return success;
         }
 
-        /// <summary>
-        /// Gets a directory structure based on a number. For example, if the number passed in is 12345, 00/00/00/01/23 is passed back. Useful if you have a large number of files stored on disk.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static string GetIDDir(int id)
+		/// <summary>
+		/// Gets a directory structure based on a number. For example, if the number passed in is 12345, 00/00/00/01/23 is passed back. Useful if you have a large number of files stored on disk.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public static string GetIDDir(int id)
         {
             var dir = id.ToString();
             dir = ("000000000000" + dir).Right(12).Left(10); // get a string with 10 chars in it with the number being at the end (remove the last two chars).
