@@ -37,7 +37,7 @@ namespace BizArk.ConsoleApp.Tests
 			};
 
 			var results = parser.Parse(args);
-			var obj = results.CmdLineObj;
+			var obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual("Billy Bob", obj.Name);
 			Assert.AreEqual(25, obj.Age);
@@ -60,7 +60,7 @@ namespace BizArk.ConsoleApp.Tests
 			};
 
 			results = parser.Parse(args);
-			obj = results.CmdLineObj;
+			obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual(false, obj.HasHair);
 		}
@@ -85,7 +85,7 @@ namespace BizArk.ConsoleApp.Tests
 
 			parser.Options.ArraySeparator = ",";
 			var results = parser.Parse(args);
-			var obj = results.CmdLineObj;
+			var obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual("Billy Bob", obj.Name);
 			Assert.AreEqual(25, obj.Age);
@@ -114,7 +114,7 @@ namespace BizArk.ConsoleApp.Tests
 
 			parser.Options.ArraySeparator = ",";
 			var results = parser.Parse(args);
-			var obj = results.CmdLineObj;
+			var obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual("Billy Bob", obj.Name);
 			Assert.AreEqual(25, obj.Age);
@@ -138,7 +138,7 @@ namespace BizArk.ConsoleApp.Tests
 
 			parser.Options.ArraySeparator = @"\~"; // Use a sequence that might effect the regex.
 			results = parser.Parse(args);
-			obj = results.CmdLineObj;
+			obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual(3, obj.Children.Length);
 			Assert.AreEqual("Billy", obj.Children[0]);
@@ -195,7 +195,7 @@ namespace BizArk.ConsoleApp.Tests
 			};
 
 			var results = parser.Parse(args);
-			var obj = results.CmdLineObj;
+			var obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual("Billy Bob", obj.Name);
 			Assert.AreEqual(25, obj.Age);
@@ -221,7 +221,7 @@ namespace BizArk.ConsoleApp.Tests
 			};
 
 			var results = parser.Parse(args);
-			var obj = results.CmdLineObj;
+			var obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual("Billy Bob", obj.Name);
 			Assert.AreEqual(25, obj.Age);
@@ -241,7 +241,7 @@ namespace BizArk.ConsoleApp.Tests
 				"/Children", "Billy", "Bob", "Betty"
 			};
 			results = parser.Parse(args);
-			obj = results.CmdLineObj;
+			obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual("Billy Bob", obj.Name);
 			Assert.AreEqual(25, obj.Age);

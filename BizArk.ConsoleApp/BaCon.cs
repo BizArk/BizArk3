@@ -38,7 +38,7 @@ namespace BizArk.ConsoleApp
 			try
 			{
 				var results = ParseArgs<T>(options.CmdLineOptions);
-				consoleApp = results.CmdLineObj;
+				consoleApp = results.Args;
 
 				if (results.Title.HasValue())
 					WriteLine(results.Title, AppTitleColor);

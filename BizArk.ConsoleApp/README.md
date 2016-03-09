@@ -25,7 +25,7 @@ Here is an examplee of a simple command-line app using a POCO (Plain Old CLR Obj
 		{
 			var results = BaCon.ParseArgs<SampleCmdLineArgs>();
 			//todo: might want to check the results for errors.
-			var myArgs = results.CmdLineObj;
+			var myArgs = results.Args;
 			BaCon.WriteLine("First={0}".Fmt(myArgs.MyFirstProperty), ConsoleColor.White);
 			BaCon.WriteLine("Second={0}".Fmt(myArgs.AnotherProperty));
 		}

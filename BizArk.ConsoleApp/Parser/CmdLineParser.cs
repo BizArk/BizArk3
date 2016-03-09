@@ -74,7 +74,7 @@ namespace BizArk.ConsoleApp.Parser
 			VerifyCmdLineOptions();
 
 			var results = new CmdLineParseResults<T>(Options);
-			results.CmdLineObj = obj;
+			results.Args = obj;
 			var props = results.Properties = GetCmdLineProperties(obj);
 			var errors = new List<string>();
 			CmdLineProperty prop = null;
@@ -443,7 +443,7 @@ namespace BizArk.ConsoleApp.Parser
 		/// <summary>
 		/// Gets the command-line object that contains the results of the parser.
 		/// </summary>
-		public T CmdLineObj { get; internal set; }
+		public T Args { get; internal set; }
 
 	}
 }
