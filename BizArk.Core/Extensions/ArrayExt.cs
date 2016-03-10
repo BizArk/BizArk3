@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BizArk.Core.Extensions.ArrayExt
 {
@@ -8,77 +9,6 @@ namespace BizArk.Core.Extensions.ArrayExt
     /// </summary>
     public static class ArrayExt
     {
-        #region Shrink
-
-        /// <summary>
-        /// Creates a new array with just the specified elements.
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
-        /// <returns></returns>
-        public static Array Shrink(this Array arr, int startIndex, int endIndex)
-        {
-            if (arr == null) return null;
-            if (startIndex >= arr.Length) return Array.CreateInstance(arr.GetType().GetElementType(), 0);
-            if (endIndex < startIndex) return Array.CreateInstance(arr.GetType().GetElementType(), 0);
-            if (startIndex < 0) startIndex = 0;
-
-            int length = (endIndex - startIndex) + 1;
-            Array retArr = Array.CreateInstance(arr.GetType().GetElementType(), length);
-            for (int i = startIndex; i <= endIndex; i++)
-                retArr.SetValue(arr.GetValue(i), i - startIndex);
-
-            return retArr;
-        }
-
-        /// <summary>
-        /// Creates a new array with just the specified elements.
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="startIndex"></param>
-        /// <returns></returns>
-        public static string[] Shrink(this string[] arr, int startIndex)
-        {
-            return Shrink((Array)arr, startIndex, arr.Length - 1) as string[];
-        }
-
-        /// <summary>
-        /// Creates a new array with just the specified elements.
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
-        /// <returns></returns>
-        public static string[] Shrink(this string[] arr, int startIndex, int endIndex)
-        {
-            return Shrink((Array)arr, startIndex, endIndex) as string[];
-        }
-
-        /// <summary>
-        /// Creates a new array with just the specified elements.
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="startIndex"></param>
-        /// <returns></returns>
-        public static int[] Shrink(this int[] arr, int startIndex)
-        {
-            return Shrink((Array)arr, startIndex, arr.Length - 1) as int[];
-        }
-
-        /// <summary>
-        /// Creates a new array with just the specified elements.
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
-        /// <returns></returns>
-        public static int[] Shrink(this int[] arr, int startIndex, int endIndex)
-        {
-            return Shrink((Array)arr, startIndex, endIndex) as int[];
-        }
-
-        #endregion
 
         #region Convert
 
@@ -148,79 +78,6 @@ namespace BizArk.Core.Extensions.ArrayExt
 
         #endregion
 
-        #region Split
-
-        /// <summary>
-        /// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
-        /// </summary>
-        /// <param name="str">The string to split.</param>
-        /// <param name="separator">The char used to split the string.</param>
-        /// <param name="trim">If true, removes leading and trailing whitespace characters from each element.</param>
-        /// <returns></returns>
-        public static string[] Split(this string str, char separator, bool trim)
-        {
-            return Split(str, separator, trim, false);
-        }
-
-        /// <summary>
-        /// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
-        /// </summary>
-        /// <param name="str">The string to split.</param>
-        /// <param name="separator">The char used to split the string.</param>
-        /// <returns></returns>
-        public static T[] Split<T>(this string str, char separator)
-        {
-            return Split(str, separator, true, false).Convert<T>();
-        }
-
-        /// <summary>
-        /// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
-        /// </summary>
-        /// <param name="str">The string to split.</param>
-        /// <param name="separator">The char used to split the string.</param>
-        /// <param name="trim">If true, removes leading and trailing whitespace characters from each element.</param>
-        /// <param name="removeEmpties">Removes empty elements from the string.</param>
-        /// <returns></returns>
-        public static string[] Split(this string str, char separator, bool trim, bool removeEmpties)
-        {
-            string[] strs;
-            if (removeEmpties)
-                strs = str.Split(new char[] { separator }, StringSplitOptions.RemoveEmptyEntries);
-            else
-                strs = str.Split(separator);
-
-            if (trim)
-            {
-                var strl = new List<string>();
-                for (int i = 0; i < strs.Length; i++)
-                {
-                    var s = strs[i].Trim();
-                    if (removeEmpties && s == "")
-                    {
-                        // don't add this value.
-                    }
-                    else
-                        strl.Add(s);
-                }
-                strs = strl.ToArray();
-            }
-            return strs;
-        }
-        
-        /// <summary>
-        /// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
-        /// </summary>
-        /// <param name="str">The string to split.</param>
-        /// <param name="separator">The char used to split the string.</param>
-        /// <param name="removeEmpties">Removes empty elements from the string.</param>
-        /// <returns></returns>
-        public static T[] Split<T>(this string str, char separator, bool removeEmpties)
-        {
-            return Split(str, separator, true, removeEmpties).Convert<T>();
-        }
-
-        #endregion
-
         #region Join
 
         /// <summary>
@@ -235,38 +92,6 @@ namespace BizArk.Core.Extensions.ArrayExt
             foreach (var val in arr)
                 vals.Add(ConvertEx.ToString(val));
             return string.Join(separator, vals.ToArray());
-        }
-
-        #endregion
-
-        #region Append
-
-        /// <summary>
-        /// Concatenates the two arrays together and returns a new array.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arr"></param>
-        /// <param name="arr2"></param>
-        /// <returns></returns>
-        public static T[] Append<T>(this T[] arr, T[] arr2)
-        {
-            var newArr = new List<T>(arr);
-            newArr.AddRange(arr2);
-            return newArr.ToArray();
-        }
-
-        /// <summary>
-        /// Adds the value to the end of the array and returns the new array.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arr"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static T[] Append<T>(this T[] arr, T value)
-        {
-            var newArr = new List<T>(arr);
-            newArr.Add(value);
-            return newArr.ToArray();
         }
 
         #endregion

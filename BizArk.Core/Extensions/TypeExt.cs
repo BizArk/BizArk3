@@ -64,18 +64,6 @@ namespace BizArk.Core.Extensions.TypeExt
         }
 
         /// <summary>
-        /// Gets a value that determines if the type allows instances with a null value.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static bool IsNullable(this Type type)
-        {
-            if (type == null) return false;
-            if (!type.IsValueType) return true;
-            return type.IsDerivedFromGenericType(typeof(Nullable<>));
-        }
-
-        /// <summary>
         /// Gets the C# name of the type.
         /// </summary>
         /// <param name="type"></param>
@@ -99,7 +87,7 @@ namespace BizArk.Core.Extensions.TypeExt
             else if (type == typeof(decimal)) name = "decimal";
             else if (type == typeof(string)) name = "string";
 
-            if (type.IsValueType && type.IsNullable()) name += "?";
+            if (type.IsValueType && type.AllowNull()) name += "?";
 
             return name;
         }
@@ -171,6 +159,7 @@ namespace BizArk.Core.Extensions.TypeExt
 		/// <returns></returns>
 		public static bool AllowNull(this Type type)
 		{
+			if (type == null) return false;
 			if (!type.IsValueType) return true;
 			return Nullable.GetUnderlyingType(type) == null;
 		}

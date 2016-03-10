@@ -56,6 +56,16 @@ namespace BizArk.Core.Tests
 		}
 
 		[Test]
+		public void TryChangeTypeTest()
+		{
+			DateTime dt;
+			Assert.IsTrue(ConvertEx.Try("7/4/2008", out dt));
+
+			object obj;
+			Assert.IsTrue(ConvertEx.Try("7/4/2008", typeof(DateTime), out obj));
+		}
+
+		[Test]
 		public void GetDefaultEmptyTest()
 		{
 			object emptyValue;

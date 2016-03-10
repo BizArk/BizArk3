@@ -22,38 +22,35 @@ namespace BizArk.Core.Extensions.ObjectExt
         /// <returns></returns>
         /// <exception cref="System.InvalidCastException">This conversion is not supported. -or-value is null and conversionType is a value type.</exception>
         /// <exception cref="System.ArgumentNullException">conversionType is null.</exception>
-        public static T Convert<T>(this object obj)
+        public static T To<T>(this object obj)
         {
             return ConvertEx.To<T>(obj);
         }
 
         /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
+        /// Gets the value for the given property name. Uses ObjectUtil.GetValue so you can use any propertyName that supports.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
         public static object GetValue(this object obj, string propertyName)
         {
-            var prop = TypeDescriptor.GetProperties(obj).Find(propertyName, false);
-            if (prop == null)
-                throw new ArgumentException(propertyName + " is not a valid property on " + obj.GetType().FullName);
-            return prop.GetValue(obj);
+			return ObjectUtil.GetValue(obj, propertyName);
         }
 
-        /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public static T GetValue<T>(this object obj, string propertyName)
+		/// <summary>
+		/// Gets the value for the given property name. Uses ObjectUtil.GetValue so you can use any propertyName that supports.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="propertyName"></param>
+		/// <returns></returns>
+		public static T GetValue<T>(this object obj, string propertyName)
         {
             return (T)GetValue(obj, propertyName);
         }
 
         /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
+        /// Gets the value for the given property name. Uses ObjectUtil.GetValue so you can use any propertyName that supports.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
@@ -64,18 +61,7 @@ namespace BizArk.Core.Extensions.ObjectExt
         }
 
         /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public static int Getint(this object obj, string propertyName)
-        {
-            return GetValue<int>(obj, propertyName);
-        }
-
-        /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
+        /// Gets the value for the given property name. Uses ObjectUtil.GetValue so you can use any propertyName that supports.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
@@ -86,7 +72,7 @@ namespace BizArk.Core.Extensions.ObjectExt
         }
 
         /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
+        /// Gets the value for the given property name. Uses ObjectUtil.GetValue so you can use any propertyName that supports.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
@@ -97,7 +83,7 @@ namespace BizArk.Core.Extensions.ObjectExt
         }
 
         /// <summary>
-        /// Gets the value for the given property name. This works for any object that uses CustomTypeDescriptor.
+        /// Gets the value for the given property name. Uses ObjectUtil.GetValue so you can use any propertyName that supports.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
@@ -119,23 +105,33 @@ namespace BizArk.Core.Extensions.ObjectExt
             return results.ToArray();
         }
 
-        /// <summary>
-        /// Gets a collection of name/value pairs based on the public properties of an object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static NameValue[] GetNameValues(this object obj)
-        {
-            var vals = obj as NameValue[];
-            if (vals != null) return vals;
+		/// <summary>
+		/// Gets a collection of name/value pairs based on the public properties of an object.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static NameValue[] GetNameValues(this object obj)
+		{
+			var vals = obj as NameValue[];
+			if (vals != null) return vals;
 
-            var pairs = new List<NameValue>();
+			var pairs = new List<NameValue>();
 
-            foreach (var prop in obj.GetType().GetProperties())
-                pairs.Add(new NameValue(prop.Name, prop.GetValue(obj, null), prop.PropertyType));
+			foreach (var prop in obj.GetType().GetProperties())
+				pairs.Add(new NameValue(prop.Name, prop.GetValue(obj, null), prop.PropertyType));
 
-            return pairs.ToArray();
-        }
+			return pairs.ToArray();
+		}
 
-    }
+		/// <summary>
+		/// Normalizes a large number of classes into a dictionary. Works with DataRow, IDataReader, IDictionary, or POCO.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static IDictionary<string, object> ToPropertyBag(this object obj)
+		{
+			return ObjectUtil.ToPropertyBag(obj);
+		}
+
+	}
 }

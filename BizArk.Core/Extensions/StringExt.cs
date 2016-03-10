@@ -230,18 +230,6 @@ namespace BizArk.Core.Extensions.StringExt
         }
 
         /// <summary>
-        /// Shortcut for string.Format.
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static string Format(this string str, params object[] args)
-        {
-            if (str == null) return null;
-            return string.Format(str, args);
-        }
-
-        /// <summary>
         /// If the string is empty, returns the default.
         /// </summary>
         /// <param name="str"></param>
@@ -268,5 +256,78 @@ namespace BizArk.Core.Extensions.StringExt
             return Vowels.Contains(ch);
         }
 
-    }
+		#region Split
+
+		/// <summary>
+		/// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
+		/// </summary>
+		/// <param name="str">The string to split.</param>
+		/// <param name="separator">The char used to split the string.</param>
+		/// <param name="trim">If true, removes leading and trailing whitespace characters from each element.</param>
+		/// <returns></returns>
+		public static string[] Split(this string str, char separator, bool trim)
+		{
+			return Split(str, separator, trim, false);
+		}
+
+		/// <summary>
+		/// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
+		/// </summary>
+		/// <param name="str">The string to split.</param>
+		/// <param name="separator">The char used to split the string.</param>
+		/// <returns></returns>
+		public static T[] Split<T>(this string str, char separator)
+		{
+			return Split(str, separator, true, false).Convert<T>();
+		}
+
+		/// <summary>
+		/// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
+		/// </summary>
+		/// <param name="str">The string to split.</param>
+		/// <param name="separator">The char used to split the string.</param>
+		/// <param name="trim">If true, removes leading and trailing whitespace characters from each element.</param>
+		/// <param name="removeEmpties">Removes empty elements from the string.</param>
+		/// <returns></returns>
+		public static string[] Split(this string str, char separator, bool trim, bool removeEmpties)
+		{
+			string[] strs;
+			if (removeEmpties)
+				strs = str.Split(new char[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+			else
+				strs = str.Split(separator);
+
+			if (trim)
+			{
+				var strl = new List<string>();
+				for (int i = 0; i < strs.Length; i++)
+				{
+					var s = strs[i].Trim();
+					if (removeEmpties && s == "")
+					{
+						// don't add this value.
+					}
+					else
+						strl.Add(s);
+				}
+				strs = strl.ToArray();
+			}
+			return strs;
+		}
+
+		/// <summary>
+		/// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
+		/// </summary>
+		/// <param name="str">The string to split.</param>
+		/// <param name="separator">The char used to split the string.</param>
+		/// <param name="removeEmpties">Removes empty elements from the string.</param>
+		/// <returns></returns>
+		public static T[] Split<T>(this string str, char separator, bool removeEmpties)
+		{
+			return Split(str, separator, true, removeEmpties).Convert<T>();
+		}
+
+		#endregion
+
+	}
 }

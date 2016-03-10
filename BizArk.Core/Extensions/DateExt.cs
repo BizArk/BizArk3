@@ -54,19 +54,31 @@ namespace BizArk.Core.Extensions.DateExt
             return years <= 1 ? "one year ago" : years + " years ago";
         }
 
-        /// <summary>
-        /// Determines if the two dates are within the amount of time specified.
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="value"></param>
-        /// <param name="giveOrTake">The amount of time, plus or minus, that the two dates can vary from one another and still be considered close.</param>
-        /// <returns></returns>
-        public static bool IsClose(this DateTime dt, DateTime value, TimeSpan giveOrTake)
-        {
-            if (dt.Add(giveOrTake) < value) return false;
-            if (dt.Subtract(giveOrTake) > value) return false;
-            return true;
-        }
+		/// <summary>
+		/// Determines if the two dates are within the amount of time specified.
+		/// </summary>
+		/// <param name="dt"></param>
+		/// <param name="value"></param>
+		/// <param name="giveOrTake">The amount of time, plus or minus, that the two dates can vary from one another and still be considered close.</param>
+		/// <returns></returns>
+		public static bool IsClose(this DateTime dt, DateTime value, TimeSpan giveOrTake)
+		{
+			if (dt.Add(giveOrTake) < value) return false;
+			if (dt.Subtract(giveOrTake) > value) return false;
+			return true;
+		}
 
-    }
+		/// <summary>
+		/// Determines if the two dates are within the amount of time specified.
+		/// </summary>
+		/// <param name="dt"></param>
+		/// <param name="value"></param>
+		/// <param name="milliseconds">The amount of time, plus or minus, that the two dates can vary from one another and still be considered close.</param>
+		/// <returns></returns>
+		public static bool IsClose(this DateTime dt, DateTime value, int milliseconds)
+		{
+			return IsClose(dt, value, TimeSpan.FromMilliseconds(milliseconds));
+		}
+
+	}
 }

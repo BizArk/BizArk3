@@ -51,8 +51,6 @@ namespace BizArk.Core
                 ExePath = uri.ToString();
 
             ExeName = System.IO.Path.GetFileName(ExePath);
-
-            Cache = new Cache();
         }
 
         /// <summary>
@@ -99,11 +97,6 @@ namespace BizArk.Core
         /// Gets the just the name of the exe (without the extension).
         /// </summary>
         public static string ExeName { get; private set; }
-
-        /// <summary>
-        /// Gets the application level cache.
-        /// </summary>
-        public static Cache Cache { get; private set; }
 
         /// <summary>
         /// Returns an absolute path relative to the ExePath.

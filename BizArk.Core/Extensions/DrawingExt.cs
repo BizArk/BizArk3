@@ -1,3 +1,4 @@
+using BizArk.Core.Util;
 using System;
 using System.Drawing;
 
@@ -246,7 +247,7 @@ namespace BizArk.Core.Extensions.DrawingExt
         /// </summary>
         /// <param name="img"></param>
         /// <returns></returns>
-        public static long SizeOf(this Image img)
+        public static MemSize SizeOf(this Image img)
         {
             //var sz = img.Height * img.Width;
             //return sz*4;

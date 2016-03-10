@@ -33,8 +33,8 @@ namespace BizArk.Core.Convert
 			new StaticMethodConversionStrategy(),
 			new CtorConversionStrategy(),
 			new ConvertMethodConversionStrategy(),
+			new ByteArrayImageConversionStrategy(),
 			new ByteArrayStringConversionStrategy(),
-			new ByteArrayImageConversionStrategy()
 		};
 
 		/// <summary>
@@ -141,7 +141,7 @@ namespace BizArk.Core.Convert
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (type.IsNullable())
+			if (type.AllowNull())
 				return null;
 			else
 				return Activator.CreateInstance(type);

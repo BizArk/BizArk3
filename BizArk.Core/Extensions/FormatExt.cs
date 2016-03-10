@@ -191,7 +191,7 @@ namespace BizArk.Core.Extensions.FormatExt
 		public static string Tmpl(this string template, object values)
 		{
 			var tmpl = new StringTemplate(template);
-			return tmpl.ToString(values);
+			return tmpl.Format(values);
 		}
 
 	}

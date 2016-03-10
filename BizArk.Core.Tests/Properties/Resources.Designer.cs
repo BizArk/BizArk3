@@ -61,6 +61,20 @@ namespace BizArk.Core.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date: {Sent:d}
+        ///
+        ///{Greeting} {Recipient.Name},
+        ///Thank you for reading this letter.
+        ///
+        ///Revision {Revision:N0}.
+        /// </summary>
+        internal static string FormLetter {
+            get {
+                return ResourceManager.GetString("FormLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap TestImg {

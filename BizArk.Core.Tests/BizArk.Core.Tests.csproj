@@ -78,9 +78,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertEx.cs" />
+    <Compile Include="ObjectUtilTest.cs" />
+    <Compile Include="MathExtTests.cs" />
     <Compile Include="BaObjectTest.cs" />
     <Compile Include="ConversionStrategyTests.cs" />
     <Compile Include="ConvertExTests.cs" />
+    <Compile Include="AttributeExtTests.cs" />
     <Compile Include="UtilTests.cs" />
     <Compile Include="FormatExtTests.cs" />
     <Compile Include="HashListTests.cs" />
@@ -102,6 +105,7 @@
     <Content Include="Data\Northwind.sdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\FormLetter.txt" />
     <Content Include="Resources\ValidRpcFaultResponse.xml" />
     <Content Include="Resources\ValidRpcParamsResponse.xml" />
     <Content Include="Resources\XmlRpcInvokeTest.xml" />

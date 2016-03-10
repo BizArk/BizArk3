@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
 
 namespace BizArk.Core.Util
 {
 
-    /// <summary>
-    /// Provides a way to compare two values using a lambda expression.
-    /// </summary>
-    public class EqualityComparer : IEqualityComparer
+	/// <summary>
+	/// Provides a way to compare two values using a lambda expression.
+	/// </summary>
+	public class EqualityComparer : IEqualityComparer
     {
 
         #region Initialization and Destruction
@@ -23,7 +20,7 @@ namespace BizArk.Core.Util
         public EqualityComparer(Func<object, object, bool> comparer, Func<object, int> hashCode = null)
         {
             Comparer = comparer;
-            HashCode = hashCode;
+            HashCode = hashCode ?? new Func<object, int>((obj) => obj.GetHashCode());
         }
 
         #endregion
@@ -62,7 +59,7 @@ namespace BizArk.Core.Util
         /// <returns></returns>
         public int GetHashCode(object obj)
         {
-            return obj.GetHashCode();
+            return HashCode(obj);
         }
 
         #endregion

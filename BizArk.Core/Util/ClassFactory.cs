@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace BizArk.Core
 {
-    /// <summary>
-    /// The class factory for objects allows for objects to be changed at runtime.
-    /// </summary>
-    public static class ClassFactory
+	/// <summary>
+	/// The class factory for objects allows for objects to be changed at runtime.
+	/// </summary>
+	public static class ClassFactory
     {
 
         /// <summary>

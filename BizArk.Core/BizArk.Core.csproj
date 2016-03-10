@@ -89,7 +89,6 @@
     <Compile Include="Collections\HashList.cs" />
     <Compile Include="Convert\BaConverter.cs" />
     <Compile Include="Convert\ConvertEx.cs" />
-    <Compile Include="Convert\ConvertStrategyMgr.cs" />
     <Compile Include="Convert\Strategies\ByteArrayImageConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\ByteArrayStringConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\ConvertibleConversionStrategy.cs" />
@@ -136,13 +135,13 @@
     </Compile>
     <Compile Include="Data\BaObject.cs" />
     <Compile Include="Util\Bitmask.cs" />
-    <Compile Include="Util\Cache.cs" />
     <Compile Include="Util\ClassFactory.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\FontUtil.cs" />
     <Compile Include="Util\MemSize.cs" />
     <Compile Include="Util\MimeMap.cs" />
     <Compile Include="Util\NameValue.cs" />
+    <Compile Include="Util\ObjectDictionary.cs" />
     <Compile Include="Util\ObjectUtil.cs" />
     <Compile Include="Util\Range.cs" />
     <Compile Include="Util\RemoteDateTime.cs" />

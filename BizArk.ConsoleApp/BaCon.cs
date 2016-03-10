@@ -158,7 +158,7 @@ namespace BizArk.ConsoleApp
 		/// <param name="results"></param>
 		public static void WriteHelp(CmdLineParseResults results)
 		{
-			var generator = new HelpGenerator(results);
+			var generator = ClassFactory.CreateObject<HelpGenerator>(results);
 
 			if (results.Errors.Length > 0)
 			{

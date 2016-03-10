@@ -36,37 +36,6 @@ namespace BizArk.Core.Tests
             AssertEx.AreEqual(expected, actual);
         }
 
-        /// <summary>
-        ///A test for Shrink
-        ///</summary>
-        [Test]
-        public void ShrinkTest()
-        {
-            string[] test;
-            string[] expected;
-            string[] actual;
-
-            test = new string[] { };
-            actual = ArrayExt.Shrink(test, 0, 0);
-            expected = new string[] { };
-            Assert.AreEqual(0, actual.Length);
-
-            test = new string[] { "Hi", "Bye" };
-            actual = ArrayExt.Shrink(test, 0, 1);
-            expected = new string[] { "Hi", "Bye" };
-            AssertEx.AreEqual(expected, actual);
-
-            test = new string[] { "Hi", "Bye" };
-            actual = ArrayExt.Shrink(test, 0, 0);
-            expected = new string[] { "Hi" };
-            AssertEx.AreEqual(expected, actual);
-
-            test = new string[] { "Hi", "Bye" };
-            actual = ArrayExt.Shrink(test, 1, 1);
-            expected = new string[] { "Bye" };
-            AssertEx.AreEqual(expected, actual);
-        }
-
         [Test]
         public void RemoveEmptiesTest()
         {
