@@ -51,6 +51,9 @@ Not everybody agrees with using extensions, but I find them to be very useful fo
 
 ## Utilities
 
+- **StringTemplate** If you like string interpolation in C# but need to use it for a non-interned string, StringTemplate might be of use to you. You can create a template using property names instead of indexes.
+- **ObjectUtil** Can convert an object into a property bag (a string/object dictionary). Can convert from dictionary, DataReader, DataRow, or POCO.
+- **ObjectDictionary** Wraps an object and provides an IDictionary interface for accessing its properties.
 - **BitMask** Provides a wrapper around an integer that easy access to the different bits. It is expected that you derive a custom class from BitMask and provide properties for each of the bits. The properties should call GetBit and SetBit with the appropriate bit number, starting with 0.
 - **ClassFactory** A very simple class factory. Used inside of BizArk.Core to provide a way to change what classes get created for some key classes. To customize classes, just set ClassFactory.Factory to your factory method.
 - **EqualityComparer** Useful for handling equality comparisons in Linq queries with a lambda.
@@ -58,16 +61,8 @@ Not everybody agrees with using extensions, but I find them to be very useful fo
 - **FontUtil** This will allow you to register fonts, including fonts embedded in your application, so they can be used by your application. The fonts are only available to your application.
 - **MemSize** Provides useful features for working with memory sizes, including relative formatting (figures out if it should show bytes, KB, MB, etc). Provides conversions between IEC and SI standards.
 - **MimeMap** Provides mime types based on file extensions. Uses the Windows registry and Mime.Types from Apache. Mime.Types is a separate file in the same directory as BizArk.Core.dll.
-- **ObjectUtil** Can convert an object into a property bag (a string/object dictionary). Can convert from dictionary, DataReader, DataRow, or POCO.
 - **Range** Represents a mathmatical range of values. Useful for validating data.
 - **RemoteDateTime** This is a DateTime that is initialized from a remote source. You can then efficiently get the current DateTime from that source.
-- **StringTemplate** If you like string interpolation in C# but need to use it for a non-interned string, StringTemplate might be of use to you. You can create a template
-- ****
-- ****
-- ****
-- ****
-- ****
-- ****
-- ****
-
-- ****
+- **StringWriterEx** Inherits from StringWriter and allows you to set the Encoding.
+- **TempFile** Provides a temp file that will be automatically deleted when the object is disposed.
+- **Application** Provides easy access to application properties such as the location of the executable, title, version, etc.

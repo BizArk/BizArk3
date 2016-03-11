@@ -70,7 +70,7 @@ namespace BizArk.ConsoleApp.Tests
 
 			public string[] Children { get; set; }
 
-			[CmdLineArg("Type", ShowInUsage = DefaultBoolean.True)]
+			[CmdLineArg("Type", ShowInUsage = true)]
 			public PersonType PersonType { get; set; }
 		}
 

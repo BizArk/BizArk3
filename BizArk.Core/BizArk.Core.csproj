@@ -105,7 +105,6 @@
     <Compile Include="Data\BaField.cs" />
     <Compile Include="Data\BaFieldList.cs" />
     <Compile Include="Data\BaObjectOptions.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="Extensions\ArrayExt.cs" />
     <Compile Include="Extensions\AttributeExt.cs" />
     <Compile Include="Extensions\DataExt.cs" />

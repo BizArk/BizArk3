@@ -52,7 +52,7 @@ namespace BizArk.Core.Util
         /// <param name="phrase"></param>
         /// <param name="maxLength"></param>
         /// <returns></returns>
-        public static string GenerateSlug(string phrase, int maxLength)
+        public static string GenerateSlug(string phrase, int maxLength = int.MaxValue)
         {
             string str = phrase.ToLower();
 

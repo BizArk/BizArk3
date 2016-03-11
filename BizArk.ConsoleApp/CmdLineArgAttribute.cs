@@ -10,8 +10,6 @@ namespace BizArk.ConsoleApp
 
 		public CmdLineArgAttribute()
 		{
-			ShowDefaultValue = DefaultBoolean.Default;
-			ShowInUsage = DefaultBoolean.Default;
 			ShowInHelp = true;
 		}
 
@@ -22,9 +20,23 @@ namespace BizArk.ConsoleApp
 		}
 
 		public string[] Aliases { get; set; }
-		public DefaultBoolean ShowDefaultValue { get; set; }
 		public bool ShowInHelp { get; set; }
-		public DefaultBoolean ShowInUsage { get; set; }
+
+		// Attributes do not support null properties, so we need to make the field visible internally.
+		internal bool? mShowDefaultValue = null;
+		public bool ShowDefaultValue
+		{
+			get { return mShowDefaultValue ?? false; }
+			set { mShowDefaultValue = value; }
+		}
+
+		// Attributes do not support null properties, so we need to make the field visible internally.
+		internal bool? mShowInUsage = null;
+		public bool ShowInUsage
+		{
+			get { return mShowInUsage ?? false; }
+			set { mShowInUsage = value; }
+		}
 	}
 
 }

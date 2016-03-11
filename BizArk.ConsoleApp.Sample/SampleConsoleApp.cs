@@ -26,18 +26,18 @@ namespace BizArk.ConsoleApp.Sample
 		[Description("The age in years of the person.")]
 		public int Age { get; set; }
 
-		[CmdLineArg("Job", ShowInUsage = Core.DefaultBoolean.True)]
+		[CmdLineArg("Job", ShowInUsage = true)]
 		[Description("The type of job the person has.")]
 		public string Occupation { get; set; }
 
-		[CmdLineArg(ShowInUsage = Core.DefaultBoolean.True)]
+		[CmdLineArg(ShowInUsage = true)]
 		[Description("Does the person have hair.")]
 		public bool HasHair { get; set; }
 
 		[Description("Names of the person's children.")]
 		public string[] Children { get; set; }
 
-		[CmdLineArg(ShowInUsage = Core.DefaultBoolean.True)]
+		[CmdLineArg(ShowInUsage = true)]
 		[Description("Marital status of the person.")]
 		public MaritalStatus Status { get; set; }
 

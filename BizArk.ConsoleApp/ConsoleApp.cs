@@ -46,14 +46,14 @@ namespace BizArk.ConsoleApp
 		/// <summary>
 		/// Gets or sets a value that determines if help text should be displayed instead of running the console app.
 		/// </summary>
-		[CmdLineArg("?", ShowInUsage = Core.DefaultBoolean.False)]
+		[CmdLineArg("?", ShowInUsage = false)]
 		[Description("If true, displays the help text.")]
 		public bool Help { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value that determines if the process should pause before exiting.
 		/// </summary>
-		[CmdLineArg(ShowInUsage = Core.DefaultBoolean.False)]
+		[CmdLineArg(ShowInUsage = false)]
 		[Description("If true, waits for a key to be pressed before exiting the application.")]
 		public bool Wait { get; set; }
 
