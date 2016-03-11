@@ -51,7 +51,7 @@ Not everybody agrees with using extensions, but I find them to be very useful fo
 
 ## Utilities
 
-- **StringTemplate** If you like string interpolation in C# but need to use it for a non-interned string, StringTemplate might be of use to you. You can create a template using property names instead of indexes.
+- **StringTemplate** If you like string interpolation in C# but need to use it for a non-interned string, StringTemplate might be of use to you. You can create a template using property names instead of indexes. [Additional Details](./Util/StringTemplate.md)
 - **ObjectUtil** Can convert an object into a property bag (a string/object dictionary). Can convert from dictionary, DataReader, DataRow, or POCO.
 - **ObjectDictionary** Wraps an object and provides an IDictionary interface for accessing its properties.
 - **BitMask** Provides a wrapper around an integer that easy access to the different bits. It is expected that you derive a custom class from BitMask and provide properties for each of the bits. The properties should call GetBit and SetBit with the appropriate bit number, starting with 0.
