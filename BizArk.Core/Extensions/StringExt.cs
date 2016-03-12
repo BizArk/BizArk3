@@ -11,14 +11,20 @@ namespace BizArk.Core.Extensions.StringExt
     /// </summary>
     public static class StringExt
     {
-        /// <summary>
-        /// Forces the string to word wrap so that each line doesn't exceed the maxLineLength.
-        /// </summary>
-        /// <param name="str">The string to wrap.</param>
-        /// <param name="maxLength">The maximum number of characters per line.</param>
-        /// <param name="prefix">Adds this string to the beginning of each line that has been broken (used for indenting text).</param>
-        /// <returns></returns>
-        public static string Wrap(this string str, int maxLength, string prefix = "")
+
+		/// <summary>
+		/// Gets or sets the size of a TAB (number of spaces). Used for calculating word wraps.
+		/// </summary>
+		public static int WrapTabSize { get; set; } = 4;
+
+		/// <summary>
+		/// Forces the string to word wrap so that each line doesn't exceed the maxLineLength.
+		/// </summary>
+		/// <param name="str">The string to wrap.</param>
+		/// <param name="maxLength">The maximum number of characters per line.</param>
+		/// <param name="prefix">Adds this string to the beginning of each line that has been broken (used for indenting text).</param>
+		/// <returns></returns>
+		public static string Wrap(this string str, int maxLength, string prefix = "")
         {
             var lines = WrappedLines(str, maxLength, prefix);
             return string.Join(Environment.NewLine, lines);
@@ -51,7 +57,9 @@ namespace BizArk.Core.Extensions.StringExt
                 }
 
                 var textMaxLen = maxLength - start.Length;
-                var i = 0;
+				//todo: iterate through string 1 char at a time
+				// Count tabs as WrapTabSize.
+				var i = 0;
                 do
                 {
                     string partial;
@@ -246,12 +254,12 @@ namespace BizArk.Core.Extensions.StringExt
         /// </summary>
         public static char[] Vowels = { 'a', 'e', 'i', 'o', 'u' };
 
-        /// <summary>
-        /// Determines if the character is a vowel.
-        /// </summary>
-        /// <param name="ch"></param>
-        /// <returns></returns>
-        public static bool IsVowel(this char ch)
+		/// <summary>
+		/// Determines if the character is a vowel.
+		/// </summary>
+		/// <param name="ch"></param>
+		/// <returns></returns>
+		public static bool IsVowel(this char ch)
         {
             return Vowels.Contains(ch);
         }
