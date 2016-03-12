@@ -171,8 +171,10 @@ namespace BizArk.Core.Util
 			var currentObj = obj;
 			foreach (var name in propertyNames)
 			{
-				var propName = name; // Need to put it in a variable because we might change it.
+				// Need to put it in a variable because we will need to change it if it includes an index.
+				var propName = name; 
 
+				// Check to see if using an index of some type (string or numeric).
 				var idx = propName.IndexOf('[');
 				if (idx == 0)
 					throw new InvalidOperationException($"{propName} is not a supported property name. Property names cannot start with '['");
@@ -182,7 +184,9 @@ namespace BizArk.Core.Util
 				{
 					if (!propName.EndsWith("]"))
 						throw new InvalidOperationException($"{propName} is not a supported property name. Property names that include an indexer must end with ']'");
+					// Get the index (numeric or string)
 					indexer = propName.Substring(idx + 1, propName.Length - idx - 2);
+					// Get just the name of the property without the index.
 					propName = propName.Substring(0, idx);
 				}
 
@@ -193,6 +197,7 @@ namespace BizArk.Core.Util
 				currentObj = prop.GetValue(currentObj);
 				if (currentObj == null) return true;
 
+				// Check to see if we need to get an indexed value.
 				if (indexer != null)
 				{
 					currentObj = GetIndexedValue(currentObj, indexer);
@@ -211,7 +216,7 @@ namespace BizArk.Core.Util
 			if (list != null)
 			{
 				int idx;
-				if (!ConvertEx.Try(indexer, out idx))
+				if (!int.TryParse(indexer, out idx))
 					throw new ArgumentException($"'[{indexer}]' is not a valid index argument for an array.");
 				return list[idx];
 			}
@@ -226,14 +231,6 @@ namespace BizArk.Core.Util
 		private static PropertyInfo FindProperty(object obj, string name)
 		{
 			return obj.GetType().GetProperty(name);
-			//Debug.WriteLine(propx.Name);
-			//var props = TypeDescriptor.GetProperties(obj);
-			//foreach (PropertyDescriptor prop in props)
-			//{
-			//	if (prop.Name == name)
-			//		return prop;
-			//}
-			//return null;
 		}
 
 	}
