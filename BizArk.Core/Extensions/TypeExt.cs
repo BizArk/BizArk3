@@ -161,7 +161,7 @@ namespace BizArk.Core.Extensions.TypeExt
 		{
 			if (type == null) return false;
 			if (!type.IsValueType) return true;
-			return Nullable.GetUnderlyingType(type) == null;
+			return Nullable.GetUnderlyingType(type) != null;
 		}
 
     }

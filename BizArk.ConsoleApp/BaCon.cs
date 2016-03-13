@@ -44,7 +44,7 @@ namespace BizArk.ConsoleApp
 					WriteLine(results.Title, AppTitleColor);
 				if (results.Description.HasValue())
 					WriteLine(results.Description, AppDescriptionColor);
-				if(results.Copyright.HasValue())
+				if (results.Copyright.HasValue())
 					WriteLine(results.Copyright.Replace("©", "(c)"), AppDescriptionColor); // The © doesn't show up correctly in the console.
 
 				WriteLine(); // Put a line between the title and rest of the information.
@@ -162,9 +162,13 @@ namespace BizArk.ConsoleApp
 
 			if (results.Errors.Length > 0)
 			{
-				WriteLine("[ERRORS]", ErrorColor);
+				if (ErrorMessageTitle.HasValue())
+				{
+					using (var clr = BaConColor.Error())
+						(Out ?? Console.Out).WriteLine(ErrorMessageTitle);
+				}
 				foreach (var err in results.Errors)
-					WriteLine(err, ErrorColor, "", "\t");
+					WriteLine(err, ErrorColor, " > ", "\t");
 				WriteLine();
 			}
 
@@ -184,7 +188,7 @@ namespace BizArk.ConsoleApp
 				var propHelp = generator.GetPropertyHelp(prop);
 				if (propHelp.IsEmpty()) continue;
 
-				if(showSectionTitle)
+				if (showSectionTitle)
 				{
 					// We only want to display the section title if we 
 					// are displaying help text for properties.
@@ -201,6 +205,11 @@ namespace BizArk.ConsoleApp
 		}
 
 		/// <summary>
+		/// Gets or sets the title used above the error message.
+		/// </summary>
+		public static string ErrorMessageTitle { get; set; } = "An error has occurred.";
+	
+		/// <summary>
 		/// Displays the exception to the console.
 		/// </summary>
 		/// <param name="ex"></param>
@@ -208,7 +217,13 @@ namespace BizArk.ConsoleApp
 		{
 			var curEx = ex;
 			if (curEx == null) return;
-			WriteLine("ERROR!!!", color: ErrorColor);
+
+			if (ErrorMessageTitle.HasValue())
+			{
+				using (var clr = BaConColor.Error())
+					(Out ?? Console.Out).WriteLine(ErrorMessageTitle);
+			}
+
 			while (curEx != null)
 			{
 				WriteLine(new string('*', ConsoleWidth));
@@ -242,7 +257,7 @@ namespace BizArk.ConsoleApp
 					{
 						return Console.WindowWidth - 1;
 					}
-					catch(System.IO.IOException ex)
+					catch (System.IO.IOException ex)
 					{
 						// This exception is thrown if we can't get a handle to the window.
 						// This happens in CSI when running from Visual Studio.
@@ -261,6 +276,16 @@ namespace BizArk.ConsoleApp
 		}
 
 		/// <summary>
+		/// Gets or sets the width of the TAB in the console. Defaults to 8. Needed for word wrap. However, it is recommended that you do not put TABs in your text since it might not look the way you want it.
+		/// </summary>
+		public static byte ConsoleTabWidth { get; set; } = 8;
+
+		/***
+		 * BaCon does not support Write (as opposed to WriteLine) because BaCon needs to have full control over the line
+		 * that it is printing on in order for line wrapping to work correctly. 
+		 */
+
+		/// <summary>
 		/// Writes the value to the console using the given options.
 		/// </summary>
 		/// <param name="value">The value to write.</param>
@@ -275,25 +300,17 @@ namespace BizArk.ConsoleApp
 				return;
 			}
 
-			var oldClr = Console.ForegroundColor;
-			try
+			using (var clr = new BaConColor(color ?? Console.ForegroundColor))
 			{
-				if (color != null) Console.ForegroundColor = color.Value;
-
 				var displayVal = value;
 
 				if (indent1.HasValue())
 					displayVal = indent1 + displayVal;
 
-				displayVal = displayVal.Wrap(ConsoleWidth, indentN);
+				var options = new StringWrapOptions() { MaxWidth = ConsoleWidth, TabWidth = ConsoleTabWidth, Prefix = indentN };
+				displayVal = displayVal.Wrap(options);
 
 				(Out ?? Console.Out).WriteLine(displayVal);
-			}
-			finally
-			{
-				// Make sure we switch the color back!
-				if (color != null)
-					Console.ForegroundColor = oldClr;
 			}
 		}
 
@@ -357,4 +374,5 @@ namespace BizArk.ConsoleApp
 		#endregion
 
 	}
+
 }

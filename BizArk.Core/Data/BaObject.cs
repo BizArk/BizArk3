@@ -113,6 +113,22 @@ namespace BizArk.Core.Data
 		/// </summary>
 		public BaFieldList Fields { get; } = new BaFieldList();
 
+		/// <summary>
+		/// Gets a value that determines if the object has changed.
+		/// </summary>
+		public bool HasChanged
+		{
+			get
+			{
+				foreach (var fld in Fields)
+				{
+					if (fld.IsChanged)
+						return true;
+				}
+				return false;
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -220,7 +236,7 @@ namespace BizArk.Core.Data
 		/// <summary>
 		/// Updates the default value to be the same as value so that the fields show up as not changed.
 		/// </summary>
-		public void ResetChanges()
+		public void UpdateDefaults()
 		{
 			foreach (var fld in Fields)
 			{

@@ -108,7 +108,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(1, changes.Count);
 			Assert.IsFalse(changes.ContainsKey("Greeting"));
 
-			obj.ResetChanges();
+			obj.UpdateDefaults();
 			changes = obj.GetChanges();
 			Assert.AreEqual(0, changes.Count);
 
