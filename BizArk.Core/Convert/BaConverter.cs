@@ -33,8 +33,6 @@ namespace BizArk.Core.Convert
 			new StaticMethodConversionStrategy(),
 			new CtorConversionStrategy(),
 			new ConvertMethodConversionStrategy(),
-			new ByteArrayImageConversionStrategy(),
-			new ByteArrayStringConversionStrategy(),
 		};
 
 		/// <summary>
