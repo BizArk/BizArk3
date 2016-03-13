@@ -102,7 +102,8 @@ namespace BizArk.Core.Extensions.StringExt
 						// This allows text to have something that looks like columns
 						// It's not recommended to have embedded TABs in text for wrapped
 						// lines, but we need to support it.
-						charWidth = options.TabWidth;
+
+						charWidth = CalcTabWidth(lineWidth, options.TabWidth);
 					}
 					else if (char.IsControl(ch))
 					{
@@ -171,6 +172,18 @@ namespace BizArk.Core.Extensions.StringExt
 			}
 
 			return lines.ToArray();
+		}
+
+		/// <summary>
+		/// Calculate the width of the tab based on where it is in the string.
+		/// </summary>
+		/// <param name="tabStart">The width of the string prior to the tab.</param>
+		/// <param name="tabWidth">The max width of the tab.</param>
+		/// <returns></returns>
+		private static byte CalcTabWidth(int tabStart, byte tabWidth)
+		{
+			var width = tabWidth - (tabStart % tabWidth);
+			return (byte)width;
 		}
 
 		/// <summary>

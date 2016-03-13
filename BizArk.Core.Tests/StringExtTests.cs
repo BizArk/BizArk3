@@ -59,6 +59,14 @@ namespace BizArk.Core.Tests
 			options.Prefix = "\t";
 			actual = "\tWhat about this?".Wrap(options);
 			Assert.AreEqual("\tWhat\r\n\tabout\r\n\tthis?", actual);
+
+			options = new StringWrapOptions() { MaxWidth = 20, TabWidth = 4 };
+			actual = "Do\tsomething\twith\tinternal\ttabs.".Wrap(options);
+			Assert.AreEqual("Do\tsomething\twith\r\ninternal\ttabs.", actual);
+
+			options = new StringWrapOptions() { MaxWidth = 9, TabWidth = 8 };
+			actual = "123456789\n1\t9 123456789".Wrap(options);
+			Assert.AreEqual("123456789\r\n1\t9\r\n123456789", actual);
 		}
 
 		[Test]
