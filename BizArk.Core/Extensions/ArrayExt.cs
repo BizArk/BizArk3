@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace BizArk.Core.Extensions.ArrayExt
 {
@@ -141,5 +142,19 @@ namespace BizArk.Core.Extensions.ArrayExt
             arr.CopyTo(newArr, 0);
             return newArr;
         }
+
+		/// <summary>
+		/// Converts the collection of bytes into a hex strings (no prefix).
+		/// </summary>
+		/// <param name="bytes"></param>
+		/// <returns></returns>
+		public static string ToHex(this IEnumerable<byte> bytes)
+		{
+			var hex = new StringBuilder();
+			foreach (byte b in bytes)
+				hex.AppendFormat("{0:X2}", b);
+			return hex.ToString();
+		}
+
     }
 }

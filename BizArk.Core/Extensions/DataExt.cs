@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
+using BizArk.Core.Extensions.ArrayExt;
 
 namespace BizArk.Core.Extensions.DataExt
 {
@@ -603,6 +605,7 @@ namespace BizArk.Core.Extensions.DataExt
                 value = DBNull.Value;
             return parameters.AddWithValue(name, value);
         }
+
 		/// <summary>
 		/// This will add an array of parameters to a SqlCommand. This is used for an IN statement.
 		/// Use the returned value for the IN part of your SQL call. (i.e. SELECT * FROM table WHERE field IN ({paramNameRoot}))
@@ -631,6 +634,90 @@ namespace BizArk.Core.Extensions.DataExt
 			cmd.CommandText = cmd.CommandText.Replace("{" + paramNameRoot + "}", string.Join(separator, parameterNames));
 
 			return parameters.ToArray();
+		}
+
+		/// <summary>
+		/// Converts the command into TSql that can be executed in Sql Server Management Studio.
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <returns></returns>
+		public static string DebugText(this SqlCommand cmd)
+		{
+			// No parameters, no problem.
+			if (cmd.Parameters.Count == 0)
+				return cmd.CommandText;
+			
+			var sb = new StringBuilder();
+			
+			foreach(SqlParameter param in cmd.Parameters)
+			{				
+				sb.AppendFormat($"DECLARE {DebugSqlParamName(param)} AS {DebugSqlType(param)} = {DebugSqlValue(param)}\n");
+			}
+
+			sb.Append(cmd.CommandText);
+
+			return sb.ToString();
+		}
+
+		private static object DebugSqlParamName(SqlParameter param)
+		{
+			if (param.ParameterName.StartsWith("@"))
+				return param.ParameterName;
+			else
+				return "@" + param.ParameterName;
+		}
+
+		private static object DebugSqlValue(SqlParameter param)
+		{
+			if (param.Value == null) return "NULL";
+			if (param.Value == DBNull.Value) return "NULL";
+
+			switch(param.SqlDbType)
+			{
+				case SqlDbType.Char:
+				case SqlDbType.Text:
+				case SqlDbType.Time:
+				case SqlDbType.VarChar:
+				case SqlDbType.Xml:
+				case SqlDbType.Date:
+				case SqlDbType.DateTime:
+				case SqlDbType.DateTime2:
+				case SqlDbType.DateTimeOffset:
+					return $"'{param.Value.ToString().Replace("'", "''")}'";
+
+				case SqlDbType.NChar:
+				case SqlDbType.NText:
+				case SqlDbType.NVarChar:
+					return $"N'{param.Value.ToString().Replace("'", "''")}'";
+
+				case SqlDbType.Binary:
+				case SqlDbType.VarBinary:
+					var bytes = param.Value as IEnumerable<byte>;
+					return $"0x{bytes.ToHex()}";
+
+				case SqlDbType.Bit:
+					return ConvertEx.ToBool(param.Value) ? "1" : "0";
+
+				default:
+					return param.Value.ToString();
+			}
+		}
+
+		private static string DebugSqlType(SqlParameter param)
+		{
+			switch (param.SqlDbType)
+			{
+				case SqlDbType.Char:
+				case SqlDbType.VarChar:
+				case SqlDbType.NChar:
+				case SqlDbType.NText:
+				case SqlDbType.NVarChar:
+				case SqlDbType.Binary:
+				case SqlDbType.VarBinary:
+					return $"{param.SqlDbType.ToString().ToUpper()}({param.Size})";
+				default:
+					return param.SqlDbType.ToString().ToUpper();
+			}
 		}
 
 	}
