@@ -142,6 +142,19 @@ namespace BizArk.Data.SqlServer
 		}
 
 		/// <summary>
+		/// Executes a Transact-SQL statement against the connection and returns the number
+		/// of rows affected.
+		/// </summary>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <returns></returns>
+		public int ExecuteNonQuery(string sprocName, object parameters = null)
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return ExecuteNonQuery(cmd);
+		}
+
+		/// <summary>
 		/// Executes the query, and returns the first column of the first row in the result
 		/// set returned by the query. Additional columns or rows are ignored.
 		/// </summary>
@@ -162,6 +175,20 @@ namespace BizArk.Data.SqlServer
 		/// Executes the query, and returns the first column of the first row in the result
 		/// set returned by the query. Additional columns or rows are ignored.
 		/// </summary>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="dflt"></param>
+		/// <returns></returns>
+		public object ExecuteScalar(string sprocName, object parameters = null, object dflt = null)
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return ExecuteScalar(cmd, dflt);
+		}
+
+		/// <summary>
+		/// Executes the query, and returns the first column of the first row in the result
+		/// set returned by the query. Additional columns or rows are ignored.
+		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="cmd"></param>
 		/// <param name="dflt"></param>
@@ -172,6 +199,21 @@ namespace BizArk.Data.SqlServer
 			if (result == null) return dflt;
 			if (result == DBNull.Value) return dflt;
 			return ConvertEx.To<T>(result);
+		}
+
+		/// <summary>
+		/// Executes the query, and returns the first column of the first row in the result
+		/// set returned by the query. Additional columns or rows are ignored.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="dflt"></param>
+		/// <returns></returns>
+		public T ExecuteScalar<T>(string sprocName, object parameters = null, T dflt = default(T))
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return ExecuteScalar<T>(cmd, dflt);
 		}
 
 		/// <summary>
@@ -195,6 +237,33 @@ namespace BizArk.Data.SqlServer
 					}
 				}
 			});
+		}
+
+		/// <summary>
+		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
+		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
+		/// Use processRow to process each row in the reader.
+		/// </summary>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
+		public void ExecuteReader(string sprocName, Func<SqlDataReader, bool> processRow)
+		{
+			var cmd = PrepareSprocCmd(sprocName, null);
+			ExecuteReader(cmd, processRow);
+		}
+
+		/// <summary>
+		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
+		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
+		/// Use processRow to process each row in the reader.
+		/// </summary>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
+		public void ExecuteReader(string sprocName, object parameters, Func<SqlDataReader, bool> processRow)
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			ExecuteReader(cmd, processRow);
 		}
 
 		#endregion
@@ -235,6 +304,20 @@ namespace BizArk.Data.SqlServer
 		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor).</param>
+		/// <returns></returns>
+		public T GetObject<T>(string sprocName, object parameters = null, Func<IDataReader, T> load = null) where T : class
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return GetObject<T>(cmd, load);
+		}
+
+		/// <summary>
+		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
 		/// <param name="cmd"></param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
 		/// <returns></returns>
@@ -264,6 +347,20 @@ namespace BizArk.Data.SqlServer
 			});
 
 			return results.ToArray();
+		}
+
+		/// <summary>
+		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
+		/// <returns></returns>
+		public T[] GetObjects<T>(string sprocName, object parameters = null, Func<SqlDataReader, T> load = null) where T : class
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return GetObjects<T>(cmd, load);
 		}
 
 		/// <summary>
@@ -311,6 +408,18 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Gets the first row as a dynamic object.
 		/// </summary>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <returns></returns>
+		public dynamic[] GetDynamic(string sprocName, object parameters = null)
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return GetDynamic(cmd);
+		}
+
+		/// <summary>
+		/// Returns the results of the SQL command as a list of dynamic objects.
+		/// </summary>
 		/// <param name="cmd"></param>
 		/// <returns></returns>
 		public dynamic[] GetDynamics(SqlCommand cmd)
@@ -325,6 +434,18 @@ namespace BizArk.Data.SqlServer
 			});
 
 			return results.ToArray();
+		}
+
+		/// <summary>
+		/// Returns the results of the SQL command as a list of dynamic objects.
+		/// </summary>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <returns></returns>
+		public dynamic[] GetDynamics(string sprocName, object parameters = null)
+		{
+			var cmd = PrepareSprocCmd(sprocName, parameters);
+			return GetDynamics(cmd);
 		}
 
 		private dynamic SqlDataReaderToDynamic(SqlDataReader row)
@@ -343,6 +464,21 @@ namespace BizArk.Data.SqlServer
 			}
 
 			return result;
+		}
+
+		#endregion
+
+		#region Utility Methods
+
+		private SqlCommand PrepareSprocCmd(string sprocName, object parameters)
+		{
+			var cmd = new SqlCommand(sprocName);
+			cmd.CommandType = CommandType.StoredProcedure;
+
+			if (parameters != null)
+				cmd.AddParameters(parameters);
+
+			return cmd;
 		}
 
 		#endregion

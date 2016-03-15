@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using BizArk.Core.Extensions.ArrayExt;
+using BizArk.Core.Util;
 
 namespace BizArk.Core.Extensions.DataExt
 {
@@ -648,6 +649,18 @@ namespace BizArk.Core.Extensions.DataExt
 			cmd.CommandText = cmd.CommandText.Replace("{" + paramNameRoot + "}", string.Join(separator, parameterNames));
 
 			return parameters.ToArray();
+		}
+
+		/// <summary>
+		/// Adds the objects properties as parameters.
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <param name="parameters"></param>
+		public static void AddParameters(this SqlCommand cmd, object parameters)
+		{
+			var propBag = ObjectUtil.ToPropertyBag(parameters);
+			foreach(var prop in propBag)
+				cmd.Parameters.AddWithValue(prop.Key, prop.Value, true);
 		}
 
 		#endregion
