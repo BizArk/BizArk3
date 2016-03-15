@@ -10,11 +10,19 @@ using System.Text;
 
 namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 {
+
+	/// <summary>
+	/// Generates help text for a command-line object.
+	/// </summary>
 	public class HelpGenerator
 	{
 
 		#region Initialization and Destruction
 
+		/// <summary>
+		/// Creates an instance of HelpGenerator.
+		/// </summary>
+		/// <param name="results"></param>
 		public HelpGenerator(CmdLineParseResults results)
 		{
 			ParseResults = results;
@@ -24,6 +32,9 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 
 		#region Fields and Properties
 
+		/// <summary>
+		/// Gets the command-line parser results that are used to generate the help.
+		/// </summary>
 		public CmdLineParseResults ParseResults { get; private set; }
 
 		#endregion

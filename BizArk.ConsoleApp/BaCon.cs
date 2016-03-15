@@ -11,6 +11,10 @@ using System.Linq;
 
 namespace BizArk.ConsoleApp
 {
+
+	/// <summary>
+	/// BizArk Console utility.
+	/// </summary>
 	public static class BaCon
 	{
 

@@ -17,7 +17,8 @@ namespace BizArk.ConsoleApp
 		/// <summary>
 		/// Creates a new instance of BaConColor.
 		/// </summary>
-		/// <param name="clr"></param>
+		/// <param name="foreground"></param>
+		/// <param name="background"></param>
 		public BaConColor(ConsoleColor? foreground, ConsoleColor? background = null)
 		{
 			OrigForegroundColor = Console.ForegroundColor;

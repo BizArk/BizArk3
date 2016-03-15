@@ -5,12 +5,19 @@ using System.Text;
 
 namespace BizArk.ConsoleApp
 {
+
+	/// <summary>
+	/// Start options for BizArk Console apps.
+	/// </summary>
     public class BaConStartOptions
     {
 
-        #region Construction and Destruction
+		#region Construction and Destruction
 
-        public BaConStartOptions()
+		/// <summary>
+		/// Creates an instance of BaConStartOptions.
+		/// </summary>
+		public BaConStartOptions()
         {
             var sb = new StringBuilder();
             sb.AppendLine();

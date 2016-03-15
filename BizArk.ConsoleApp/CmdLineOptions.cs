@@ -7,6 +7,10 @@ using System.Text;
 
 namespace BizArk.ConsoleApp
 {
+
+	/// <summary>
+	/// Command-line options.
+	/// </summary>
     public class CmdLineOptions
     {
 

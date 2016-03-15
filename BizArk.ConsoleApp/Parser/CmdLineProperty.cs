@@ -138,6 +138,10 @@ namespace BizArk.ConsoleApp.Parser
 
 		#region Initialization and Destruction
 
+		/// <summary>
+		/// Creates an instance of CmdLinePropertyBag.
+		/// </summary>
+		/// <param name="options"></param>
 		public CmdLinePropertyBag(CmdLineOptions options)
 		{
 			Options = options;
@@ -154,6 +158,11 @@ namespace BizArk.ConsoleApp.Parser
 		/// </summary>
 		public CmdLineOptions Options { get; private set; }
 
+		/// <summary>
+		/// Gets the command-line property that matches the argName. Searches aliases and partial matches.
+		/// </summary>
+		/// <param name="argName"></param>
+		/// <returns></returns>
 		public CmdLineProperty this[string argName]
 		{
 			get

@@ -16,12 +16,19 @@ namespace BizArk.ConsoleApp
 
 		#region Initialization and Destruction
 
+		/// <summary>
+		/// Creates an instance of CmdLineOptionsAttribute.
+		/// </summary>
 		public CmdLineOptionsAttribute()
 		{
 			// Start with the default options.
 			CmdLineOptions = new CmdLineOptions();
 		}
 
+		/// <summary>
+		/// Creates an instance of CmdLineOptionsAttribute.
+		/// </summary>
+		/// <param name="defaultArgName"></param>
 		public CmdLineOptionsAttribute(string defaultArgName)
 			: this()
 		{
