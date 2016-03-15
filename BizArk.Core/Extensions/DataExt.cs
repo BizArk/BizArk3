@@ -13,13 +13,15 @@ namespace BizArk.Core.Extensions.DataExt
     public static class DataExt
     {
 
-        /// <summary>
-        /// Returns the field value as a string. Uses ConvertEx to convert the value.
-        /// </summary>
-        /// <param name="row"></param>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
-        public static string GetString(this DataRow row, string fieldName)
+		#region DataRow
+
+		/// <summary>
+		/// Returns the field value as a string. Uses ConvertEx to convert the value.
+		/// </summary>
+		/// <param name="row"></param>
+		/// <param name="fieldName"></param>
+		/// <returns></returns>
+		public static string GetString(this DataRow row, string fieldName)
         {
             return GetValue<string>(row, fieldName);
         }
@@ -177,13 +179,17 @@ namespace BizArk.Core.Extensions.DataExt
             return ConvertEx.To<T>(row[fieldName]);
         }
 
-        /// <summary>
-        /// Returns the field value as a string. Uses ConvertEx to convert the value to a string.
-        /// </summary>
-        /// <param name="row"></param>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
-        public static string GetString(this DataRowView row, string fieldName)
+		#endregion
+
+		#region DataRowView
+
+		/// <summary>
+		/// Returns the field value as a string. Uses ConvertEx to convert the value to a string.
+		/// </summary>
+		/// <param name="row"></param>
+		/// <param name="fieldName"></param>
+		/// <returns></returns>
+		public static string GetString(this DataRowView row, string fieldName)
         {
             return GetValue<string>(row, fieldName);
         }
@@ -352,13 +358,17 @@ namespace BizArk.Core.Extensions.DataExt
             return row.Row.IsNull(fieldName);
         }
 
-        /// <summary>
-        /// Returns the field value as a string. Uses ConvertEx to convert the value to a string.
-        /// </summary>
-        /// <param name="row"></param>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
-        public static string GetString(this IDataReader row, string fieldName)
+		#endregion
+
+		#region IDataReader
+
+		/// <summary>
+		/// Returns the field value as a string. Uses ConvertEx to convert the value to a string.
+		/// </summary>
+		/// <param name="row"></param>
+		/// <param name="fieldName"></param>
+		/// <returns></returns>
+		public static string GetString(this IDataReader row, string fieldName)
         {
             return GetValue<string>(row, fieldName);
         }
@@ -591,15 +601,19 @@ namespace BizArk.Core.Extensions.DataExt
             return false;
         }
 
-        /// <summary>
-        /// Adds a value to the end of the parameter collection.
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <param name="setNull">If true, sets the value to DBNull if it ConvertEx.IsEmpty is true.</param>
-        /// <returns></returns>
-        public static SqlParameter AddWithValue(this SqlParameterCollection parameters, string name, object value, bool setNull)
+		#endregion
+
+		#region SqlParameter
+
+		/// <summary>
+		/// Adds a value to the end of the parameter collection.
+		/// </summary>
+		/// <param name="parameters"></param>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <param name="setNull">If true, sets the value to DBNull if it ConvertEx.IsEmpty is true.</param>
+		/// <returns></returns>
+		public static SqlParameter AddWithValue(this SqlParameterCollection parameters, string name, object value, bool setNull)
         {
             if (setNull && ConvertEx.IsEmpty(value))
                 value = DBNull.Value;
@@ -635,6 +649,10 @@ namespace BizArk.Core.Extensions.DataExt
 
 			return parameters.ToArray();
 		}
+
+		#endregion
+
+		#region Debug SQL
 
 		/// <summary>
 		/// Converts the command into TSql that can be executed in Sql Server Management Studio.
@@ -719,6 +737,8 @@ namespace BizArk.Core.Extensions.DataExt
 					return param.SqlDbType.ToString().ToUpper();
 			}
 		}
+
+		#endregion
 
 	}
 }
