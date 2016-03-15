@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using BizArk.Core.Extensions.ArrayExt;
 using System.Text;
+using BizArk.Core.Util;
 
 namespace BizArk.Core.Extensions.StringExt
 {
@@ -390,6 +391,84 @@ namespace BizArk.Core.Extensions.StringExt
 		}
 
 		/// <summary>
+		/// Puts the string into a MemoryStream. Resets the MemoryStream to position 0 so it can be read from.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="encoding">The encoding to use to write the string to the stream. If null, uses the default encoding.</param>
+		/// <returns></returns>
+		public static Stream ToStream(this string str, Encoding encoding = null)
+		{
+			var ms = new MemoryStream();
+			var sw = new StreamWriter(ms, encoding ?? Encoding.Default);
+			sw.Write(str);
+			sw.Flush();
+			ms.Position = 0;
+			return ms;
+		}
+
+		/// <summary>
+		/// Puts the string into an array of bytes.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="encoding">The encoding to use to write the string to array of bytes. If null, uses the default encoding.</param>
+		/// <returns></returns>
+		public static byte[] ToBytes(this string str, Encoding encoding = null)
+		{
+			return (encoding ?? Encoding.Default).GetBytes(str);
+				
+		}
+
+		#region Security
+
+		/// <summary>
+		/// Hashes the string using SHA-256.
+		/// </summary>
+		/// <param name="str">The value to hash.</param>
+		/// <param name="salt">An optional salt.</param>
+		/// <returns></returns>
+		public static byte[] SHA256(this string str, string salt = null)
+		{
+			return Security.SHA256(str, salt);
+		}
+
+		/// <summary>
+		/// Hashes the string using SHA-256.
+		/// </summary>
+		/// <param name="str">The value to hash.</param>
+		/// <param name="salt">An optional salt.</param>
+		/// <returns></returns>
+		public static byte[] SHA256(this string str, byte[] salt = null)
+		{
+			return Security.SHA256(str, salt);
+		}
+
+		/// <summary>
+		/// Hashes the string using SHA-512.
+		/// </summary>
+		/// <param name="str">The value to hash.</param>
+		/// <param name="salt">An optional salt.</param>
+		/// <returns></returns>
+		public static byte[] SHA512(this string str, string salt = null)
+		{
+			return Security.SHA512(str, salt);
+		}
+
+		/// <summary>
+		/// Hashes the string using SHA-512.
+		/// </summary>
+		/// <param name="str">The value to hash.</param>
+		/// <param name="salt">An optional salt.</param>
+		/// <returns></returns>
+		public static byte[] SHA512(this string str, byte[] salt = null)
+		{
+			return Security.SHA512(str, salt);
+		}
+
+		#endregion
+
+		#region StringBuilder
+
+		/// <summary>
 		/// Retrieves a substring from this instance. The substring starts at a specified
 		/// character position and continues to the end of the string.
 		/// </summary>
@@ -449,6 +528,8 @@ namespace BizArk.Core.Extensions.StringExt
 		{
 			return sb.ToString().TrimEnd();
 		}
+
+		#endregion
 
 		#region Split
 

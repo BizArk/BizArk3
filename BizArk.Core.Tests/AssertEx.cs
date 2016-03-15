@@ -11,32 +11,44 @@ namespace BizArk.Core.Tests
     /// </summary>
     public static class AssertEx
     {
-        public static void AreEqual(Array expected, Array actual)
-        {
-            AreEqual(expected, actual, "");
-        }
-
-        public static void AreEqual(Array expected, Array actual, string message)
+		public static void AreEqual(Array expected, Array actual, string message = null)
         {
             if (expected == actual) return;
-            if (expected == null) Assert.Fail(message == "" ? string.Format("Expected <null>. Actual array contained {0} elements.", actual.Length) : message);
-            if (actual == null) Assert.Fail(message == "" ? string.Format("Expected {0} elements. Actual array was null.", expected.Length) : message);
-            if (expected.GetType().GetElementType() != actual.GetType().GetElementType()) Assert.Fail(message == "" ? string.Format("Array element types differ. Expected elements of type {0}, actual array conains elements of type {1}.", expected.GetType().GetElementType().FullName, actual.GetType().GetElementType().FullName) : message);
-            if (expected.Length != actual.Length) Assert.Fail(message == "" ? string.Format("Expected {0} elements. Actual array conains {1} elements.", expected.Length, actual.Length) : message);
+            if (expected == null) Assert.Fail(message ?? $"Expected <null>. Actual array contained {actual.Length} elements.");
+            if (actual == null) Assert.Fail(message ?? $"Expected {expected.Length} elements. Actual array was null.");
+            if (expected.GetType().GetElementType() != actual.GetType().GetElementType()) Assert.Fail(message ?? $"Array element types differ. Expected elements of type {expected.GetType().GetElementType().FullName}, actual array conains elements of type {actual.GetType().GetElementType().FullName}.");
+            if (expected.Length != actual.Length) Assert.Fail(message ?? $"Expected {expected.Length} elements. Actual array conains {actual.Length} elements.");
 
             for (int i = 0; i < actual.Length; i++)
             {
                 if (!expected.GetValue(i).Equals(actual.GetValue(i)))
-                    Assert.Fail(message == "" ? string.Format("Arrays differ at element {0}. Expected '{1}', actual '{2}'.", i, expected.GetValue(i), actual.GetValue(i)) : message);
+                    Assert.Fail(message ?? $"Arrays differ at element {i}. Expected '{expected.GetValue(i)}', actual '{actual.GetValue(i)}'.");
             }
         }
 
-        /// <summary>
-        /// Catches the given exception type and ignores it.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="action"></param>
-        public static void Throws<T>(Action action) where T : Exception
+		public static void AreNotEqual(Array expected, Array actual, string message = null)
+		{
+			if (expected == actual) Assert.Fail(message ?? "The arrays are the same instance.");
+			if (expected == null) return;
+			if (actual == null) return;
+			if (expected.Length != actual.Length) return;
+			if (expected.GetType().GetElementType() != actual.GetType().GetElementType()) return;
+
+			for (int i = 0; i < actual.Length; i++)
+			{
+				if (!expected.GetValue(i).Equals(actual.GetValue(i)))
+					return;
+					
+			}
+			Assert.Fail(message ?? $"Arrays have identical values");
+		}
+
+		/// <summary>
+		/// Catches the given exception type and ignores it.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="action"></param>
+		public static void Throws<T>(Action action) where T : Exception
         {
             try
             {

@@ -137,6 +137,7 @@
     <Compile Include="Util\ClassFactory.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\FontUtil.cs" />
+    <Compile Include="Util\Security.cs" />
     <Compile Include="Util\MemSize.cs" />
     <Compile Include="Util\MimeMap.cs" />
     <Compile Include="Util\NameValue.cs" />
