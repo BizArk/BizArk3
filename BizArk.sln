@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Core.Tests", "BizArk.Core.Tests\BizArk.Core.Tests.csproj", "{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Data.SqlServer", "BizArk.Data.SqlServer\BizArk.Data.SqlServer.csproj", "{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,18 @@ Global
 		{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}.Release|x86.ActiveCfg = Release|Any CPU
 		{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}.Release|x86.Build.0 = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|x86.Build.0 = Debug|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Publish|x86.ActiveCfg = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Publish|x86.Build.0 = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|x86.ActiveCfg = Release|Any CPU
+		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
