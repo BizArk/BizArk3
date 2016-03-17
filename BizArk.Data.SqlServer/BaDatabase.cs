@@ -62,6 +62,16 @@ namespace BizArk.Data.SqlServer
 			mConnectionString = null;
 		}
 
+		/// <summary>
+		/// Creates the BaDatabase from the connection string named in the config file.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static BaDatabase Create(string name)
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion
 
 		#region Fields and Properties
@@ -69,6 +79,7 @@ namespace BizArk.Data.SqlServer
 		private string mConnectionString;
 
 		private SqlConnection mConnection;
+
 		/// <summary>
 		/// Gets the connection to use for this database. Only a single instance per BaDatabase instance is supported.
 		/// </summary>
@@ -85,7 +96,7 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Gets the currently executing transaction for this database instance.
 		/// </summary>
-		public SqlTransaction Transaction { get; private set; }
+		public BaTransaction Transaction { get; private set; }
 
 		#endregion
 
@@ -113,7 +124,8 @@ namespace BizArk.Data.SqlServer
 			try
 			{
 				cmd.Connection = Connection;
-				cmd.Transaction = Transaction;
+				if (Transaction != null)
+					cmd.Transaction = Transaction.Transaction;
 				execute(cmd);
 			}
 			finally
@@ -264,6 +276,148 @@ namespace BizArk.Data.SqlServer
 		{
 			var cmd = PrepareSprocCmd(sprocName, parameters);
 			ExecuteReader(cmd, processRow);
+		}
+
+		#endregion
+
+		#region Object Insert/Update/Delete Methods
+
+		/// <summary>
+		/// Inserts a new record into the table.
+		/// </summary>
+		/// <param name="tableName">Name of the table to insert into.</param>
+		/// <param name="values">The values that will be added to the table. Can be anything that can be converted to a property bag.</param>
+		/// <returns></returns>
+		public int Insert(string tableName, object values)
+		{
+			var cmd = PrepareInsertCmd(tableName, values);
+			return ExecuteNonQuery(cmd);
+		}
+
+		/// <summary>
+		/// Creates the insert command.
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <param name="values"></param>
+		/// <remarks>Internal so it can be called from the unit tests.</remarks>
+		/// <returns></returns>
+		internal SqlCommand PrepareInsertCmd(string tableName, object values)
+		{
+			var cmd = new SqlCommand();
+			var sb = new StringBuilder();
+
+			var fields = new List<string>();
+			var propBag = ObjectUtil.ToPropertyBag(values);
+
+			foreach (var val in propBag)
+			{
+				fields.Add(val.Key);
+				cmd.Parameters.AddWithValue(val.Key, val.Value);
+			}
+
+			sb.AppendLine($"INSERT INTO {tableName} ({string.Join(", ", fields)})");
+			sb.AppendLine($"\tVALUES (@{string.Join(", @", fields)})");
+
+			cmd.CommandText = sb.ToString();
+
+			return cmd;
+		}
+
+		/// <summary>
+		/// Updates the table with the given values.
+		/// </summary>
+		/// <param name="tableName">Name of the table to update.</param>
+		/// <param name="key">Key of the record to update. Can be anything that can be converted to a property bag.</param>
+		/// <param name="values">The values that will be updated. Can be anything that can be converted to a property bag.</param>
+		/// <returns></returns>
+		public int Update(string tableName, object key, object values)
+		{
+			var cmd = PrepareUpdateCmd(tableName, key, values);
+			return ExecuteNonQuery(cmd);
+		}
+
+		/// <summary>
+		/// Creates the update command.
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <param name="key"></param>
+		/// <param name="values"></param>
+		/// <remarks>Internal so it can be called from the unit tests.</remarks>
+		/// <returns></returns>
+		internal SqlCommand PrepareUpdateCmd(string tableName, object key, object values)
+		{
+			var cmd = new SqlCommand();
+			var sb = new StringBuilder();
+
+			sb.AppendLine($"UPDATE {tableName} SET");
+
+			var propBag = ObjectUtil.ToPropertyBag(values);
+			foreach (var val in propBag)
+			{
+				sb.AppendLine($"\t\t{val.Key} = @{val.Key}");
+				cmd.Parameters.AddWithValue(val.Key, val.Value);
+			}
+
+			// Get the criteria for the UPDATE.
+			if (key != null)
+			{
+				var criteria = new List<string>();
+				propBag = ObjectUtil.ToPropertyBag(key);
+				foreach (var val in propBag)
+				{
+					criteria.Add($"{val.Key} = @{val.Key}");
+					cmd.Parameters.AddWithValue(val.Key, val.Value);
+				}
+				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
+			}
+
+			cmd.CommandText = sb.ToString();
+
+			return cmd;
+		}
+
+		/// <summary>
+		/// Deletes the records with the given key.
+		/// </summary>
+		/// <param name="tableName">Name of the table to remove records from.</param>
+		/// <param name="key">Key of the record to delete. Can be anything that can be converted to a property bag.</param>
+		/// <returns></returns>
+		public int Delete(string tableName, object key)
+		{
+			var cmd = PrepareDeleteCmd(tableName, key);
+			return ExecuteNonQuery(cmd);
+		}
+
+		/// <summary>
+		/// Creates the delete command.
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <param name="key"></param>
+		/// <remarks>Internal so it can be called from the unit tests.</remarks>
+		/// <returns></returns>
+		internal SqlCommand PrepareDeleteCmd(string tableName, object key)
+		{
+			var cmd = new SqlCommand();
+			var sb = new StringBuilder();
+
+			sb.AppendLine($"DELETE FROM {tableName}");
+
+			// Get the criteria for the UPDATE.
+			if (key != null)
+			{
+				var criteria = new List<string>();
+				var propBag = ObjectUtil.ToPropertyBag(key);
+				foreach (var val in propBag)
+				{
+					criteria.Add($"{val.Key} = @{val.Key}");
+					cmd.Parameters.AddWithValue(val.Key, val.Value);
+				}
+				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
+			}
+
+			cmd.CommandText = sb.ToString();
+
+			return cmd;
 		}
 
 		#endregion
@@ -470,7 +624,14 @@ namespace BizArk.Data.SqlServer
 
 		#region Utility Methods
 
-		private SqlCommand PrepareSprocCmd(string sprocName, object parameters)
+		/// <summary>
+		/// Creates a SqlCommand to execute a stored procedure.
+		/// </summary>
+		/// <param name="sprocName"></param>
+		/// <param name="parameters"></param>
+		/// <remarks>This is internal so it can be called from the unit tests.</remarks>
+		/// <returns></returns>
+		internal SqlCommand PrepareSprocCmd(string sprocName, object parameters)
 		{
 			var cmd = new SqlCommand(sprocName);
 			cmd.CommandType = CommandType.StoredProcedure;
@@ -479,6 +640,14 @@ namespace BizArk.Data.SqlServer
 				cmd.AddParameters(parameters);
 
 			return cmd;
+		}
+
+		/// <summary>
+		/// This method is called from BaTransaction to close the current transaction.
+		/// </summary>
+		internal void CloseTransaction()
+		{
+			Transaction = null;
 		}
 
 		#endregion

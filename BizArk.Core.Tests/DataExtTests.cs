@@ -48,5 +48,17 @@ namespace BizArk.Core.Tests
 			Assert.IsTrue(sql.Contains(cmd.CommandText));
 		}
 
+		[Test]
+		public void DebugSqlWithSprocTest()
+		{
+			var cmd = new SqlCommand("MySproc");
+			cmd.CommandType = System.Data.CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("MyField", "SomeValue");
+			cmd.Parameters.AddWithValue("AnotherField", "AnotherValue");
+			var sql = cmd.DebugText();
+			Debug.WriteLine(sql);
+			Assert.IsTrue(sql.Contains("EXEC MySproc @MyField, @AnotherField"));
+		}
+
 	}
 }
