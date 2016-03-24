@@ -62,6 +62,7 @@ namespace BizArk.Core.Tests
 		}
 
 		[Test]
+        [Ignore]
 		public void CreateMixedBaObject()
 		{
 			var obj = new BaObject(new BaObjectOptions() { StrictSet = false, StrictGet = true });
@@ -71,6 +72,7 @@ namespace BizArk.Core.Tests
 		}
 
 		[Test]
+        [Ignore]
 		public void CreateDynamicBaObject()
 		{
 			dynamic obj = new BaObject(false);
