@@ -1,4 +1,4 @@
-# BizArk v3
+# BizArk v3 [![build status](http://teamcity.codebetter.com/app/rest/builds/buildType:id:BizArk_Bizark30/statusIcon)](http://teamcity.codebetter.com/viewType.html?buildTypeId=BizArk_Bizark30&guest=1) [![code coverage](https://img.shields.io/teamcity/coverage/BizArk_Bizark30.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=BizArk_Bizark30&guest=1)
 BizArk provides a collection of tools to make building line-of-business applications easier. 
 
 ## Version 3
