@@ -65,7 +65,8 @@ namespace BizArk.Core.Tests
 		public void CreateMixedBaObject()
 		{
 			var obj = new BaObject(new BaObjectOptions() { StrictSet = false, StrictGet = true });
-			AssertEx.Throws<ArgumentOutOfRangeException>(() => { Debug.WriteLine(obj["Test"]); });
+			object test;
+			AssertEx.Throws<ArgumentOutOfRangeException>(() => { test = obj["Test"]; });
 			obj["Test"] = 123;
 			Assert.AreEqual(123, obj["Test"]);
 		}
@@ -79,7 +80,8 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(123, obj.VALID);
 
 			obj = new BaObject(true, new { VALID = 0 });
-			AssertEx.Throws<RuntimeBinderException>(() => { Debug.WriteLine(obj.INVALID as string); });
+			string invalid; // Just needed to assign to.
+			AssertEx.Throws<RuntimeBinderException>(() => { invalid = obj.INVALID as string; });
 			obj.VALID = 123;
 			Assert.AreEqual(123, obj.VALID);
 		}

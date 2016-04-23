@@ -79,14 +79,24 @@ namespace BizArk.Core.Tests
 	The name of the person.
 	The field Name must be a string with a minimum length of 2 and a maximum length of 20.";
 
-			var expected = @"/Name <String> REQUIRED
+			var expected = Normalize(@"/Name <String> REQUIRED
 	The name of the person.
 	The field Name must be a string with a minimum
-	length of 2 and a maximum length of 20.";
+	length of 2 and a maximum length of 20.");
 
 			var options = new StringWrapOptions() { MaxWidth = 59, TabWidth = 8, Prefix = "\t" };
-			var actual = str.Wrap(options);
+			var actual = Normalize(str.Wrap(options));
 			Assert.AreEqual(expected, actual);
+		}
+
+		/// <summary>
+		/// Makes sure all newlines are just '\n' (basically just removes '\r' from the string).
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		private string Normalize(string str)
+		{
+			return str.Remove('\r');
 		}
 
 	}
