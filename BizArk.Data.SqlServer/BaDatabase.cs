@@ -99,7 +99,7 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Gets the currently executing transaction for this database instance.
 		/// </summary>
-		public BaTransaction Transaction { get; private set; }
+		public BaTransaction Transaction { get; internal set; } // Internal so it can be called from BaTransaction.
 
 		#endregion
 
@@ -643,14 +643,6 @@ namespace BizArk.Data.SqlServer
 				cmd.AddParameters(parameters);
 
 			return cmd;
-		}
-
-		/// <summary>
-		/// This method is called from BaTransaction to close the current transaction.
-		/// </summary>
-		internal void CloseTransaction()
-		{
-			Transaction = null;
 		}
 
 		#endregion

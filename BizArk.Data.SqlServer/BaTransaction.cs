@@ -74,7 +74,7 @@ namespace BizArk.Data.SqlServer
 		{
 			Transaction.Dispose();
 			Transaction = null;
-			Database.CloseTransaction();
+			Database.Transaction = null;
 		}
 
 		#endregion
