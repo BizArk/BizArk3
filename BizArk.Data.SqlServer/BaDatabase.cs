@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BizArk.Core;
 using BizArk.Core.Extensions.DataExt;
 using BizArk.Core.Extensions.StringExt;
-using BizArk.Core;
 using BizArk.Core.Util;
-using BizArk.Core.Data;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Dynamic;
+using System.Text;
 
 namespace BizArk.Data.SqlServer
 {
@@ -31,6 +29,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="connStr">The connection string to use for the database.</param>
 		public BaDatabase(string connStr)
 		{
+			if (connStr.IsEmpty()) throw new ArgumentNullException("connStr");
 			mConnectionString = connStr;
 		}
 
@@ -69,14 +68,18 @@ namespace BizArk.Data.SqlServer
 		/// <returns></returns>
 		public static BaDatabase Create(string name)
 		{
-			throw new NotImplementedException();
+			var connStrSetting = ConfigurationManager.ConnectionStrings[name];
+			if (connStrSetting == null)
+				throw new InvalidOperationException($"The connection string setting for '{name}' was not found.");
+			return new BaDatabase(connStrSetting.ConnectionString);
 		}
 
 		#endregion
 
 		#region Fields and Properties
 
-		private string mConnectionString;
+		// Internal so it can be viewed in the unit tests.
+		internal string mConnectionString;
 
 		private SqlConnection mConnection;
 

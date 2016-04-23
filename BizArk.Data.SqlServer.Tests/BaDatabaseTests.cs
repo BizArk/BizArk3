@@ -114,5 +114,15 @@ namespace BizArk.Data.SqlServer.Tests
 				Assert.AreEqual(dt, cmd.Parameters["SomeDate"].Value);
 			}
 		}
+
+		[Test]
+		public void ConnStrFromConfig()
+		{
+			using (var db = BaDatabase.Create("test"))
+			{
+				Assert.AreEqual("Wazzup!", db.mConnectionString);
+			}
+		}
+
 	}
 }
