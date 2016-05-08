@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BizArk.Data.SqlServer
 {
 
-    /// <summary>
-    /// The base class for classes that access the database. A repository should have fairly simple database commands and no business logic.
-    /// </summary>
-    public class BaRepository : IDisposable, ISupportBaDatabase
+	/// <summary>
+	/// The base class for classes that access the database. A repository should have fairly simple database commands and no business logic.
+	/// </summary>
+	public class BaRepository : IDisposable, ISupportBaDatabase
     {
 
         #region Initialization and Destruction

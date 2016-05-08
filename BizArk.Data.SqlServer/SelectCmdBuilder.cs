@@ -1,18 +1,16 @@
-﻿using System;
+﻿using BizArk.Core.Extensions.StringExt;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.StringExt;
 
 namespace BizArk.Data.SqlServer
 {
 
-    /// <summary>
-    /// Build a complex SqlCommand object.
-    /// </summary>
-    public class SelectCmdBuilder
+	/// <summary>
+	/// Build a complex SqlCommand object.
+	/// </summary>
+	public class SelectCmdBuilder
     {
 
         #region Initialization and Destruction

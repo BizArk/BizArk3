@@ -1,10 +1,6 @@
-﻿using System;
+﻿using BizArk.Core.Extensions.ObjectExt;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.ObjectExt;
 
 namespace BizArk.Data.SqlServer
 {
