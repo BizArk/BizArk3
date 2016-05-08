@@ -25,6 +25,53 @@ namespace BizArk.Data.SqlServer.Tests
 		}
 
 		[Test]
+		public void SingleFieldTest()
+		{
+			var bldr = new SelectCmdBuilder("Person p");
+			bldr.Fields.Add("p.Name");
+
+			var cmd = bldr.CreateCmd();
+			AreEqual("SELECT p.Name\n\tFROM Person p\n", cmd.CommandText);
+		}
+
+		[Test]
+		public void MultipleFieldTest()
+		{
+			var bldr = new SelectCmdBuilder("Person p");
+			bldr.Fields.Add("p.Name");
+			bldr.Fields.Add("p.PersonTypeID");
+
+			var cmd = bldr.CreateCmd();
+			var expected =
+@"SELECT p.Name, p.PersonTypeID
+	FROM Person p
+";
+			AreEqual(expected, cmd.CommandText);
+		}
+
+		[Test]
+		public void FiveFieldTest()
+		{
+			var bldr = new SelectCmdBuilder("Person p");
+			bldr.Fields.Add("p.ID");
+			bldr.Fields.Add("p.Name");
+			bldr.Fields.Add("p.PersonTypeID");
+			bldr.Fields.Add("p.AddressID");
+			bldr.Fields.Add("p.Nickname");
+
+			var cmd = bldr.CreateCmd();
+			var expected =
+@"SELECT p.ID,
+		p.Name,
+		p.PersonTypeID,
+		p.AddressID,
+		p.Nickname
+	FROM Person p
+";
+			AreEqual(expected, cmd.CommandText);
+		}
+
+		[Test]
 		public void SingleJoinTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -184,6 +231,48 @@ SELECT *
 			Assert.AreEqual("Jill", cmd.Parameters[0].Value);
 			Assert.AreEqual("PersonTypeID", cmd.Parameters[1].ParameterName);
 			Assert.AreEqual(1, cmd.Parameters[1].Value);
+		}
+
+		[Test]
+		public void ComplexSelectTest()
+		{
+			var bldr = new SelectCmdBuilder("Person p");
+
+			bldr.Fields.Add("p.ID");
+			bldr.Fields.Add("p.Name");
+			bldr.Fields.Add("pt.PersonTypeID");
+			bldr.Fields.Add("pt.PersonTypeName");
+			bldr.Fields.Add("a.AddressID");
+			bldr.Fields.Add("a.City");
+
+			bldr.Joins.Add("JOIN Address a ON (p.AddressID = a.AddressID)");
+			bldr.Joins.Add("JOIN PersonType pt ON (p.PersonTypeID = pt.PersonTypeID)");
+
+			bldr.Criteria.Add("p.Name = @Name");
+			bldr.Criteria.Add("p.PersonTypeID = @PersonTypeID");
+			var param = bldr.Parameters.AddValues(new { Name = "Jill", PersonTypeID = 1 });
+
+			bldr.OrderBy.Add("p.Name");
+			bldr.OrderBy.Add("a.City");
+
+			var cmd = bldr.CreateCmd();
+			var expected =
+@"SELECT p.ID,
+		p.Name,
+		pt.PersonTypeID,
+		pt.PersonTypeName,
+		a.AddressID,
+		a.City
+	FROM Person p
+		JOIN Address a ON (p.AddressID = a.AddressID)
+		JOIN PersonType pt ON (p.PersonTypeID = pt.PersonTypeID)
+	WHERE p.Name = @Name
+		AND p.PersonTypeID = @PersonTypeID
+	ORDER BY p.Name, a.City
+";
+
+			AreEqual(expected, cmd.CommandText);
+			Assert.AreEqual(2, cmd.Parameters.Count);
 		}
 
 		private void AreEqual(string expected, string actual)
