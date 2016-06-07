@@ -682,7 +682,10 @@ namespace BizArk.Core.Extensions.DataExt
 
 			foreach (SqlParameter param in cmd.Parameters)
 			{
-				sb.AppendFormat($"DECLARE {DebugSqlParamName(param)} AS {DebugSqlType(param)} = {DebugSqlValue(param)}\n");
+				var paramName = DebugSqlParamName(param);
+				var type = DebugSqlType(param);
+				var value = DebugSqlValue(param);
+				sb.Append($"DECLARE {paramName} AS {type} = {value}\n");
 			}
 
 			sb.Append(DebugSqlCommandText(cmd));
@@ -726,8 +729,9 @@ namespace BizArk.Core.Extensions.DataExt
 
 		private static object DebugSqlValue(SqlParameter param)
 		{
-			if (param.Value == null) return "NULL";
-			if (param.Value == DBNull.Value) return "NULL";
+			var val = param.Value;
+			if (val == null) return "NULL";
+			if (val == DBNull.Value) return "NULL";
 
 			switch (param.SqlDbType)
 			{
@@ -740,23 +744,23 @@ namespace BizArk.Core.Extensions.DataExt
 				case SqlDbType.DateTime:
 				case SqlDbType.DateTime2:
 				case SqlDbType.DateTimeOffset:
-					return $"'{param.Value.ToString().Replace("'", "''")}'";
+					return val; // $"'{val.ToString().Replace("'", "''")}'";
 
 				case SqlDbType.NChar:
 				case SqlDbType.NText:
 				case SqlDbType.NVarChar:
-					return $"N'{param.Value.ToString().Replace("'", "''")}'";
+					return $"N'{val.ToString().Replace("'", "''")}'";
 
 				case SqlDbType.Binary:
 				case SqlDbType.VarBinary:
-					var bytes = param.Value as IEnumerable<byte>;
+					var bytes = val as IEnumerable<byte>;
 					return $"0x{bytes.ToHex()}";
 
 				case SqlDbType.Bit:
-					return ConvertEx.ToBool(param.Value) ? "1" : "0";
+					return ConvertEx.ToBool(val) ? "1" : "0";
 
 				default:
-					return param.Value.ToString();
+					return val.ToString();
 			}
 		}
 
