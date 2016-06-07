@@ -126,7 +126,10 @@ namespace BizArk.Data.SqlServer
 
 			try
 			{
-				cmd.Connection = Connection;
+				var conn = Connection;
+				if (conn.State == ConnectionState.Closed)
+					conn.Open();
+				cmd.Connection = conn;				
 				if (Transaction != null)
 					cmd.Transaction = Transaction.Transaction;
 				execute(cmd);
