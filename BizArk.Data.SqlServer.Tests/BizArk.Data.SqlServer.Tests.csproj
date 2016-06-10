@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="BaDatabaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectCmdBuilderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BizArk.Data.SqlServer.Tests.dll.config">

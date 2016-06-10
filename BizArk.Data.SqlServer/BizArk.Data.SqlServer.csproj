@@ -48,6 +48,8 @@
     <Compile Include="BaRepository.cs" />
     <Compile Include="BaTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectCmdBuilder.cs" />
+    <Compile Include="SqlParameterList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BizArk.Core\BizArk.Core.csproj">

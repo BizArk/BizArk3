@@ -65,22 +65,22 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Creates the BaDatabase from the connection string named in the config file.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="name">The name or key of the connection string in the config file.</param>
 		/// <returns></returns>
 		public static BaDatabase Create(string name)
 		{
 			var connStrSetting = ConfigurationManager.ConnectionStrings[name];
 			if (connStrSetting == null)
 				throw new InvalidOperationException($"The connection string setting for '{name}' was not found.");
-			return new BaDatabase(connStrSetting.ConnectionString);
-		}
+            return ClassFactory.CreateObject<BaDatabase>(connStrSetting.ConnectionString);
+        }
 
-		#endregion
+        #endregion
 
-		#region Fields and Properties
+        #region Fields and Properties
 
-		// Internal so it can be viewed in the unit tests.
-		internal string mConnectionString;
+        // Internal so it can be viewed in the unit tests.
+        internal string mConnectionString;
 
 		private SqlConnection mConnection;
 
