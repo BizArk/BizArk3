@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Dynamic;
+using System.Linq;
 using System.Text;
 
 namespace BizArk.Data.SqlServer
@@ -293,11 +294,11 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="tableName">Name of the table to insert into.</param>
 		/// <param name="values">The values that will be added to the table. Can be anything that can be converted to a property bag.</param>
-		/// <returns></returns>
-		public int Insert(string tableName, object values)
+		/// <returns>The newly inserted row.</returns>
+		public dynamic Insert(string tableName, object values)
 		{
 			var cmd = PrepareInsertCmd(tableName, values);
-			return ExecuteNonQuery(cmd);
+			return GetDynamic(cmd);
 		}
 
 		/// <summary>
@@ -318,11 +319,12 @@ namespace BizArk.Data.SqlServer
 			foreach (var val in propBag)
 			{
 				fields.Add(val.Key);
-				cmd.Parameters.AddWithValue(val.Key, val.Value);
+				cmd.Parameters.AddWithValue(val.Key, val.Value, true);
 			}
 
 			sb.AppendLine($"INSERT INTO {tableName} ({string.Join(", ", fields)})");
-			sb.AppendLine($"\tVALUES (@{string.Join(", @", fields)})");
+			sb.AppendLine("\tOUTPUT INSERTED.*");
+			sb.AppendLine($"\tVALUES (@{string.Join(", @", fields)});");
 
 			cmd.CommandText = sb.ToString();
 
@@ -358,10 +360,12 @@ namespace BizArk.Data.SqlServer
 			sb.AppendLine($"UPDATE {tableName} SET");
 
 			var propBag = ObjectUtil.ToPropertyBag(values);
-			foreach (var val in propBag)
+			var keys = propBag.Keys.ToArray();
+			for (var i = 0; i < keys.Length; i++)
 			{
-				sb.AppendLine($"\t\t{val.Key} = @{val.Key}");
-				cmd.Parameters.AddWithValue(val.Key, val.Value);
+				var val = propBag[keys[i]];
+				sb.AppendLine($"\t\t{keys[i]} = @{keys[i]}{(i < keys.Length - 1 ? "," : "")}");
+				cmd.Parameters.AddWithValue(keys[i], val, true);
 			}
 
 			// Get the criteria for the UPDATE.
@@ -372,7 +376,7 @@ namespace BizArk.Data.SqlServer
 				foreach (var val in propBag)
 				{
 					criteria.Add($"{val.Key} = @{val.Key}");
-					cmd.Parameters.AddWithValue(val.Key, val.Value);
+					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
 				}
 				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
 			}
@@ -416,7 +420,7 @@ namespace BizArk.Data.SqlServer
 				foreach (var val in propBag)
 				{
 					criteria.Add($"{val.Key} = @{val.Key}");
-					cmd.Parameters.AddWithValue(val.Key, val.Value);
+					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
 				}
 				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
 			}

@@ -24,7 +24,7 @@ namespace BizArk.Data.SqlServer.Tests
 				var cmd = db.PrepareUpdateCmd("MyTable", new { MyID = 123 }, new { MyField = "SomeValue", SomeDate = dt });
 				Debug.WriteLine(cmd.DebugText());
 				Assert.IsTrue(cmd.CommandText.Contains("UPDATE MyTable SET"));
-				Assert.IsTrue(cmd.CommandText.Contains("MyField = @MyField"));
+				Assert.IsTrue(cmd.CommandText.Contains("MyField = @MyField,"));
 				Assert.IsTrue(cmd.CommandText.Contains("SomeDate = @SomeDate"));
 				Assert.IsTrue(cmd.CommandText.Contains("MyID = @MyID"));
 				Assert.AreEqual(123, cmd.Parameters["MyID"].Value);
@@ -42,7 +42,7 @@ namespace BizArk.Data.SqlServer.Tests
 				var cmd = db.PrepareUpdateCmd("MyTable", new { MyID = 123, AnotherID = 654 }, new { MyField = "SomeValue", SomeDate = dt });
 				Debug.WriteLine(cmd.DebugText());
 				Assert.IsTrue(cmd.CommandText.Contains("UPDATE MyTable SET"));
-				Assert.IsTrue(cmd.CommandText.Contains("MyField = @MyField"));
+				Assert.IsTrue(cmd.CommandText.Contains("MyField = @MyField,"));
 				Assert.IsTrue(cmd.CommandText.Contains("SomeDate = @SomeDate"));
 				Assert.IsTrue(cmd.CommandText.Contains("WHERE MyID = @MyID"));
 				Assert.IsTrue(cmd.CommandText.Contains("AND AnotherID = @AnotherID"));
