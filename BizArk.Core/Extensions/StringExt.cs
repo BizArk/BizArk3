@@ -364,6 +364,36 @@ namespace BizArk.Core.Extensions.StringExt
 		}
 
 		/// <summary>
+		/// Gets everything to the right of the find string.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="find">The string to find. Looks for the first occurrence.</param>
+		/// <returns>Null if find not found.</returns>
+		public static string Right(this string str, string find)
+		{
+			if (find.IsEmpty()) return str;
+			if (str.IsEmpty()) return null;
+			var idx = str.IndexOf(find);
+			if (idx < 0) return null;
+			return str.Substring(idx + find.Length);
+		}
+
+		/// <summary>
+		/// Gets everything to the left of the find string.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="find">The string to find. Looks for the first occurrence.</param>
+		/// <returns>Null if find not found.</returns>
+		public static string Left(this string str, string find)
+		{
+			if (find.IsEmpty()) return str;
+			if (str.IsEmpty()) return null;
+			var idx = str.IndexOf(find);
+			if (idx < 0) return null;
+			return str.Substring(0, idx);
+		}
+
+		/// <summary>
 		/// If the string is empty, returns the default.
 		/// </summary>
 		/// <param name="str"></param>
@@ -415,7 +445,7 @@ namespace BizArk.Core.Extensions.StringExt
 		public static byte[] ToBytes(this string str, Encoding encoding = null)
 		{
 			return (encoding ?? Encoding.Default).GetBytes(str);
-				
+
 		}
 
 		#region Security
