@@ -62,7 +62,20 @@ namespace BizArk.Data.SqlServer
         /// </summary>
         public BaDatabase Database { get; private set; }
 
-        #endregion
+		#endregion
 
-    }
+		#region Methods
+
+		/// <summary>
+		/// Starts a transaction. Must call Dispose on the transaction.
+		/// </summary>
+		/// <returns></returns>
+		public BaTransaction BeginTransaction()
+		{
+			return Database.BeginTransaction();
+		}
+
+		#endregion
+
+	}
 }
