@@ -39,6 +39,7 @@ namespace BizArk.Core.Data
 
 			if (Options.Schema != null
 				&& !InitFromDataRow(Options.Schema as DataRow)
+				&& !InitFromDataTable(Options.Schema as DataTable)
 				&& !InitFromDataReader(Options.Schema as IDataReader)
 				&& !InitSchemaFromObject(Options.Schema, true))
 			{ } // Just a simple way to call the init schema methods without a bunch of if/else statements. 
@@ -80,7 +81,8 @@ namespace BizArk.Core.Data
 
 			foreach (DataColumn col in row.Table.Columns)
 			{
-				Add(col.ColumnName, col.DataType, row[col]);
+				var fld = AddDataColumn(col);
+				fld.DefaultValue = row[col];
 			}
 			return true;
 		}
@@ -96,9 +98,22 @@ namespace BizArk.Core.Data
 
 			foreach (DataColumn col in tbl.Columns)
 			{
-				Add(col.ColumnName, col.DataType);
+				AddDataColumn(col);
 			}
 			return true;
+		}
+
+		private BaField AddDataColumn(DataColumn col)
+		{
+			var fld = new BaField(this, col.ColumnName, col.DataType);
+
+			if (!col.AllowDBNull)
+				fld.Validators.Required();
+
+			if (col.MaxLength > 0)
+				fld.Validators.MaxLength(col.MaxLength);
+
+			return fld;
 		}
 
 		/// <summary>
