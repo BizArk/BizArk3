@@ -408,7 +408,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <summary>
 		/// Vowels. Used for IsVowel.
 		/// </summary>
-		public static char[] Vowels = { 'a', 'e', 'i', 'o', 'u' };
+		public static char[] Vowels = { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' };
 
 		/// <summary>
 		/// Determines if the character is a vowel.

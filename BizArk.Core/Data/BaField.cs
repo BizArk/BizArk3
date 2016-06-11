@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.StringExt;
+﻿using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Extensions.TypeExt;
+using System;
 
 namespace BizArk.Core.Data
 {
@@ -115,6 +110,11 @@ namespace BizArk.Core.Data
 		/// </summary>
 		public Type FieldType { get; private set; } = typeof(object);
 
+		/// <summary>
+		/// Gets the list of validation attributes for this field.
+		/// </summary>
+		public BaValidatorList Validators { get; } = new BaValidatorList();
+
 		#endregion
 
 		#region Methods
@@ -143,6 +143,18 @@ namespace BizArk.Core.Data
 
 			if (!FieldType.IsAssignableFrom(value.GetType()))
 				throw new InvalidOperationException($"The {valName} for {Name} is not of the correct type. The type is {value.GetType().FullName}, expecting {FieldType.FullName}.");
+		}
+
+		/// <summary>
+		/// Gets the string representation for this object.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			if (IsSet)
+				return $"{Name} = {ConvertEx.ToString(Value)}";
+			else
+				return $"{Name} = [NOT SET]";
 		}
 
 		#endregion

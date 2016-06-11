@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.FormatExt;
-using System.ComponentModel;
-using System.Data;
 
 namespace BizArk.Core.Data
 {
@@ -59,7 +57,14 @@ namespace BizArk.Core.Data
 				object dflt = null;
 				if (setDflt)
 					dflt = propDesc.GetValue(schema);
-				Add(propDesc.Name, propDesc.PropertyType, dflt);
+				var fld = Add(propDesc.Name, propDesc.PropertyType, dflt);
+				var atts = propDesc.Attributes;
+				foreach(Attribute att in atts)
+				{
+					var valAtt = att as ValidationAttribute;
+					if (valAtt != null)
+						fld.Validators.Add(valAtt);
+				}
 			}
 			return true;
 		}
@@ -76,6 +81,22 @@ namespace BizArk.Core.Data
 			foreach (DataColumn col in row.Table.Columns)
 			{
 				Add(col.ColumnName, col.DataType, row[col]);
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Initializes the schema from a DataTable.
+		/// </summary>
+		/// <param name="tbl"></param>
+		/// <returns></returns>
+		private bool InitFromDataTable(DataTable tbl)
+		{
+			if (tbl == null) return false;
+
+			foreach (DataColumn col in tbl.Columns)
+			{
+				Add(col.ColumnName, col.DataType);
 			}
 			return true;
 		}
@@ -221,12 +242,18 @@ namespace BizArk.Core.Data
 		/// <summary>
 		/// Returns a dictionary of changed values.
 		/// </summary>
+		/// <param name="ignore">Excludes these fields from the results. Useful for readonly or restricted fields.</param>
 		/// <returns></returns>
-		public IDictionary<string, object> GetChanges()
+		public virtual IDictionary<string, object> GetChanges(params string[] ignore)
 		{
 			var changes = new Dictionary<string, object>();
 			foreach (var fld in Fields)
 			{
+				// Check to see if we should ignore this field.
+				// This is useful if there are readonly or 
+				// restricted fields.
+				if (ignore.Contains(fld.Name)) continue;
+
 				if (fld.IsChanged)
 					changes.Add(fld.Name, fld.Value);
 			}
@@ -243,6 +270,24 @@ namespace BizArk.Core.Data
 				if (fld.IsSet) // If it's not set, Value returns the DefaultValue.
 					fld.DefaultValue = fld.Value;
 			}
+		}
+
+		/// <summary>
+		/// Uses DataAnnotations to validate the properties of the object.
+		/// </summary>
+		public ValidationResult[] Validate(bool changedOnly = true)
+		{
+			var ctx = new ValidationContext(this, null, null);
+			var results = new List<ValidationResult>();
+			foreach(var fld in Fields)
+			{
+				if (!fld.IsSet) continue; // Only validate set properties.
+				if (changedOnly && !fld.IsChanged) continue;
+
+				ctx.DisplayName = fld.Name;
+				Validator.TryValidateValue(fld.Value, ctx, results, fld.Validators);
+			}
+			return results.ToArray();
 		}
 
 		#endregion

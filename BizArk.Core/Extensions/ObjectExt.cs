@@ -124,7 +124,7 @@ namespace BizArk.Core.Extensions.ObjectExt
 		}
 
 		/// <summary>
-		/// Normalizes a large number of classes into a dictionary. Works with DataRow, IDataReader, IDictionary, or POCO.
+		/// Normalizes a number of different types into a dictionary. Works with DataRow, DataTable, IDataReader, IDictionary, or POCO.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
