@@ -3,6 +3,7 @@ using BizArk.Core.Extensions.DataExt;
 using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Util;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -72,15 +73,15 @@ namespace BizArk.Data.SqlServer
 			var connStrSetting = ConfigurationManager.ConnectionStrings[name];
 			if (connStrSetting == null)
 				throw new InvalidOperationException($"The connection string setting for '{name}' was not found.");
-            return ClassFactory.CreateObject<BaDatabase>(connStrSetting.ConnectionString);
-        }
+			return ClassFactory.CreateObject<BaDatabase>(connStrSetting.ConnectionString);
+		}
 
-        #endregion
+		#endregion
 
-        #region Fields and Properties
+		#region Fields and Properties
 
-        // Internal so it can be viewed in the unit tests.
-        internal string mConnectionString;
+		// Internal so it can be viewed in the unit tests.
+		internal string mConnectionString;
 
 		private SqlConnection mConnection;
 
@@ -130,7 +131,7 @@ namespace BizArk.Data.SqlServer
 				var conn = Connection;
 				if (conn.State == ConnectionState.Closed)
 					conn.Open();
-				cmd.Connection = conn;				
+				cmd.Connection = conn;
 				if (Transaction != null)
 					cmd.Transaction = Transaction.Transaction;
 				execute(cmd);
@@ -667,6 +668,30 @@ namespace BizArk.Data.SqlServer
 				cmd.AddParameters(parameters);
 
 			return cmd;
+		}
+
+		private static ConcurrentDictionary<string, DataTable> sSchemas = new ConcurrentDictionary<string, DataTable>();
+		/// <summary>
+		/// Gets the schema for a table from the database.
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <returns></returns>
+		public DataTable GetSchema(string tableName)
+		{
+			DataTable schema;
+			if (!sSchemas.TryGetValue(tableName, out schema))
+			{
+				var conn = Connection;
+				if (conn.State == ConnectionState.Closed)
+					conn.Open();
+
+				var restrictions = new string[4];
+				restrictions[2] = tableName;
+				schema = conn.GetSchema("Tables", restrictions);
+				sSchemas.TryAdd(tableName, schema);
+			}
+
+			return schema.Clone();
 		}
 
 		#endregion
