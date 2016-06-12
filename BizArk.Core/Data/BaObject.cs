@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BizArk.Core.Util;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,12 +39,35 @@ namespace BizArk.Core.Data
 			Options = options ?? new BaObjectOptions();
 
 			if (Options.Schema != null
+				&& !InitFromBaObject(Options.Schema as BaObject)
 				&& !InitFromDataRow(Options.Schema as DataRow)
 				&& !InitFromDataTable(Options.Schema as DataTable)
 				&& !InitFromDataReader(Options.Schema as IDataReader)
 				&& !InitSchemaFromObject(Options.Schema, true))
 			{ } // Just a simple way to call the init schema methods without a bunch of if/else statements. 
 
+		}
+
+		private bool InitFromBaObject(BaObject schema)
+		{
+			if (schema == null) return false;
+			if (schema == this) return false; // Can't initialize from itself!
+
+			foreach (var fld in schema.Fields)
+			{
+				// Can't share fields.
+				var newfld = Add(fld.Name, fld.FieldType);
+
+				// Setting the DefaultValue can throw an exception 
+				// if the field is required and the value is null.
+				if (fld.DefaultValue != null)
+					newfld.DefaultValue = fld.DefaultValue;
+				
+				// Validators can be reused. They should be thread-safe.
+				newfld.Validators.AddRange(fld.Validators); 
+			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -53,6 +77,8 @@ namespace BizArk.Core.Data
 		/// <param name="setDflt">Determines if we will get the default value from the schema or not.</param>
 		protected bool InitSchemaFromObject(object schema, bool setDflt)
 		{
+			if (schema == null) return false;
+
 			foreach (PropertyDescriptor propDesc in TypeDescriptor.GetProperties(schema))
 			{
 				object dflt = null;
@@ -60,7 +86,7 @@ namespace BizArk.Core.Data
 					dflt = propDesc.GetValue(schema);
 				var fld = Add(propDesc.Name, propDesc.PropertyType, dflt);
 				var atts = propDesc.Attributes;
-				foreach(Attribute att in atts)
+				foreach (Attribute att in atts)
 				{
 					var valAtt = att as ValidationAttribute;
 					if (valAtt != null)
@@ -105,7 +131,7 @@ namespace BizArk.Core.Data
 
 		private BaField AddDataColumn(DataColumn col)
 		{
-			var fld = new BaField(this, col.ColumnName, col.DataType);
+			var fld = Add(col.ColumnName, col.DataType);
 
 			if (!col.AllowDBNull)
 				fld.Validators.Required();
@@ -294,7 +320,7 @@ namespace BizArk.Core.Data
 		{
 			var ctx = new ValidationContext(this, null, null);
 			var results = new List<ValidationResult>();
-			foreach(var fld in Fields)
+			foreach (var fld in Fields)
 			{
 				if (!fld.IsSet) continue; // Only validate set properties.
 				if (changedOnly && !fld.IsChanged) continue;
@@ -303,6 +329,22 @@ namespace BizArk.Core.Data
 				Validator.TryValidateValue(fld.Value, ctx, results, fld.Validators);
 			}
 			return results.ToArray();
+		}
+
+		/// <summary>
+		/// Fills this instance with data. Only sets fields that are in the schema (others are ignored).
+		/// </summary>
+		/// <param name="data">Converts to a property bag then sets the values.</param>
+		public void Fill(object data)
+		{
+			if (data == null) return;
+
+			var propBag = ObjectUtil.ToPropertyBag(data);
+			foreach(var fld in Fields)
+			{
+				if (!propBag.ContainsKey(fld.Name)) continue;
+				fld.Value = propBag[fld.Name];
+			}
 		}
 
 		#endregion
