@@ -670,28 +670,23 @@ namespace BizArk.Data.SqlServer
 			return cmd;
 		}
 
-		private static ConcurrentDictionary<string, DataTable> sSchemas = new ConcurrentDictionary<string, DataTable>();
 		/// <summary>
 		/// Gets the schema for a table from the database.
 		/// </summary>
-		/// <param name="tableName"></param>
+		/// <param name="tableName">Gets just the schema for this table.</param>
 		/// <returns></returns>
 		public DataTable GetSchema(string tableName)
 		{
-			DataTable schema;
-			if (!sSchemas.TryGetValue(tableName, out schema))
+			var conn = Connection;
+			if (conn.State == ConnectionState.Closed)
+				conn.Open();
+
+			using (var da = new SqlDataAdapter($"SELECT * FROM {tableName} WHERE 0 = 1", conn))
 			{
-				var conn = Connection;
-				if (conn.State == ConnectionState.Closed)
-					conn.Open();
-
-				var restrictions = new string[4];
-				restrictions[2] = tableName;
-				schema = conn.GetSchema("Tables", restrictions);
-				sSchemas.TryAdd(tableName, schema);
+				var tbl = new DataTable(tableName);
+				da.Fill(tbl);
+				return tbl;
 			}
-
-			return schema.Clone();
 		}
 
 		#endregion
