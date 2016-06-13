@@ -331,18 +331,31 @@ namespace BizArk.Data.SqlServer
 			var cmd = new SqlCommand();
 			var sb = new StringBuilder();
 
-			var fields = new List<string>();
 			var propBag = ObjectUtil.ToPropertyBag(values);
 
+			var inFields = new StringBuilder();
+			var valFields = new StringBuilder();
 			foreach (var val in propBag)
 			{
-				fields.Add(val.Key);
-				cmd.Parameters.AddWithValue(val.Key, val.Value, true);
+				if (inFields.Length > 0) inFields.Append(", ");
+				inFields.Append(val.Key);
+
+				if (valFields.Length > 0) valFields.Append(", ");
+				var literal = GetValueLiteral(val.Value as string);
+				if (literal != null)
+				{
+					valFields.Append(literal);
+				}
+				else
+				{
+					valFields.Append($"@{val.Key}");
+					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
+				}
 			}
 
-			sb.AppendLine($"INSERT INTO {tableName} ({string.Join(", ", fields)})");
+			sb.AppendLine($"INSERT INTO {tableName} ({inFields})");
 			sb.AppendLine("\tOUTPUT INSERTED.*");
-			sb.AppendLine($"\tVALUES (@{string.Join(", @", fields)});");
+			sb.AppendLine($"\tVALUES ({valFields});");
 
 			cmd.CommandText = sb.ToString();
 
@@ -382,22 +395,28 @@ namespace BizArk.Data.SqlServer
 			for (var i = 0; i < keys.Length; i++)
 			{
 				var val = propBag[keys[i]];
-				sb.AppendLine($"\t\t{keys[i]} = @{keys[i]}{(i < keys.Length - 1 ? "," : "")}");
-				cmd.Parameters.AddWithValue(keys[i], val, true);
+
+				sb.Append($"\t\t{keys[i]} = ");
+
+				var literal = GetValueLiteral(val as string);
+				if (literal != null)
+				{
+					sb.Append(literal);
+				}
+				else
+				{
+					sb.Append($"@{keys[i]}");
+					cmd.Parameters.AddWithValue(keys[i], val, true);
+				}
+
+				if (i < keys.Length - 1)
+					sb.Append(",");
+				sb.AppendLine();
 			}
 
-			// Get the criteria for the UPDATE.
-			if (key != null)
-			{
-				var criteria = new List<string>();
-				propBag = ObjectUtil.ToPropertyBag(key);
-				foreach (var val in propBag)
-				{
-					criteria.Add($"{val.Key} = @{val.Key}");
-					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
-				}
-				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
-			}
+			var criteria = PrepareCriteria(cmd, key);
+			if (criteria != null)
+				sb.AppendLine(criteria);
 
 			cmd.CommandText = sb.ToString();
 
@@ -430,22 +449,47 @@ namespace BizArk.Data.SqlServer
 
 			sb.AppendLine($"DELETE FROM {tableName}");
 
-			// Get the criteria for the UPDATE.
-			if (key != null)
-			{
-				var criteria = new List<string>();
-				var propBag = ObjectUtil.ToPropertyBag(key);
-				foreach (var val in propBag)
-				{
-					criteria.Add($"{val.Key} = @{val.Key}");
-					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
-				}
-				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
-			}
+			var criteria = PrepareCriteria(cmd, key);
+			if (criteria != null)
+				sb.AppendLine(criteria);
 
 			cmd.CommandText = sb.ToString();
 
 			return cmd;
+		}
+
+		private string PrepareCriteria(SqlCommand cmd, object key)
+		{
+			if (key == null) return null;
+
+			var criteria = new StringBuilder();
+			var propBag = ObjectUtil.ToPropertyBag(key);
+			foreach (var val in propBag)
+			{
+				if (criteria.Length > 0)
+					criteria.Append("\n\t\tAND ");
+				criteria.Append($"{val.Key} = ");
+
+				var literal = GetValueLiteral(val.Value as string);
+				if (literal != null)
+				{
+					criteria.Append(literal);
+				}
+				else
+				{
+					criteria.Append($"@{val.Key}");
+					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
+				}
+			}
+			return $"\tWHERE {criteria}";
+		}
+
+		private string GetValueLiteral(string str)
+		{
+			if (str == null) return null;
+			if (!str.StartsWith("[[")) return null;
+			if (!str.EndsWith("]]")) return null;
+			return str.Substring(2, str.Length - 4);
 		}
 
 		#endregion
@@ -683,9 +727,9 @@ namespace BizArk.Data.SqlServer
 
 			using (var da = new SqlDataAdapter($"SELECT * FROM {tableName} WHERE 0 = 1", conn))
 			{
-				var tbl = new DataTable(tableName);
-				da.Fill(tbl);
-				return tbl;
+				var ds = new DataSet();
+				da.FillSchema(ds, SchemaType.Source, tableName);
+				return ds.Tables[tableName];
 			}
 		}
 

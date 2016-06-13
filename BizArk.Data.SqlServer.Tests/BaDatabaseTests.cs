@@ -124,5 +124,50 @@ namespace BizArk.Data.SqlServer.Tests
 			}
 		}
 
+		[Test]
+		public void ValueLiteralInsertCmdTest()
+		{
+			using (var db = new BaDatabase("myconnectionstring"))
+			{
+				var cmd = db.PrepareInsertCmd("MyTable", new { MyField = "SomeValue", SomeDate = "[[GETDATE()]]" });
+				Debug.WriteLine(cmd.DebugText());
+				Assert.IsTrue(cmd.CommandText.Contains("INSERT INTO MyTable (MyField, SomeDate)"));
+				Assert.IsTrue(cmd.CommandText.Contains("VALUES (@MyField, GETDATE())"));
+				Assert.AreEqual(1, cmd.Parameters.Count);
+				Assert.AreEqual("SomeValue", cmd.Parameters["MyField"].Value);
+			}
+		}
+
+		[Test]
+		public void ValueLiteralUpdateCmdTest()
+		{
+			using (var db = new BaDatabase("myconnectionstring"))
+			{
+				var cmd = db.PrepareUpdateCmd("MyTable", new { MyID = "[[123]]" }, new { MyField = "SomeValue", SomeDate = "[[GETDATE()]]" });
+				Debug.WriteLine(cmd.DebugText());
+				Assert.IsTrue(cmd.CommandText.Contains("UPDATE MyTable SET"));
+				Assert.IsTrue(cmd.CommandText.Contains("MyField = @MyField,"));
+				Assert.IsTrue(cmd.CommandText.Contains("SomeDate = GETDATE()"));
+				Assert.IsTrue(cmd.CommandText.Contains("MyID = 123"));
+				Assert.AreEqual(1, cmd.Parameters.Count);
+				Assert.AreEqual("SomeValue", cmd.Parameters["MyField"].Value);
+			}
+		}
+
+		[Test]
+		public void ValueLiteralDeleteCmdTest()
+		{
+			using (var db = new BaDatabase("myconnectionstring"))
+			{
+				var cmd = db.PrepareDeleteCmd("MyTable", new { MyField = "SomeValue", SomeDate = "[[GETDATE()]]" });
+				Debug.WriteLine(cmd.DebugText());
+				Assert.IsTrue(cmd.CommandText.Contains("DELETE FROM MyTable"));
+				Assert.IsTrue(cmd.CommandText.Contains("WHERE MyField = @MyField"));
+				Assert.IsTrue(cmd.CommandText.Contains("AND SomeDate = GETDATE()"));
+				Assert.AreEqual(1, cmd.Parameters.Count);
+				Assert.AreEqual("SomeValue", cmd.Parameters["MyField"].Value);
+			}
+		}
+
 	}
 }
