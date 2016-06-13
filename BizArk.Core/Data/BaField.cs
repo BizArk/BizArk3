@@ -1,6 +1,7 @@
 ﻿using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Extensions.TypeExt;
 using System;
+using System.Collections.Generic;
 
 namespace BizArk.Core.Data
 {
@@ -24,7 +25,7 @@ namespace BizArk.Core.Data
 		{
 			if(obj == null) throw new ArgumentNullException(nameof(obj));
 			if (name.IsEmpty()) throw new ArgumentNullException(nameof(name));
-			if (FieldType == null) throw new ArgumentNullException(nameof(fieldType));
+			if (fieldType == null) throw new ArgumentNullException(nameof(fieldType));
 
 			Object = obj;
 			Name = name;

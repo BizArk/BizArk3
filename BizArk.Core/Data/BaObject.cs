@@ -56,15 +56,15 @@ namespace BizArk.Core.Data
 			foreach (var fld in schema.Fields)
 			{
 				// Can't share fields.
-				var newfld = Add(fld.Name, fld.FieldType);
+				var newfld = Add(fld.Name, fld.FieldType, null);
 
 				// Setting the DefaultValue can throw an exception 
 				// if the field is required and the value is null.
 				if (fld.DefaultValue != null)
 					newfld.DefaultValue = fld.DefaultValue;
-				
+
 				// Validators can be reused. They should be thread-safe.
-				newfld.Validators.AddRange(fld.Validators); 
+				newfld.Validators.AddRange(fld.Validators);
 			}
 
 			return true;
@@ -131,7 +131,7 @@ namespace BizArk.Core.Data
 
 		private BaField AddDataColumn(DataColumn col)
 		{
-			var fld = Add(col.ColumnName, col.DataType);
+			var fld = Add(col.ColumnName, col.DataType, null);
 
 			if (!col.AllowDBNull)
 				fld.Validators.Required();
@@ -218,7 +218,7 @@ namespace BizArk.Core.Data
 		/// <param name="fldType">The data type for the field.</param>
 		/// <param name="dflt">Default value for the field. Used to determine if the field has changed. If null, it is converted to the default value for fieldType.</param>
 		/// <returns></returns>
-		public BaField Add(string fldName, Type fldType, object dflt = null)
+		public BaField Add(string fldName, Type fldType, object dflt)
 		{
 			if (Fields.ContainsField(fldName))
 				throw new ArgumentException("A field already exists with this field name.");
@@ -229,7 +229,13 @@ namespace BizArk.Core.Data
 
 		private ICollection<KeyValuePair<string, object>> GetKeyValuePairs()
 		{
-			return null;
+			var pairs = new List<KeyValuePair<string, object>>();
+			foreach (var fld in Fields)
+			{
+				if(fld.IsSet)
+				pairs.Add(new KeyValuePair<string, object>(fld.Name, fld.Value));
+			}
+			return pairs;
 		}
 
 		/// <summary>
@@ -340,7 +346,7 @@ namespace BizArk.Core.Data
 			if (data == null) return;
 
 			var propBag = ObjectUtil.ToPropertyBag(data);
-			foreach(var fld in Fields)
+			foreach (var fld in Fields)
 			{
 				if (!propBag.ContainsKey(fld.Name)) continue;
 				fld.Value = propBag[fld.Name];
@@ -417,7 +423,7 @@ namespace BizArk.Core.Data
 			var fldType = typeof(object);
 			if (value != null)
 				fldType = value.GetType();
-			var fld = Add(key, fldType);
+			var fld = Add(key, fldType, null);
 			fld.Value = value;
 		}
 

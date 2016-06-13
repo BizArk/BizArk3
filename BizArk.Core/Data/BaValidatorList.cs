@@ -161,7 +161,7 @@ namespace BizArk.Core.Data
 		/// <param name="values">Values allowed in the set.</param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
-		public BaValidatorList Set(IEnumerable<object> values, string errMsg = null)
+		public BaValidatorList Set(object[] values, string errMsg = null)
 		{
 			var att = new SetAttribute(values);
 			if (errMsg != null) att.ErrorMessage = errMsg;
@@ -176,9 +176,9 @@ namespace BizArk.Core.Data
 		/// <param name="comparer"></param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
-		public BaValidatorList Set(IEnumerable<object> values, IEqualityComparer comparer, string errMsg = null)
+		public BaValidatorList Set(object[] values, IEqualityComparer comparer, string errMsg = null)
 		{
-			var att = new SetAttribute(comparer, values);
+			var att = new SetAttribute(values, comparer);
 			if (errMsg != null) att.ErrorMessage = errMsg;
 			Add(att);
 			return this;
@@ -191,9 +191,9 @@ namespace BizArk.Core.Data
 		/// <param name="ignoreCase"></param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
-		public BaValidatorList Set(IEnumerable<string> values, bool ignoreCase, string errMsg = null)
+		public BaValidatorList Set(string[] values, bool ignoreCase, string errMsg = null)
 		{
-			var att = new SetAttribute(ignoreCase, values);
+			var att = new SetAttribute(values, ignoreCase);
 			if (errMsg != null) att.ErrorMessage = errMsg;
 			Add(att);
 			return this;
