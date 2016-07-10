@@ -23,7 +23,7 @@ namespace BizArk.Core.Data
 		/// <param name="dflt">Default value for the field. Used to determine if the field has changed. If null, it is converted to the default value for fieldType.</param>
 		internal BaField(BaObject obj, string name, Type fieldType, object dflt = null)
 		{
-			if(obj == null) throw new ArgumentNullException(nameof(obj));
+			if (obj == null) throw new ArgumentNullException(nameof(obj));
 			if (name.IsEmpty()) throw new ArgumentNullException(nameof(name));
 			if (fieldType == null) throw new ArgumentNullException(nameof(fieldType));
 
@@ -70,6 +70,10 @@ namespace BizArk.Core.Data
 			}
 			set
 			{
+				// Make sure the value uses the correct empty value.
+				if (value == null || value == DBNull.Value)
+					value = ConvertEx.GetDefaultEmptyValue(FieldType);
+
 				if (mValue == value) return;
 				VerifyValue(value, "value");
 				mValue = value;
