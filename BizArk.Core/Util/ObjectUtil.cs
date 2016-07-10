@@ -158,9 +158,9 @@ namespace BizArk.Core.Util
 		/// <param name="key"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static bool TryGetValue(object obj, string key, out object value)
+		public static bool TryGetValue<T>(object obj, string key, out T value)
 		{
-			value = null;
+			value = default(T);
 
 			if (key.IsEmpty())
 				throw new ArgumentNullException("key");
@@ -206,7 +206,7 @@ namespace BizArk.Core.Util
 
 			}
 
-			value = currentObj;
+			value = ConvertEx.To<T>(currentObj);
 			return true;
 		}
 
