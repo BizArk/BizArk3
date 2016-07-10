@@ -158,9 +158,9 @@ namespace BizArk.Core.Util
 		/// <param name="key"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static bool TryGetValue<T>(object obj, string key, out T value)
+		public static bool TryGetValue(object obj, string key, out object value)
 		{
-			value = default(T);
+			value = null;
 
 			if (key.IsEmpty())
 				throw new ArgumentNullException("key");
@@ -187,10 +187,16 @@ namespace BizArk.Core.Util
 				}
 
 				var prop = FindProperty(currentObj, propName);
-				if (prop == null)
-					return false;
-
-				currentObj = prop.GetValue(currentObj);
+				if (prop != null)
+				{
+					currentObj = prop.GetValue(currentObj);
+				}
+				else
+				{
+					var propBag = ToPropertyBag(currentObj);
+					if (!propBag.TryGetValue(propName, out currentObj))
+						return false;
+				}
 				if (currentObj == null) return true;
 
 				if (indexer != null)
@@ -201,7 +207,7 @@ namespace BizArk.Core.Util
 
 			}
 
-			value = ConvertEx.To<T>(currentObj);
+			value = currentObj;
 			return true;
 		}
 
