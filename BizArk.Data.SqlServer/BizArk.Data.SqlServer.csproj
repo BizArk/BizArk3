@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +47,7 @@
   <ItemGroup>
     <Compile Include="BaDatabase.cs" />
     <Compile Include="BaRepository.cs" />
+    <Compile Include="BaTableObject.cs" />
     <Compile Include="BaTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectCmdBuilder.cs" />
