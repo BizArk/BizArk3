@@ -101,10 +101,12 @@
     <Compile Include="Convert\Strategies\StaticMethodConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\StringToBoolConversionStrategy.cs" />
     <Compile Include="Convert\Strategies\TypeConverterConversionStrategy.cs" />
+    <Compile Include="DataAnnotations\CustomAttribute.cs" />
     <Compile Include="DataAnnotations\SetAttribute.cs" />
     <Compile Include="Data\BaField.cs" />
     <Compile Include="Data\BaFieldList.cs" />
     <Compile Include="Data\BaObjectOptions.cs" />
+    <Compile Include="Data\BaValidatorList.cs" />
     <Compile Include="Extensions\ArrayExt.cs" />
     <Compile Include="Extensions\AttributeExt.cs" />
     <Compile Include="Extensions\DataExt.cs" />

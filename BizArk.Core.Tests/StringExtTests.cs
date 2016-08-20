@@ -89,6 +89,44 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		[Test]
+		public void LeftFindTest()
+		{
+			var actual = "test@asdf".Left("@");
+			Assert.AreEqual("test", actual);
+
+			actual = "@asdf".Left("@");
+			Assert.AreEqual("", actual);
+
+			actual = "test".Left("@");
+			Assert.IsNull(actual);
+
+			actual = "test@".Left("@");
+			Assert.AreEqual("test", actual);
+
+			actual = "test@@asdf".Left("@@");
+			Assert.AreEqual("test", actual);
+		}
+
+		[Test]
+		public void RightFindTest()
+		{
+			var actual = "test@asdf".Right("@");
+			Assert.AreEqual("asdf", actual);
+
+			actual = "@asdf".Right("@");
+			Assert.AreEqual("asdf", actual);
+
+			actual = "test".Right("@");
+			Assert.IsNull(actual);
+
+			actual = "test@".Right("@");
+			Assert.AreEqual("", actual);
+
+			actual = "test@@asdf".Right("@@");
+			Assert.AreEqual("asdf", actual);
+		}
+
 		/// <summary>
 		/// Makes sure all newlines are just '\n' (basically just removes '\r' from the string).
 		/// </summary>

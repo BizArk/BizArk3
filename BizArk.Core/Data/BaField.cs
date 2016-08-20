@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.StringExt;
+﻿using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Extensions.TypeExt;
+using System;
+using System.Collections.Generic;
 
 namespace BizArk.Core.Data
 {
@@ -27,9 +23,9 @@ namespace BizArk.Core.Data
 		/// <param name="dflt">Default value for the field. Used to determine if the field has changed. If null, it is converted to the default value for fieldType.</param>
 		internal BaField(BaObject obj, string name, Type fieldType, object dflt = null)
 		{
-			if(obj == null) throw new ArgumentNullException(nameof(obj));
+			if (obj == null) throw new ArgumentNullException(nameof(obj));
 			if (name.IsEmpty()) throw new ArgumentNullException(nameof(name));
-			if (FieldType == null) throw new ArgumentNullException(nameof(fieldType));
+			if (fieldType == null) throw new ArgumentNullException(nameof(fieldType));
 
 			Object = obj;
 			Name = name;
@@ -74,6 +70,10 @@ namespace BizArk.Core.Data
 			}
 			set
 			{
+				// Make sure the value uses the correct empty value.
+				if (value == null || value == DBNull.Value)
+					value = ConvertEx.GetDefaultEmptyValue(FieldType);
+
 				if (mValue == value) return;
 				VerifyValue(value, "value");
 				mValue = value;
@@ -115,6 +115,11 @@ namespace BizArk.Core.Data
 		/// </summary>
 		public Type FieldType { get; private set; } = typeof(object);
 
+		/// <summary>
+		/// Gets the list of validation attributes for this field.
+		/// </summary>
+		public BaValidatorList Validators { get; } = new BaValidatorList();
+
 		#endregion
 
 		#region Methods
@@ -143,6 +148,18 @@ namespace BizArk.Core.Data
 
 			if (!FieldType.IsAssignableFrom(value.GetType()))
 				throw new InvalidOperationException($"The {valName} for {Name} is not of the correct type. The type is {value.GetType().FullName}, expecting {FieldType.FullName}.");
+		}
+
+		/// <summary>
+		/// Gets the string representation for this object.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			if (IsSet)
+				return $"{Name} = {ConvertEx.ToString(Value)}";
+			else
+				return $"{Name} = [NOT SET]";
 		}
 
 		#endregion

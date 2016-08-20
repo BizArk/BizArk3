@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BizArk.Data.SqlServer
 {
@@ -53,7 +49,7 @@ namespace BizArk.Data.SqlServer
 		#region Methods
 
 		/// <summary>
-		/// Rolls the transaction back and invalidates this object. This is automatically called if Commit is not called.
+		/// Rolls the transaction back and invalidates this object. This is automatically called in Dispose if Commit is not called.
 		/// </summary>
 		public void Rollback()
 		{
@@ -62,11 +58,11 @@ namespace BizArk.Data.SqlServer
 		}
 
 		/// <summary>
-		/// Commits the transaction and invalidates this object. This is automatically called if Commit is not called.
+		/// Commits the transaction and invalidates this object.
 		/// </summary>
 		public void Commit()
 		{
-			Transaction.Rollback();
+			Transaction.Commit();
 			CloseTransaction();
 		}
 
@@ -74,7 +70,7 @@ namespace BizArk.Data.SqlServer
 		{
 			Transaction.Dispose();
 			Transaction = null;
-			Database.CloseTransaction();
+			Database.Transaction = null;
 		}
 
 		#endregion

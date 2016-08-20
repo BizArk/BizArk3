@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace BizArk.Data.SqlServer
 {
@@ -16,16 +14,25 @@ namespace BizArk.Data.SqlServer
 		#region Initialization and Destruction
 
 		/// <summary>
+		/// Creates a new instance of BaRepository creating a new instance of BaDatabase.
+		/// </summary>
+		/// <param name="name">The name or key of the connection string in the config file.</param>
+		public BaRepository(string name)
+			: this(BaDatabase.Create(name))
+		{
+			DisposeDatabase = true;
+		}
+
+		/// <summary>
 		/// Creates a new instance of BaRepository.
 		/// </summary>
-		/// <param name="db">The database to use for the repository.</param>
-		/// <param name="disposeDB">If true, the database passed in is disposed when the repository is disposed.</param>
-		public BaRepository(ISupportBaDatabase db, bool disposeDB = true)
+		/// <param name="db">The database to use for the repository. The database will not be disposed with the repository.</param>
+		public BaRepository(ISupportBaDatabase db)
 		{
 			if (db == null) throw new ArgumentNullException("db");
 			if (db.Database == null) throw new ArgumentException("Unable to access the database.", "db");
 
-			DisposeDatabase = disposeDB;
+			DisposeDatabase = false;
 			Database = db.Database;
 		}
 
@@ -34,9 +41,11 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		public void Dispose()
 		{
-			if (Database != null && DisposeDatabase)
+			if (Database != null)
 			{
-				Database.Dispose();
+				if (DisposeDatabase)
+					Database.Dispose();
+
 				Database = null;
 			}
 		}
@@ -54,6 +63,47 @@ namespace BizArk.Data.SqlServer
 		/// Gets the database for this repository instance.
 		/// </summary>
 		public BaDatabase Database { get; private set; }
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Starts a transaction. Must call Dispose on the transaction.
+		/// </summary>
+		/// <returns></returns>
+		public BaTransaction BeginTransaction()
+		{
+			return Database.BeginTransaction();
+		}
+
+		/// <summary>
+		/// Saves the table object.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="restricted"></param>
+		public void Save(BaTableObject obj, params string[] restricted)
+		{
+			if (obj == null) return;
+
+			// Check to see if there are any changes to save.
+			var updates = obj.GetChanges(restricted);
+			if (updates.Count == 0) return;
+
+			if (obj.IsNew)
+			{
+				var values = Database.Insert(obj.TableName, updates);
+				obj.Fill((object)values);
+			}
+			else
+			{
+				var key = new Dictionary<string, object>();
+				foreach (var fld in obj.GetKey())
+					key.Add(fld.Name, fld.Value);
+				Database.Update(obj.TableName, key, updates);
+			}
+			obj.UpdateDefaults();
+		}
 
 		#endregion
 

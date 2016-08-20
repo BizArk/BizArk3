@@ -24,6 +24,17 @@ namespace BizArk.Core.Tests
 		}
 
 		[Test]
+		public void DebugSqlWithJsonTest()
+		{
+			var cmd = new SqlCommand("SELECT * FROM MyTable WHERE MyField = @MyField");
+			cmd.Parameters.AddWithValue("@MyField", "{SomeField:\"SomeValue\"}");
+			var sql = cmd.DebugText();
+			Debug.WriteLine(sql);
+			Assert.IsTrue(sql.Contains("DECLARE @MyField AS NVARCHAR(23) = N'{SomeField:\"SomeValue\"}'"));
+			Assert.IsTrue(sql.Contains(cmd.CommandText));
+		}
+
+		[Test]
 		public void DebugSqlWithoutVarDesignatorTest()
 		{
 			var cmd = new SqlCommand("SELECT * FROM MyTable WHERE MyField = @MyField");
