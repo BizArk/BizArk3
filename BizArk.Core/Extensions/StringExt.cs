@@ -559,6 +559,74 @@ namespace BizArk.Core.Extensions.StringExt
 			return sb.ToString().TrimEnd();
 		}
 
+		/// <summary>
+		/// If the string is empty, returns the default.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="dflt"></param>
+		/// <returns></returns>
+		public static string IfEmpty(this StringBuilder sb, string dflt)
+		{
+			return sb.ToString().IfEmpty(dflt);
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string to this instance if the condition is true.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="condition">If true, appends the value.</param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendIf(this StringBuilder sb, bool condition, string value)
+		{
+			if (condition)
+				sb.Append(value);
+			return sb;
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string to this instance if the value is not null or empty.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendIf(this StringBuilder sb, string value)
+		{
+			if (value.HasValue())
+				sb.Append(value);
+			return sb;
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string followed by the default line terminator to
+		/// the end of the current System.Text.StringBuilder object if the condition is true.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="condition">If true, appends the value.</param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendLineIf(this StringBuilder sb, bool condition, string value)
+		{
+			if (condition)
+				sb.AppendLine(value);
+			return sb;
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string followed by the default line terminator
+		/// to the end of the current System.Text.StringBuilder object if the value is not
+		/// null or empty.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendLineIf(this StringBuilder sb, string value)
+		{
+			if (value.HasValue())
+				sb.AppendLine(value);
+			return sb;
+		}
+
 		#endregion
 
 		#region Split
