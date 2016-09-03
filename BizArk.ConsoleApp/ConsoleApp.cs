@@ -9,10 +9,11 @@ namespace BizArk.ConsoleApp
 	/// </summary>
 	public interface IConsoleApp
 	{
-		/// <summary>
-		/// The method to call to start running the console application.
-		/// </summary>
-		int Start();
+        /// <summary>
+        /// The method to call to start running the console application.
+        /// </summary>
+        /// <returns>Environment.ExitCode</returns>
+        int Start();
 
 		/// <summary>
 		/// Gets a value that determines if the process should pause before exiting.
@@ -38,10 +39,11 @@ namespace BizArk.ConsoleApp
 	public abstract class BaseConsoleApp : IConsoleApp
 	{
 
-		/// <summary>
-		/// The method to call to start running the console application.
-		/// </summary>
-		public abstract int Start();
+        /// <summary>
+        /// The method to call to start running the console application.
+        /// </summary>
+        /// <returns>Environment.ExitCode</returns>
+        public abstract int Start();
 
 		/// <summary>
 		/// Gets or sets a value that determines if help text should be displayed instead of running the console app.
