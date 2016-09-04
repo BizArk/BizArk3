@@ -1,10 +1,6 @@
-﻿using NUnit.Framework;
-using System;
+﻿using BizArk.Core.Extensions.DictionaryExt;
+using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.DictionaryExt;
 
 namespace BizArk.Core.Tests
 {
