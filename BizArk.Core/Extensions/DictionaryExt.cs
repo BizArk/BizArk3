@@ -23,7 +23,7 @@ namespace BizArk.Core.Extensions.DictionaryExt
         /// <returns></returns>
         public static dynamic ToDynamic<TVal>(this IDictionary<string, TVal> dict)
         {
-            dynamic obj = new ExpandoObject();
+            var obj = new ExpandoObject() as IDictionary<string, object>;
             foreach(var item in dict)
             {
                 obj[item.Key] = item.Value;
@@ -39,13 +39,9 @@ namespace BizArk.Core.Extensions.DictionaryExt
         /// <param name="key">The key to the dictionary.</param>
         /// <param name="dflt">Returned if the key is not found or if the dictionary is null.</param>
         /// <returns></returns>
-        public static T GetValue<T>(this IDictionary<string, object> dict, string key, T dflt = default(T))
+        public static T TryGetValue<T>(this IDictionary<string, object> dict, string key, T dflt = default(T))
         {
-            if (dict == null) return dflt;
-            if (!dict.ContainsKey(key)) return dflt;
-
-            var val = dict[key];
-            return ConvertEx.To<T>(val);
+            return TryGetValue<string, object, T>(dict, key, dflt);
         }
 
         /// <summary>
@@ -58,7 +54,7 @@ namespace BizArk.Core.Extensions.DictionaryExt
         /// <param name="key">The key to the dictionary.</param>
         /// <param name="dflt">Returned if the key is not found or if the dictionary is null.</param>
         /// <returns></returns>
-        public static TRet GetValue<TKey, TVal, TRet>(this IDictionary<TKey, TVal> dict, TKey key, TRet dflt = default(TRet))
+        public static TRet TryGetValue<TKey, TVal, TRet>(this IDictionary<TKey, TVal> dict, TKey key, TRet dflt = default(TRet))
         {
             if (dict == null) return dflt;
             if (!dict.ContainsKey(key)) return dflt;
