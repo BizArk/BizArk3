@@ -109,6 +109,7 @@
     <Compile Include="Extensions\AttributeExt.cs" />
     <Compile Include="Extensions\DataExt.cs" />
     <Compile Include="Extensions\DateExt.cs" />
+    <Compile Include="Extensions\DictionaryExt.cs" />
     <Compile Include="Extensions\DrawingExt.cs" />
     <Compile Include="Extensions\ExceptionExt.cs" />
     <Compile Include="Extensions\FormatExt.cs" />

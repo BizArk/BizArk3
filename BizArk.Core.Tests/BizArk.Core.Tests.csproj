@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="AssertEx.cs" />
     <Compile Include="DataExtTests.cs" />
+    <Compile Include="DictionaryExtTest.cs" />
     <Compile Include="SecurityTests.cs" />
     <Compile Include="ObjectUtilTest.cs" />
     <Compile Include="MathExtTests.cs" />
