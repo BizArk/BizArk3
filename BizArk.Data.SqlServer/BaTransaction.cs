@@ -27,6 +27,16 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		public void Dispose()
 		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// If the transaction hasn't been committed, it will be rolled back.
+		/// </summary>
+		/// <param name="disposing">True if called from Dispose, false if called from finalizer.</param>
+		protected virtual void Dispose(bool disposing)
+		{
 			if (Transaction != null)
 			{
 				Transaction.Rollback();

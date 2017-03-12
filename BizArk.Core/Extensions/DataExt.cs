@@ -630,6 +630,7 @@ namespace BizArk.Core.Extensions.DataExt
 		/// <param name="paramNameRoot">What the parameter should be named followed by a unique value for each value. This value surrounded by {} in the CommandText will be replaced.</param>
 		/// <param name="start">The beginning number to append to the end of paramNameRoot for each value.</param>
 		/// <param name="separator">The string that separates the parameter names in the sql command.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public static SqlParameter[] AddArrayParameters<T>(this SqlCommand cmd, IEnumerable<T> values, string paramNameRoot, int start = 1, string separator = ", ")
 		{
 			/* An array cannot be simply added as a parameter to a SqlCommand so we need to loop through things and add it manually. 

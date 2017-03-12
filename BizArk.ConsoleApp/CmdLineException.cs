@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace BizArk.ConsoleApp
@@ -9,6 +10,7 @@ namespace BizArk.ConsoleApp
 	/// <summary>
 	/// Base exception thrown for command-line parsing errors.
 	/// </summary>
+	[Serializable]
     public class CmdLineException : ApplicationException
     {
 
@@ -28,6 +30,7 @@ namespace BizArk.ConsoleApp
 	/// <summary>
 	/// Exception with a specific property.
 	/// </summary>
+	[Serializable]
     public class CmdLineArgException : CmdLineException
     {
 
@@ -48,5 +51,11 @@ namespace BizArk.ConsoleApp
 		/// </summary>
         public string ArgName { get; private set; }
 
-    }
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("ArgName", ArgName);
+			base.GetObjectData(info, context);
+		}
+
+	}
 }

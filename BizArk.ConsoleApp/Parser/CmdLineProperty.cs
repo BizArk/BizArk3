@@ -163,6 +163,7 @@ namespace BizArk.ConsoleApp.Parser
 		/// </summary>
 		/// <param name="argName"></param>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public CmdLineProperty this[string argName]
 		{
 			get

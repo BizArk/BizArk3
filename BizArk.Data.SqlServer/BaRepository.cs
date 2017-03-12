@@ -34,6 +34,16 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		public void Dispose()
 		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Cleans up any resources that the repository is using.
+		/// </summary>
+		/// <param name="disposing">True if called from Dispose, false if called from finalizer.</param>
+		protected virtual void Dispose(bool disposing)
+		{
 			if (Database != null && DisposeDatabase)
 			{
 				Database.Dispose();

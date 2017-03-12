@@ -301,6 +301,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="values"></param>
 		/// <remarks>Internal so it can be called from the unit tests.</remarks>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		internal SqlCommand PrepareInsertCmd(string tableName, object values)
 		{
 			var cmd = new SqlCommand();
@@ -344,6 +345,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="values"></param>
 		/// <remarks>Internal so it can be called from the unit tests.</remarks>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		internal SqlCommand PrepareUpdateCmd(string tableName, object key, object values)
 		{
 			var cmd = new SqlCommand();
@@ -395,6 +397,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="key"></param>
 		/// <remarks>Internal so it can be called from the unit tests.</remarks>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		internal SqlCommand PrepareDeleteCmd(string tableName, object key)
 		{
 			var cmd = new SqlCommand();
@@ -631,6 +634,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="parameters"></param>
 		/// <remarks>This is internal so it can be called from the unit tests.</remarks>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		internal SqlCommand PrepareSprocCmd(string sprocName, object parameters)
 		{
 			var cmd = new SqlCommand(sprocName);

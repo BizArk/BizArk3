@@ -39,11 +39,19 @@ namespace BizArk.ConsoleApp
 	public abstract class BaseConsoleApp : IConsoleApp
 	{
 
-        /// <summary>
-        /// The method to call to start running the console application.
-        /// </summary>
-        /// <returns>Environment.ExitCode</returns>
-        public abstract int Start();
+		/// <summary>
+		/// Performs application-defined tasks associated with 
+		/// freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+		}
+
+		/// <summary>
+		/// The method to call to start running the console application.
+		/// </summary>
+		/// <returns>Environment.ExitCode</returns>
+		public abstract int Start();
 
 		/// <summary>
 		/// Gets or sets a value that determines if help text should be displayed instead of running the console app.

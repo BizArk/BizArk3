@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BizArk")]
 [assembly: AssemblyProduct("BizArk")]
-[assembly: AssemblyCopyright("Copyright © 2016 BizArk")]
+[assembly: AssemblyCopyright("Copyright © 2017 BizArk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
