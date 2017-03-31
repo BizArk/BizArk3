@@ -2,6 +2,8 @@
 
 BizArk provides a collection of tools to make building line-of-business applications easier. 
 
+**NOTE: The reason this hasn't been released yet is because we want to try to implement this so it works in .Net Core/.Net Standard 1.X. I held off due to the tooling being in an alpha state and now I'm just busy on other projects (such as BizArk\JobMon and some electronics). I'm hoping to get back around to this soon.**
+
 ## Version 3
 This is the 3rd version of BizArk. Although much of the code was ported from v2, not all of it was and some of it has changed so if you are coming from v2, you might need to make changes to your code. In particular, the command-line parsing was moved into its own project, ConvertEx has been refactored and improved, WebHelper has been removed, and the database utilities have also been removed. If the WebHelper or database utilites were useful to you and you think they should be ported to v3, please leave a comment and we'll consider it.
 
