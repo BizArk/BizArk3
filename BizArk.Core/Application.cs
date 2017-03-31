@@ -106,7 +106,8 @@ namespace BizArk.Core
         public static string GetPath(string relativePath)
         {
             var dirPath = System.IO.Path.GetDirectoryName(ExePath);
-            return System.IO.Path.Combine(dirPath, relativePath);
+            var path = System.IO.Path.Combine(dirPath, relativePath);
+			return Path.GetFullPath(path);
         }
 
         /// <summary>
