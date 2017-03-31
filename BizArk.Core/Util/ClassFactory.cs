@@ -3,7 +3,7 @@
 namespace BizArk.Core
 {
 	/// <summary>
-	/// The class factory for objects allows for objects to be changed at runtime.
+	/// A simple but extensible class factory. Used by BizArk to create some internal objects.
 	/// </summary>
 	public static class ClassFactory
     {

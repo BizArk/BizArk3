@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="StringExtTests.cs" />
     <Compile Include="StringTemplateTests.cs" />
+    <Compile Include="WebExtTests.cs" />
     <Compile Include="XmlExtTests.cs" />
   </ItemGroup>
   <ItemGroup>

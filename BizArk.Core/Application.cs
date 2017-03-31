@@ -8,7 +8,7 @@ using BizArk.Core.Util;
 namespace BizArk.Core
 {
     /// <summary>
-    /// Primary class for application information and plugin support.
+    /// Provides easy access to information about the currently running application.
     /// </summary>
     public static class Application
     {

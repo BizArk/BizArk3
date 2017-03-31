@@ -5,7 +5,7 @@ namespace BizArk.Core.Extensions.ExceptionExt
 {
 
     /// <summary>
-    /// Extensions for classes within the Drawing namespace.
+    /// Provides extension method for exceptions.
     /// </summary>
     public static class ExceptionExt
     {

@@ -155,7 +155,6 @@
     <Compile Include="Util\StringTemplate.cs" />
     <Compile Include="Util\StringWriterEx.cs" />
     <Compile Include="Util\TempFile.cs" />
-    <Compile Include="Util\WebUtil.cs" />
     <Compile Include="Util\FileEx.cs" />
   </ItemGroup>
   <ItemGroup>

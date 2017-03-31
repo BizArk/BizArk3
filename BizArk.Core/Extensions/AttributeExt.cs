@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace BizArk.Core.Extensions.AttributeExt
 {
     /// <summary>
-    /// Provides extension methods for PropertyDescriptor.
+    /// Provides extension methods for working with attributes.
     /// </summary>
     public static class AttributeExt
     {
