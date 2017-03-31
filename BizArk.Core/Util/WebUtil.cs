@@ -67,39 +67,6 @@ namespace BizArk.Core.Util
 
             return str;
         }
-        
-        /// <summary>
-        /// Gets the contents of the response. Handles decompression if needed.
-        /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        public static byte[] GetContent(HttpWebResponse response)
-        {
-            using (var responseStream = response.GetResponseStream())
-            {
-                var ms = new MemoryStream();
-                var buffer = new byte[8192];
-                var bytesRead = 0;
-                int read;
-                Stream s;
-
-                if (response.ContentEncoding.ToLower().Contains("deflate"))
-                    s = new System.IO.Compression.DeflateStream(responseStream, System.IO.Compression.CompressionMode.Decompress);
-                else if (response.ContentEncoding.ToLower().Contains("gzip"))
-                    s = new System.IO.Compression.GZipStream(responseStream, System.IO.Compression.CompressionMode.Decompress);
-                else
-                    s = responseStream;
-
-                while ((read = s.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                    bytesRead += read;
-                }
-
-                return ms.ToArray();
-            }
-
-        }
 
     }
 }

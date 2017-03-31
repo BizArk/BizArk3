@@ -88,7 +88,7 @@ namespace BizArk.Core.Extensions.XmlExt
         /// <param name="value"></param>
         public static XmlElement SetElementValue(this XmlNode node, string name, object value)
         {
-            var child = (XmlElement)node.SelectSingleNode(name);
+            var child = node.SelectSingleNode(name) as XmlElement;
             if(child == null)
             {
                 child = node.OwnerDocument.CreateElement(name);
