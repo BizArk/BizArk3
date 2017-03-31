@@ -19,18 +19,9 @@ namespace BizArk.Core.DataAnnotations
         /// <summary>
         /// Creates an instance of SetAttribute.
         /// </summary>
-        /// <param name="values"></param>
-        public SetAttribute(params object[] values)
-            : this(null, values)
-        {
-        }
-
-        /// <summary>
-        /// Creates an instance of SetAttribute.
-        /// </summary>
         /// <param name="comparer">The comparer to use to compare the values.</param>
         /// <param name="values"></param>
-        public SetAttribute(IEqualityComparer comparer, params object[] values)
+        public SetAttribute(object[] values, IEqualityComparer comparer = null)
             : base("set")
         {
             Comparer = comparer;
@@ -43,8 +34,8 @@ namespace BizArk.Core.DataAnnotations
         /// </summary>
         /// <param name="ignoreCase"></param>
         /// <param name="values"></param>
-        public SetAttribute(bool ignoreCase, params string[] values)
-            : this(ignoreCase ? StringComparer.InvariantCultureIgnoreCase : null, values)
+        public SetAttribute(string[] values, bool ignoreCase)
+            : this(values, ignoreCase ? StringComparer.InvariantCultureIgnoreCase : null)
         {
         }
 

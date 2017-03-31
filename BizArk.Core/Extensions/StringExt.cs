@@ -364,6 +364,36 @@ namespace BizArk.Core.Extensions.StringExt
 		}
 
 		/// <summary>
+		/// Gets everything to the right of the find string.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="find">The string to find. Looks for the first occurrence.</param>
+		/// <returns>Null if find not found.</returns>
+		public static string Right(this string str, string find)
+		{
+			if (find.IsEmpty()) return str;
+			if (str.IsEmpty()) return null;
+			var idx = str.IndexOf(find);
+			if (idx < 0) return null;
+			return str.Substring(idx + find.Length);
+		}
+
+		/// <summary>
+		/// Gets everything to the left of the find string.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="find">The string to find. Looks for the first occurrence.</param>
+		/// <returns>Null if find not found.</returns>
+		public static string Left(this string str, string find)
+		{
+			if (find.IsEmpty()) return str;
+			if (str.IsEmpty()) return null;
+			var idx = str.IndexOf(find);
+			if (idx < 0) return null;
+			return str.Substring(0, idx);
+		}
+
+		/// <summary>
 		/// If the string is empty, returns the default.
 		/// </summary>
 		/// <param name="str"></param>
@@ -378,7 +408,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <summary>
 		/// Vowels. Used for IsVowel.
 		/// </summary>
-		public static char[] Vowels = { 'a', 'e', 'i', 'o', 'u' };
+		public static char[] Vowels = { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' };
 
 		/// <summary>
 		/// Determines if the character is a vowel.
@@ -415,7 +445,7 @@ namespace BizArk.Core.Extensions.StringExt
 		public static byte[] ToBytes(this string str, Encoding encoding = null)
 		{
 			return (encoding ?? Encoding.Default).GetBytes(str);
-				
+
 		}
 
 		#region Security
@@ -527,6 +557,74 @@ namespace BizArk.Core.Extensions.StringExt
 		public static string TrimEnd(this StringBuilder sb)
 		{
 			return sb.ToString().TrimEnd();
+		}
+
+		/// <summary>
+		/// If the string is empty, returns the default.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="dflt"></param>
+		/// <returns></returns>
+		public static string IfEmpty(this StringBuilder sb, string dflt)
+		{
+			return sb.ToString().IfEmpty(dflt);
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string to this instance if the condition is true.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="condition">If true, appends the value.</param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendIf(this StringBuilder sb, bool condition, string value)
+		{
+			if (condition)
+				sb.Append(value);
+			return sb;
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string to this instance if the value is not null or empty.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendIf(this StringBuilder sb, string value)
+		{
+			if (value.HasValue())
+				sb.Append(value);
+			return sb;
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string followed by the default line terminator to
+		/// the end of the current System.Text.StringBuilder object if the condition is true.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="condition">If true, appends the value.</param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendLineIf(this StringBuilder sb, bool condition, string value)
+		{
+			if (condition)
+				sb.AppendLine(value);
+			return sb;
+		}
+
+		/// <summary>
+		/// Appends a copy of the specified string followed by the default line terminator
+		/// to the end of the current System.Text.StringBuilder object if the value is not
+		/// null or empty.
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="value">The string to append.</param>
+		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		public static StringBuilder AppendLineIf(this StringBuilder sb, string value)
+		{
+			if (value.HasValue())
+				sb.AppendLine(value);
+			return sb;
 		}
 
 		#endregion

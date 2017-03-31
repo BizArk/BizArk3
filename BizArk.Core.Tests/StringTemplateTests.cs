@@ -4,6 +4,7 @@ using NUnit.Framework;
 using BizArk.Core.Util;
 using BizArk.Core.Extensions.FormatExt;
 using My = BizArk.Core.Tests.Properties;
+using System.Collections.Generic;
 
 namespace BizArk.Core.Tests
 {
@@ -87,6 +88,23 @@ namespace BizArk.Core.Tests
 			Debug.WriteLine(string.Format("TextTemplate.ToString: {0}", textTemplateTime));
 			Debug.WriteLine(string.Format("String.Replace: {0}", stringReplaceTime));
 			Debug.WriteLine(string.Format("Diff: {0}", (double)textTemplateTime / (double)stringFormatTime));
+		}
+
+		[Test]
+		public void DictionaryTest()
+		{
+			var dict = new Dictionary<string, object>();
+			dict.Add("Name", "World");
+			dict.Add("Greeting", "Hello");
+
+			var template = new StringTemplate("{Greeting} {Name}");
+			var actual = template.Format(dict);
+			Assert.AreEqual("Hello World", actual);
+
+			template = new StringTemplate("{Test.Greeting} {Test.Name}");
+			var args = new { Test = dict };
+			actual = template.Format(args);
+			Assert.AreEqual("Hello World", actual);
 		}
 
 		public class Letter

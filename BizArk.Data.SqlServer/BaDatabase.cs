@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BizArk.Core;
 using BizArk.Core.Extensions.DataExt;
 using BizArk.Core.Extensions.StringExt;
-using BizArk.Core;
 using BizArk.Core.Util;
-using BizArk.Core.Data;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Dynamic;
+using System.Linq;
+using System.Text;
 
 namespace BizArk.Data.SqlServer
 {
@@ -31,7 +31,8 @@ namespace BizArk.Data.SqlServer
 		/// <param name="connStr">The connection string to use for the database.</param>
 		public BaDatabase(string connStr)
 		{
-			mConnectionString = connStr;
+			if (connStr.IsEmpty()) throw new ArgumentNullException("connStr");
+			ConnectionString = connStr;
 		}
 
 		/// <summary>
@@ -59,24 +60,43 @@ namespace BizArk.Data.SqlServer
 			// Once the database has been disposed, we shouldn't need this anymore.
 			// Null it out so it will fail if anybody attempts to access it after 
 			// it's been disposed.
-			mConnectionString = null;
+			ConnectionString = null;
 		}
 
 		/// <summary>
 		/// Creates the BaDatabase from the connection string named in the config file.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="name">The name or key of the connection string in the config file.</param>
 		/// <returns></returns>
 		public static BaDatabase Create(string name)
 		{
-			throw new NotImplementedException();
+			var connStrSetting = ConfigurationManager.ConnectionStrings[name];
+			if (connStrSetting == null)
+				throw new InvalidOperationException($"The connection string setting for '{name}' was not found.");
+			return ClassFactory.CreateObject<BaDatabase>(connStrSetting.ConnectionString);
 		}
 
 		#endregion
 
 		#region Fields and Properties
 
-		private string mConnectionString;
+		/// <summary>
+		/// Error code for deadlocks in Sql Server.
+		/// </summary>
+		internal const int cSqlError_Deadlock = 1205;
+
+		/// <summary>
+		/// Gets or sets the default number of times to retry a command if a deadlock is identified.
+		/// </summary>
+		public static short DefaultRetriesOnDeadlock { get; set; } = 1;
+
+		/// <summary>
+		/// Gets or sets the number of times to retry a command if a deadlock is identified. By default, only non-transactional commands will be retried. Use BaRepository.TryTransaction() to retry entire transactions.
+		/// </summary>
+		public short RetriesOnDeadlock { get; set; } = DefaultRetriesOnDeadlock;
+
+		// Internal so it can be viewed in the unit tests.
+		internal string ConnectionString { get; private set; }
 
 		private SqlConnection mConnection;
 
@@ -88,7 +108,10 @@ namespace BizArk.Data.SqlServer
 			get
 			{
 				if (mConnection == null)
-					mConnection = new SqlConnection(mConnectionString);
+				{
+					mConnection = new SqlConnection(ConnectionString);
+					mConnection.Open();
+				}
 				return mConnection;
 			}
 		}
@@ -96,7 +119,7 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Gets the currently executing transaction for this database instance.
 		/// </summary>
-		public BaTransaction Transaction { get; private set; }
+		public BaTransaction Transaction { get; internal set; } // Internal so it can be called from BaTransaction.
 
 		#endregion
 
@@ -114,26 +137,30 @@ namespace BizArk.Data.SqlServer
 
 			Debug.WriteLine(cmd.DebugText());
 
-			// The connection is already set. Don't do anything with it.
-			if (cmd.Connection != null)
+			var attempt = 1;
+			while (true)
 			{
-				execute(cmd);
-				return;
-			}
-
-			try
-			{
-				cmd.Connection = Connection;
-				if (Transaction != null)
-					cmd.Transaction = Transaction.Transaction;
-				execute(cmd);
-			}
-			finally
-			{
-				// We don't want to leave the connection and transaction on the SqlCommand
-				// in case it is reused and the connection/transaction are no longer valid.
-				cmd.Connection = null;
-				cmd.Transaction = null;
+				try
+				{
+					cmd.Connection = cmd.Connection ?? Connection;
+					cmd.Transaction = cmd.Transaction ?? Transaction?.Transaction;
+					execute(cmd);
+					return;
+				}
+				catch (SqlException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
+				{
+					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
+					attempt++;
+				}
+				finally
+				{
+					// We don't want to leave the connection and transaction on the SqlCommand
+					// in case it is reused and the connection/transaction are no longer valid.
+					if (cmd.Connection != Connection)
+						cmd.Connection = null;
+					if (cmd.Transaction != Transaction?.Transaction)
+						cmd.Transaction = null;
+				}
 			}
 		}
 
@@ -278,6 +305,39 @@ namespace BizArk.Data.SqlServer
 			ExecuteReader(cmd, processRow);
 		}
 
+		/// <summary>
+		/// Disposes of the connection and allows it to be recreated.
+		/// </summary>
+		public void ResetConnection()
+		{
+			if (Transaction != null)
+				throw new InvalidOperationException("Cannot call BaDatabase.ResetConnection while a transaction is pending.");
+
+			if (mConnection != null)
+			{
+				mConnection.Close();
+				mConnection.Dispose();
+				mConnection = null;
+			}
+		}
+
+		#endregion
+
+		#region Transaction Methods
+
+		/// <summary>
+		/// Starts a transaction. Must call Dispose on the transaction.
+		/// </summary>
+		/// <returns></returns>
+		public BaTransaction BeginTransaction()
+		{
+			var conn = Connection;
+			if (conn.State == ConnectionState.Closed)
+				conn.Open();
+
+			return Transaction = new BaTransaction(this);
+		}
+
 		#endregion
 
 		#region Object Insert/Update/Delete Methods
@@ -287,11 +347,11 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="tableName">Name of the table to insert into.</param>
 		/// <param name="values">The values that will be added to the table. Can be anything that can be converted to a property bag.</param>
-		/// <returns></returns>
-		public int Insert(string tableName, object values)
+		/// <returns>The newly inserted row.</returns>
+		public dynamic Insert(string tableName, object values)
 		{
 			var cmd = PrepareInsertCmd(tableName, values);
-			return ExecuteNonQuery(cmd);
+			return GetDynamic(cmd);
 		}
 
 		/// <summary>
@@ -307,17 +367,31 @@ namespace BizArk.Data.SqlServer
 			var cmd = new SqlCommand();
 			var sb = new StringBuilder();
 
-			var fields = new List<string>();
 			var propBag = ObjectUtil.ToPropertyBag(values);
 
+			var inFields = new StringBuilder();
+			var valFields = new StringBuilder();
 			foreach (var val in propBag)
 			{
-				fields.Add(val.Key);
-				cmd.Parameters.AddWithValue(val.Key, val.Value);
+				if (inFields.Length > 0) inFields.Append(", ");
+				inFields.Append(val.Key);
+
+				if (valFields.Length > 0) valFields.Append(", ");
+				var literal = GetValueLiteral(val.Value as string);
+				if (literal != null)
+				{
+					valFields.Append(literal);
+				}
+				else
+				{
+					valFields.Append($"@{val.Key}");
+					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
+				}
 			}
 
-			sb.AppendLine($"INSERT INTO {tableName} ({string.Join(", ", fields)})");
-			sb.AppendLine($"\tVALUES (@{string.Join(", @", fields)})");
+			sb.AppendLine($"INSERT INTO {tableName} ({inFields})");
+			sb.AppendLine("\tOUTPUT INSERTED.*");
+			sb.AppendLine($"\tVALUES ({valFields});");
 
 			cmd.CommandText = sb.ToString();
 
@@ -354,24 +428,32 @@ namespace BizArk.Data.SqlServer
 			sb.AppendLine($"UPDATE {tableName} SET");
 
 			var propBag = ObjectUtil.ToPropertyBag(values);
-			foreach (var val in propBag)
+			var keys = propBag.Keys.ToArray();
+			for (var i = 0; i < keys.Length; i++)
 			{
-				sb.AppendLine($"\t\t{val.Key} = @{val.Key}");
-				cmd.Parameters.AddWithValue(val.Key, val.Value);
+				var val = propBag[keys[i]];
+
+				sb.Append($"\t\t{keys[i]} = ");
+
+				var literal = GetValueLiteral(val as string);
+				if (literal != null)
+				{
+					sb.Append(literal);
+				}
+				else
+				{
+					sb.Append($"@{keys[i]}");
+					cmd.Parameters.AddWithValue(keys[i], val, true);
+				}
+
+				if (i < keys.Length - 1)
+					sb.Append(",");
+				sb.AppendLine();
 			}
 
-			// Get the criteria for the UPDATE.
-			if (key != null)
-			{
-				var criteria = new List<string>();
-				propBag = ObjectUtil.ToPropertyBag(key);
-				foreach (var val in propBag)
-				{
-					criteria.Add($"{val.Key} = @{val.Key}");
-					cmd.Parameters.AddWithValue(val.Key, val.Value);
-				}
-				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
-			}
+			var criteria = PrepareCriteria(cmd, key);
+			if (criteria != null)
+				sb.AppendLine(criteria);
 
 			cmd.CommandText = sb.ToString();
 
@@ -405,22 +487,47 @@ namespace BizArk.Data.SqlServer
 
 			sb.AppendLine($"DELETE FROM {tableName}");
 
-			// Get the criteria for the UPDATE.
-			if (key != null)
-			{
-				var criteria = new List<string>();
-				var propBag = ObjectUtil.ToPropertyBag(key);
-				foreach (var val in propBag)
-				{
-					criteria.Add($"{val.Key} = @{val.Key}");
-					cmd.Parameters.AddWithValue(val.Key, val.Value);
-				}
-				sb.AppendLine($"\tWHERE {string.Join("\n\t\tAND ", criteria) }");
-			}
+			var criteria = PrepareCriteria(cmd, key);
+			if (criteria != null)
+				sb.AppendLine(criteria);
 
 			cmd.CommandText = sb.ToString();
 
 			return cmd;
+		}
+
+		private string PrepareCriteria(SqlCommand cmd, object key)
+		{
+			if (key == null) return null;
+
+			var criteria = new StringBuilder();
+			var propBag = ObjectUtil.ToPropertyBag(key);
+			foreach (var val in propBag)
+			{
+				if (criteria.Length > 0)
+					criteria.Append("\n\t\tAND ");
+				criteria.Append($"{val.Key} = ");
+
+				var literal = GetValueLiteral(val.Value as string);
+				if (literal != null)
+				{
+					criteria.Append(literal);
+				}
+				else
+				{
+					criteria.Append($"@{val.Key}");
+					cmd.Parameters.AddWithValue(val.Key, val.Value, true);
+				}
+			}
+			return $"\tWHERE {criteria}";
+		}
+
+		private string GetValueLiteral(string str)
+		{
+			if (str == null) return null;
+			if (!str.StartsWith("[[")) return null;
+			if (!str.EndsWith("]]")) return null;
+			return str.Substring(2, str.Length - 4);
 		}
 
 		#endregion
@@ -647,11 +754,22 @@ namespace BizArk.Data.SqlServer
 		}
 
 		/// <summary>
-		/// This method is called from BaTransaction to close the current transaction.
+		/// Gets the schema for a table from the database.
 		/// </summary>
-		internal void CloseTransaction()
+		/// <param name="tableName">Gets just the schema for this table.</param>
+		/// <returns></returns>
+		public DataTable GetSchema(string tableName)
 		{
-			Transaction = null;
+			var conn = Connection;
+			if (conn.State == ConnectionState.Closed)
+				conn.Open();
+
+			using (var da = new SqlDataAdapter($"SELECT * FROM {tableName} WHERE 0 = 1", conn))
+			{
+				var ds = new DataSet();
+				da.FillSchema(ds, SchemaType.Source, tableName);
+				return ds.Tables[tableName];
+			}
 		}
 
 		#endregion
@@ -683,6 +801,7 @@ namespace BizArk.Data.SqlServer
 		/// The database that is exposed from the object.
 		/// </summary>
 		BaDatabase Database { get; }
+
 	}
 
 }

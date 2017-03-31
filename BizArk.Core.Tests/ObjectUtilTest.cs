@@ -86,6 +86,44 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Test2.Greeters["Maria"].Greeting, value);
 		}
 
+		[Test]
+		public void TryGetValueDictionaryKeyWithDotTest()
+		{
+			var dict = new Dictionary<string, object>();
+			dict.Add("test.one", 1);
+			dict.Add("test.two", 2);
+			var args = new { test = dict };
+
+			object value;
+			Assert.IsTrue(ObjectUtil.TryGetValue(args, "test[test.one]", out value));
+			Assert.AreEqual(dict["test.one"], value);
+		}
+
+		[Test]
+		public void GetPropertyNamesTest()
+		{
+			var key = "one[two].three";
+			var i = 0;
+			var expected = new string[] { "one", "[two]", "three" };
+			foreach (var propName in ObjectUtil.GetPropertyNames(key))
+			{
+				Assert.AreEqual(expected[i], propName);
+				i++;
+			}
+			Assert.AreEqual(3, i);
+
+			// Make sure the method works correctly when it ends with an
+			// indexed property.
+			key = "one[two]";
+			i = 0;
+			foreach (var propName in ObjectUtil.GetPropertyNames(key))
+			{
+				Assert.AreEqual(expected[i], propName);
+				i++;
+			}
+			Assert.AreEqual(2, i);
+		}
+
 		#region Test Classes
 
 		private Test1 CreateTestStructure()

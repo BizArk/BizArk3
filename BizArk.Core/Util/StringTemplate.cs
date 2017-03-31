@@ -77,10 +77,11 @@ namespace BizArk.Core.Util
 			{
 				var argName = mArgNames[i];
 
-				if (!propBag.ContainsKey(argName))
+				object value;
+				if (!propBag.TryGetValue(argName, out value))
 					throw new FormatException($"The argument '{argName}' was not found in the format values.");
 
-				fmtArgs[i] = propBag[argName];
+				fmtArgs[i] = value;
 			}
 			return string.Format(mFormat, fmtArgs);
 		}

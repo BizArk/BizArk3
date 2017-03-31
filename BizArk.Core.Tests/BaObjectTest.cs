@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using BizArk.Core.Extensions.StringExt;
 
 namespace BizArk.Core.Tests
 {
@@ -117,6 +118,19 @@ namespace BizArk.Core.Tests
 		}
 
 		[Test]
+		public void BaObjectIgnoreChanges()
+		{
+			var obj = new BaObject(true, new { Name = "", Greeting = "" });
+
+			obj["Name"] = "John";
+			obj["Greeting"] = "Hello";
+
+			var changes = obj.GetChanges("Greeting");
+			Assert.AreEqual(1, changes.Count);
+			Assert.IsFalse(changes.ContainsKey("Greeting"));
+		}
+
+		[Test]
 		public void SetValueToDifferentType()
 		{
 			var obj = new BaObject(true, new { Str = "", Base = new MyBaseObject(), Derived = new MyDerivedObject() });
@@ -158,6 +172,24 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("Name", lastChanged);
 		}
 
+		[Test]
+		public void ValidateObject()
+		{
+			var obj = new MyObject();
+			obj.Name = "Bart";
+			obj.Greeting = "";
+			var errs = obj.Validate();
+			Assert.AreEqual(1, errs.Length);
+
+			obj.Greeting = "Hello";
+			errs = obj.Validate();
+			Assert.AreEqual(0, errs.Length);
+
+			obj.Name = "Al";
+			errs = obj.Validate();
+			Assert.AreEqual(1, errs.Length);
+		}
+
 		#region MyObject
 
 		private class MyObject : BaObject
@@ -168,6 +200,20 @@ namespace BizArk.Core.Tests
 				// default values (that would cause the class to call the 
 				// properties which would fail).
 				InitSchemaFromObject(this, false);
+
+				Fields["Name"].Validators
+					.Required()
+					.StringLength(10)
+					.Custom((val) =>
+					{
+						var name = val as string;
+						if (name.IsEmpty()) return true;
+						return !name[0].IsVowel(); // The name cannot start with a vowel.
+					});
+
+				Fields["Greeting"].Validators
+					.Required()
+					.StringLength(3, 10);
 			}
 
 			public string Name
@@ -193,7 +239,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		private class MyDerivedObject: MyBaseObject
+		private class MyDerivedObject : MyBaseObject
 		{
 
 		}

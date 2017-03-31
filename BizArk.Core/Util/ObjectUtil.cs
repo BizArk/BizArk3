@@ -169,38 +169,27 @@ namespace BizArk.Core.Util
 
 			var propertyNames = key.Split('.');
 			var currentObj = obj;
-			foreach (var name in propertyNames)
+			foreach (var propName in GetPropertyNames(key))
 			{
-				// Need to put it in a variable because we will need to change it if it includes an index.
-				var propName = name; 
-
-				// Check to see if using an index of some type (string or numeric).
-				var idx = propName.IndexOf('[');
-				if (idx == 0)
-					throw new InvalidOperationException($"{propName} is not a supported property name. Property names cannot start with '['");
-
-				string indexer = null;
-				if (idx > 0)
+				if (propName.StartsWith("["))
 				{
-					if (!propName.EndsWith("]"))
-						throw new InvalidOperationException($"{propName} is not a supported property name. Property names that include an indexer must end with ']'");
-					// Get the index (numeric or string)
-					indexer = propName.Substring(idx + 1, propName.Length - idx - 2);
-					// Get just the name of the property without the index.
-					propName = propName.Substring(0, idx);
-				}
-
-				var prop = FindProperty(currentObj, propName);
-				if (prop == null)
-					return false;
-
-				currentObj = prop.GetValue(currentObj);
-				if (currentObj == null) return true;
-
-				// Check to see if we need to get an indexed value.
-				if (indexer != null)
-				{
+					var indexer = propName.Trim('[', ']');
 					currentObj = GetIndexedValue(currentObj, indexer);
+					if (currentObj == null) return true;
+				}
+				else
+				{
+					var prop = FindProperty(currentObj, propName);
+					if (prop != null)
+					{
+						currentObj = prop.GetValue(currentObj);
+					}
+					else
+					{
+						var propBag = ToPropertyBag(currentObj);
+						if (!propBag.TryGetValue(propName, out currentObj))
+							return false;
+					}
 					if (currentObj == null) return true;
 				}
 
@@ -210,13 +199,60 @@ namespace BizArk.Core.Util
 			return true;
 		}
 
+		/// <summary>
+		/// Gets the property names from the key. Indexed properties are returned with square brackets.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public static IEnumerable<string> GetPropertyNames(string key)
+		{
+			if (key.IsEmpty()) yield break;
+
+			var idx = 0;
+			var startIdx = 0;
+			//test[hello].whatever
+			while (idx < key.Length)
+			{
+				if (key[idx] == '[')
+				{
+					// Return anything we've gathered up to this point.
+					if (idx != startIdx)
+						yield return key.Substring(startIdx, idx - startIdx);
+
+					var endIdx = key.IndexOf(']', idx);
+					if (endIdx < 0)
+						throw new ArgumentException($"'{key}' contains an invalid indexer.");
+
+					// Make sure to include the [ and ].
+					yield return key.Substring(idx, (endIdx + 1) - idx);
+
+					idx = endIdx + 1;
+					if (idx >= key.Length) yield break;
+					if (key[idx] != '.')
+						throw new ArgumentException($"Unexpected character in '{key}' at character {idx}. Expecting a '.'");
+					idx += 1; // Move past the .
+					startIdx = idx; // Start gathering the next property name.
+				}
+				else if (key[idx] == '.')
+				{
+					yield return key.Substring(startIdx, idx - startIdx);
+					startIdx = idx + 1;
+				}
+
+				idx++;
+			}
+
+			if (startIdx < idx)
+				yield return key.Substring(startIdx, idx - startIdx);
+		}
+
 		private static object GetIndexedValue(object obj, string indexer)
 		{
 			var list = obj as IList;
 			if (list != null)
 			{
 				int idx;
-				if (!int.TryParse(indexer, out idx))
+				if (!ConvertEx.Try(indexer, out idx))
 					throw new ArgumentException($"'[{indexer}]' is not a valid index argument for an array.");
 				return list[idx];
 			}
