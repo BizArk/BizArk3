@@ -4,12 +4,12 @@ using System.Reflection;
 namespace BizArk.Core.Convert.Strategies
 {
 
-    /// <summary>
-    /// Uses a typed constructor to convert the value.
-    /// </summary>
-    public class CtorConversionStrategy
-         : IConvertStrategy
-    {
+	/// <summary>
+	/// Uses a typed constructor to convert the value.
+	/// </summary>
+	public class CtorConversionStrategy
+		 : IConvertStrategy
+	{
 
 		/// <summary>
 		/// Changes the type of the value.
@@ -36,10 +36,10 @@ namespace BizArk.Core.Convert.Strategies
 			return false;
 		}
 
-        private static ConstructorInfo GetCtor(Type from, Type to)
-        {
-            return to.GetConstructor(new Type[] { from });
-        }
+		private static ConstructorInfo GetCtor(Type from, Type to)
+		{
+			return to.GetConstructor(new Type[] { from });
+		}
 
-    }
+	}
 }

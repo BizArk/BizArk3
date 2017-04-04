@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BizArk.Core.Data
 {
 	/// <summary>
 	/// List of BizArk fields.
 	/// </summary>
-	public class BaFieldList : IReadOnlyList<BaField>
+	public sealed class BaFieldList : IReadOnlyList<BaField>
 	{
 
 		#region Initialization and Destruction
@@ -18,7 +14,7 @@ namespace BizArk.Core.Data
 		/// <summary>
 		/// Creates an instance of BaFieldList.
 		/// </summary>
-		public BaFieldList()
+		internal BaFieldList(BaObject obj)
 		{
 
 		}
@@ -26,6 +22,11 @@ namespace BizArk.Core.Data
 		#endregion
 
 		#region Fields and Properties
+
+		/// <summary>
+		/// Gets the BaObject associated with this field list.
+		/// </summary>
+		public BaObject Object { get; private set; }
 
 		private List<BaField> mFields = new List<BaField>();
 

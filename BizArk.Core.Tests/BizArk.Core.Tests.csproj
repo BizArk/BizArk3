@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\Spirax-Regular.ttf" />
     <None Include="Resources\TestImg.png" />
     <Content Include="Data\Northwind.sdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -11,14 +11,14 @@ namespace BizArk.Core.Tests
         public void ConvertValueFromPropertyBag()
         {
             var dict = new Dictionary<string, object>();
-            var val = dict.TryGetValue<int>("Test");
+            var val = dict.TryGetValue("Test", 0);
             Assert.AreEqual(0, val);
 
             dict["Test"] = "123";
-            val = dict.TryGetValue<int>("Test");
+            val = dict.TryGetValue("Test", 0);
             Assert.AreEqual(123, val);
 
-            val = dict.TryGetValue<int>("INVALID", -1);
+            val = dict.TryGetValue("INVALID", -1);
             Assert.AreEqual(-1, val);
         }
 
@@ -26,14 +26,14 @@ namespace BizArk.Core.Tests
         public void ConvertValueFromIntStringDict()
         {
             var dict = new Dictionary<int, string>();
-            var val = dict.TryGetValue<int, string, decimal>(123);
+            var val = dict.TryGetValue(123, 0m);
             Assert.AreEqual(0m, val);
 
             dict[123] = "1.23";
-            val = dict.TryGetValue<int, string, decimal>(123);
+            val = dict.TryGetValue(123, 0m);
             Assert.AreEqual(1.23m, val);
 
-            val = dict.TryGetValue<int, string, decimal>(-1, decimal.MinValue);
+            val = dict.TryGetValue(-1, decimal.MinValue);
             Assert.AreEqual(decimal.MinValue, val);
         }
 

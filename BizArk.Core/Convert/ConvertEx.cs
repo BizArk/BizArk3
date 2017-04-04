@@ -1,5 +1,5 @@
-﻿using BizArk.Core.Convert;
-using System;
+﻿using System;
+using BizArk.Core.Convert;
 
 namespace BizArk.Core
 {
@@ -15,8 +15,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Boolean. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static bool ToBool(object value)
@@ -27,8 +25,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Char. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static char ToChar(object value)
@@ -39,8 +35,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a SByte. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static sbyte ToSByte(object value)
@@ -51,8 +45,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Byte. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static byte ToByte(object value)
@@ -63,8 +55,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Int16. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static short ToShort(object value)
@@ -75,8 +65,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a UInt16. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static ushort ToUShort(object value)
@@ -87,8 +75,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Int32. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static int ToInt(object value)
@@ -99,8 +85,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a UInt32. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static uint ToUInt(object value)
@@ -111,8 +95,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Int64. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static long ToLong(object value)
@@ -123,8 +105,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a UInt64. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static ulong ToULong(object value)
@@ -135,8 +115,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Single. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static float ToSingle(object value)
@@ -147,8 +125,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Single. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static float ToFloat(object value)
@@ -158,8 +134,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Double. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static double ToDouble(object value)
@@ -170,8 +144,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a Decimal. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static decimal ToDecimal(object value)
@@ -182,8 +154,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a DateTime. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static DateTime ToDateTime(object value)
@@ -194,8 +164,6 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to a String. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		public static string ToString(object value)
@@ -228,35 +196,12 @@ namespace BizArk.Core
 		}
 
 		/// <summary>
-		/// Converts the value to the specified type. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface. This is an alias 
-		/// to ChangeType.
+		/// Converts the value to the specified type.
 		/// </summary>
 		/// <typeparam name="T">The type to convert to.</typeparam>
 		/// <param name="value">The value to convert from.</param>
 		/// <returns></returns>
-		/// <remarks>
-		/// <para>The ChangeType method converts a value to another type.</para>
-		/// <para>It can use a number of different conversion techniques depending on
-		/// what is most appropriate based on the type of the value and the type it
-		/// is converting to. The following lists explains the order that the checks 
-		/// are made in.
-		/// <list type="">
-		/// <item>String to Boolean - Used when we are converting from a string to a boolean. Valid values for true are "true", "t", "yes", "1", and "-1", everything else is false.</item>
-		/// <item>TypeConverter - Used when a TypeConverter exists for either the type we are converting to or from that can convert to the other type.</item>
-		/// <item>Parse method - Used when the type we are converting from is a string and the type we are converting to defines a static, parameterless Parse method that returns the type we are converting to.</item>
-		/// <item>Convert method - Used when the type we are converting from defines an instance method called ToXXX where XXX is the name of the type we are converting to with some common aliases allowed (example ToBool or ToInt instead of ToBoolean and ToInt32). The method must return the type we are converting to</item>
-		/// <item>IConvertible - Used when the type we are converting from implements the IConvertible interface.</item>
-		/// </list>
-		/// </para>
-		/// <para>This method makes use of the strategy pattern for determining how to 
-		/// convert values. To define a custom strategy to convert from one type to 
-		/// another, define a class that implements the IConvertStrategy interface and
-		/// register it with the ConvertStrategyMgr class.</para>
-		/// </remarks>
 		/// <exception cref="System.InvalidCastException">This conversion is not supported. -or-value is null and conversionType is a value type.</exception>
-		/// <exception cref="System.ArgumentNullException">conversionType is null.</exception>
 		public static T To<T>(object value)
 		{
 			return (T)To(value, typeof(T), null);
@@ -264,32 +209,11 @@ namespace BizArk.Core
 
 		/// <summary>
 		/// Converts the value to the specified type. 
-		/// Checks for a TypeConverter, conversion methods, 
-		/// and the IConvertible interface.
 		/// </summary>
 		/// <param name="value">The value to convert from.</param>
 		/// <param name="to">The type to convert to.</param>
 		/// <param name="provider">The IFormatProvider to use for the conversion.</param>
 		/// <returns></returns>
-		/// <remarks>
-		/// <para>The ChangeType method converts a value to another type.</para>
-		/// <para>It can use a number of different conversion techniques depending on
-		/// what is most appropriate based on the type of the value and the type it
-		/// is converting to. The following lists explains the order that the checks 
-		/// are made in.
-		/// <list type="">
-		/// <item>String to Boolean - Used when we are converting from a string to a boolean. Valid values for true are "true", "t", "yes", "1", and "-1", everything else is false.</item>
-		/// <item>TypeConverter - Used when a TypeConverter exists for either the type we are converting to or from that can convert to the other type.</item>
-		/// <item>Parse method - Used when the type we are converting from is a string and the type we are converting to defines a static, parameterless Parse method that returns the type we are converting to.</item>
-		/// <item>Convert method - Used when the type we are converting from defines an instance method called ToXXX where XXX is the name of the type we are converting to with some common aliases allowed (example ToBool or ToInt instead of ToBoolean and ToInt32). The method must return the type we are converting to</item>
-		/// <item>IConvertible - Used when the type we are converting from implements the IConvertible interface.</item>
-		/// </list>
-		/// </para>
-		/// <para>This method makes use of the strategy pattern for determining how to 
-		/// convert values. To define a custom strategy to convert from one type to 
-		/// another, define a class that implements the IConvertStrategy interface and
-		/// register it with the ConvertStrategyMgr class.</para>
-		/// </remarks>
 		/// <exception cref="System.InvalidCastException">This conversion is not supported. -or-value is null and conversionType is a value type.</exception>
 		/// <exception cref="System.ArgumentNullException">conversionType is null.</exception>
 		public static object To(object value, Type to, IFormatProvider provider = null)
@@ -319,7 +243,7 @@ namespace BizArk.Core
 		/// <summary>
 		/// Attempts to convert the value to the specified type. 
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="T">The type to convert the value to.</typeparam>
 		/// <param name="value">The value to convert from.</param>
 		/// <param name="convertedValue">The converted value.</param>
 		/// <returns></returns>
@@ -341,7 +265,7 @@ namespace BizArk.Core
 		#region IsEmpty
 
 		/// <summary>
-		/// Checks to see if the value is empty. The value is empty if it is null, DBNull, or matches the MinValue, MaxValue, or Empty fields of the values type.
+		/// Checks to see if the value is considered to have no value. Null, DBNull.Value and Min/Max values, and Empty values are considered empty.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
@@ -353,6 +277,7 @@ namespace BizArk.Core
 		/// <summary>
 		/// Gets the default value that represents empty for the given type.
 		/// </summary>
+		/// <typeparam name="T">Used to identify the type to get the default empty value for.</typeparam>
 		/// <returns></returns>
 		public static T GetDefaultEmptyValue<T>()
 		{
@@ -362,6 +287,7 @@ namespace BizArk.Core
 		/// <summary>
 		/// Gets the default value that represents empty for the given type.
 		/// </summary>
+		/// <param name="type">The type to get the default empty value for.</param>
 		/// <returns></returns>
 		public static object GetDefaultEmptyValue(Type type)
 		{

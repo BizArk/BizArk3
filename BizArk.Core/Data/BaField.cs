@@ -1,7 +1,6 @@
-﻿using BizArk.Core.Extensions.StringExt;
+﻿using System;
+using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Extensions.TypeExt;
-using System;
-using System.Collections.Generic;
 
 namespace BizArk.Core.Data
 {
@@ -9,7 +8,7 @@ namespace BizArk.Core.Data
 	/// <summary>
 	/// Contains the value and other information about a field.
 	/// </summary>
-	public class BaField
+	public sealed class BaField
 	{
 
 		#region Initialization and Destruction

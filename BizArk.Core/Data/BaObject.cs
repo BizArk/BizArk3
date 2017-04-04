@@ -1,5 +1,4 @@
-﻿using BizArk.Core.Util;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +7,7 @@ using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using BizArk.Core.Util;
 
 namespace BizArk.Core.Data
 {
@@ -37,6 +37,7 @@ namespace BizArk.Core.Data
 		public BaObject(BaObjectOptions options = null)
 		{
 			Options = options ?? new BaObjectOptions();
+			Fields = new BaFieldList(this);
 
 			if (Options.Schema != null
 				&& !InitFromBaObject(Options.Schema as BaObject)
@@ -153,6 +154,7 @@ namespace BizArk.Core.Data
 
 			for (var i = 0; i < row.FieldCount; i++)
 			{
+				row.GetSchemaTable();
 				var name = row.GetName(i);
 				var type = row.GetFieldType(i);
 				var value = row.GetValue(i);
@@ -173,7 +175,7 @@ namespace BizArk.Core.Data
 		/// <summary>
 		/// Gets the fields in this object.
 		/// </summary>
-		public BaFieldList Fields { get; } = new BaFieldList();
+		public BaFieldList Fields { get; private set; }
 
 		/// <summary>
 		/// Gets a value that determines if the object has changed.
@@ -232,8 +234,8 @@ namespace BizArk.Core.Data
 			var pairs = new List<KeyValuePair<string, object>>();
 			foreach (var fld in Fields)
 			{
-				if(fld.IsSet)
-				pairs.Add(new KeyValuePair<string, object>(fld.Name, fld.Value));
+				if (fld.IsSet)
+					pairs.Add(new KeyValuePair<string, object>(fld.Name, fld.Value));
 			}
 			return pairs;
 		}
@@ -322,6 +324,7 @@ namespace BizArk.Core.Data
 		/// <summary>
 		/// Uses DataAnnotations to validate the properties of the object.
 		/// </summary>
+		/// <param name="changedOnly">Only validates changed fields.</param>
 		public ValidationResult[] Validate(bool changedOnly = true)
 		{
 			var ctx = new ValidationContext(this, null, null);
@@ -585,7 +588,7 @@ namespace BizArk.Core.Data
 		#region INotifyPropertyChanged
 
 		/// <summary>
-		/// Event raised when a field changes.
+		/// Event raised when a field value changes.
 		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 

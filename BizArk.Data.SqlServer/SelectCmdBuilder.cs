@@ -143,35 +143,38 @@ namespace BizArk.Data.SqlServer
             return sql.ToString();
         }
 
-        /// <summary>
-        /// Creates the command that will return all of the results.
-        /// </summary>
-        /// <returns></returns>
-        public SqlCommand CreateCmd()
+		/// <summary>
+		/// Creates the command that will return all of the results.
+		/// </summary>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		public SqlCommand CreateCmd()
         {
             var cmd = new SqlCommand(GetSql());
             cmd.Parameters.AddRange(Parameters.ToArray());
             return cmd;
         }
 
-        /// <summary>
-        /// Creates a command that will tell you how many results there are for this SQL.
-        /// </summary>
-        /// <returns></returns>
-        public SqlCommand CreateCountCmd()
+		/// <summary>
+		/// Creates a command that will tell you how many results there are for this SQL.
+		/// </summary>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		public SqlCommand CreateCountCmd()
         {
             var cmd = new SqlCommand(GetSql(true));
             cmd.Parameters.AddRange(Parameters.ToArray());
             return cmd;
         }
 
-        /// <summary>
-        /// Creates a command that will return a single page of results.
-        /// </summary>
-        /// <param name="skip">The number of results to skip before returning results (essentially the page)</param>
-        /// <param name="take">The number of results per page.</param>
-        /// <returns></returns>
-        public SqlCommand CreateCmd(int skip, int take)
+		/// <summary>
+		/// Creates a command that will return a single page of results.
+		/// </summary>
+		/// <param name="skip">The number of results to skip before returning results (essentially the page)</param>
+		/// <param name="take">The number of results per page.</param>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		public SqlCommand CreateCmd(int skip, int take)
 		{
             if (OrderBy.Count == 0)
                 throw new InvalidOperationException("The OrderBy fields must be specified in order to use paging.");

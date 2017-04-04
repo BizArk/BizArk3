@@ -2,12 +2,12 @@
 
 namespace BizArk.Core.Convert.Strategies
 {
-    /// <summary>
-    /// Strategy used to do no conversion at all. Just returns the value that was sent in if it can be assigned to from the value.
-    /// </summary>
-    public class AssignableFromConversionStrategy
+	/// <summary>
+	/// Strategy used to do no conversion at all. Just returns the value that was sent in if it can be assigned to from the value.
+	/// </summary>
+	public class AssignableFromConversionStrategy
 		: IConvertStrategy
-    {
+	{
 
 		/// <summary>
 		/// Changes the type of the value.
@@ -17,7 +17,7 @@ namespace BizArk.Core.Convert.Strategies
 		/// <param name="convertedValue">Return the value if converted.</param>
 		/// <returns>True if able to convert the value.</returns>
 		public bool TryConvert(object value, Type to, out object convertedValue)
-        {
+		{
 			convertedValue = null;
 			if (value == null) return false;
 
@@ -29,7 +29,7 @@ namespace BizArk.Core.Convert.Strategies
 			}
 			else
 				return false;
-        }
+		}
 
-    }
+	}
 }

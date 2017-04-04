@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.TypeExt;
-using BizArk.Core.Extensions.FormatExt;
 using BizArk.Core.Convert.Strategies;
-using System.Diagnostics;
+using BizArk.Core.Extensions.TypeExt;
 
 namespace BizArk.Core.Convert
 {
@@ -71,7 +66,7 @@ namespace BizArk.Core.Convert
 		/// <summary>
 		/// Checks to see if the value is empty. The value is empty if it is null, DBNull, or matches the MinValue, MaxValue, or Empty fields of the values type.
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="value">The value to check if it is empty or not.</param>
 		/// <returns></returns>
 		public bool IsEmpty(object value)
 		{
@@ -143,15 +138,6 @@ namespace BizArk.Core.Convert
 				return null;
 			else
 				return Activator.CreateInstance(type);
-		}
-
-		/// <summary>
-		/// Gets the default value that represents empty for the given type.
-		/// </summary>
-		/// <returns></returns>
-		public T GetDefaultEmptyValue<T>()
-		{
-			return (T)GetDefaultEmptyValue(typeof(T));
 		}
 
 		#endregion

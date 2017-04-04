@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BizArk.Core.Util
 {
@@ -123,8 +121,8 @@ namespace BizArk.Core.Util
 		{
 			object value;
 			// We don't have a good way of determining if the key is accurate or not.
-			return ObjectUtil.TryGetValue(Object, key, out value); 
-				
+			return ObjectUtil.TryGetValue(Object, key, out value);
+
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

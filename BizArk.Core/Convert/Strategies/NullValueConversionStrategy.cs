@@ -2,12 +2,12 @@
 
 namespace BizArk.Core.Convert.Strategies
 {
-    /// <summary>
-    /// Strategy used to return the default value for a type;
-    /// </summary>
-    public class NullValueConversionStrategy
-        : IConvertStrategy
-    {
+	/// <summary>
+	/// Strategy used to return the default value for a type;
+	/// </summary>
+	public class NullValueConversionStrategy
+		: IConvertStrategy
+	{
 
 		/// <summary>
 		/// Changes the type of the value.
@@ -30,5 +30,5 @@ namespace BizArk.Core.Convert.Strategies
 			}
 		}
 
-    }
+	}
 }

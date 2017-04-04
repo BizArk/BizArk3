@@ -52,7 +52,8 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(string.Format("Test date: {0:d}", dt), actual);
 		}
 
-		//[Test] // This can take a little bit to run so take it out
+		[Test]
+		[Ignore("Not an actual test (no asserts). Can also take a long time to run.")]
 		public void PerfTest()
 		{
 			var count = 1000000;
@@ -61,17 +62,18 @@ namespace BizArk.Core.Tests
 			for (int i = 0; i < count; i++)
 				string.Format("Hello {0}: {1,2}", "World", i);
 			sw.Stop();
-			var stringFormatTime = sw.ElapsedMilliseconds; // (double)sw.ElapsedMilliseconds / (double)count;
+			var stringFormatTime = sw.Elapsed;
 
 			sw.Reset();
 			sw.Start();
 			var template = new StringTemplate("Hello {name}: {num,2}");
+			var values = new { name = "World", num = 0 };
 			for (int i = 0; i < count; i++)
 			{
-				template.Format(new { name = "World", num = i });
+				template.Format(values);
 			}
 			sw.Stop();
-			var textTemplateTime = sw.ElapsedMilliseconds; // (double)sw.ElapsedMilliseconds / (double)count;
+			var textTemplateTime = sw.Elapsed;
 
 			sw.Reset();
 			sw.Start();
@@ -82,12 +84,12 @@ namespace BizArk.Core.Tests
 				str2 = str.Replace("{num}", i.ToString());
 			}
 			sw.Stop();
-			var stringReplaceTime = sw.ElapsedMilliseconds; // (double)sw.ElapsedMilliseconds / (double)count;
+			var stringReplaceTime = sw.Elapsed;
 
-			Debug.WriteLine(string.Format("String.Format: {0}", stringFormatTime));
-			Debug.WriteLine(string.Format("TextTemplate.ToString: {0}", textTemplateTime));
-			Debug.WriteLine(string.Format("String.Replace: {0}", stringReplaceTime));
-			Debug.WriteLine(string.Format("Diff: {0}", (double)textTemplateTime / (double)stringFormatTime));
+			Console.WriteLine($"String.Format: {stringFormatTime.TotalMilliseconds:N0}");
+			Console.WriteLine($"TextTemplate.ToString: {textTemplateTime.TotalMilliseconds:N0}");
+			Console.WriteLine($"String.Replace: {stringReplaceTime.TotalMilliseconds:N0}");
+			Console.WriteLine($"Diff: {textTemplateTime.TotalMilliseconds / stringFormatTime.TotalMilliseconds}");
 		}
 
 		[Test]

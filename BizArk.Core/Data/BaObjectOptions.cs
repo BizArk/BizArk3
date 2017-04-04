@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BizArk.Core.Data
+﻿namespace BizArk.Core.Data
 {
 	/// <summary>
-	/// Options for the BaObject.
+	/// Options for BaObject.
 	/// </summary>
 	public class BaObjectOptions
 	{

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
-using BizArk.Core.Extensions.ArrayExt;
 using System.Text;
+using BizArk.Core.Extensions.ArrayExt;
 using BizArk.Core.Util;
 
 namespace BizArk.Core.Extensions.StringExt
@@ -266,17 +265,6 @@ namespace BizArk.Core.Extensions.StringExt
 		}
 
 		/// <summary>
-		/// Gets the string up to the maximum number of characters.
-		/// </summary>
-		/// <param name="str"></param>
-		/// <param name="max"></param>
-		/// <returns></returns>
-		public static string Max(this string str, int max)
-		{
-			return Max(str, max, false);
-		}
-
-		/// <summary>
 		/// Returns an array split along the separator.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -302,24 +290,6 @@ namespace BizArk.Core.Extensions.StringExt
 				if (i < 0) throw;
 				throw new FormatException(string.Format("Cannot convert value '{0}'", vals[i]), ex);
 			}
-		}
-
-		/// <summary>
-		/// Gets the string up to the maximum number of characters. If ellipses is true and the string is longer than the max, the last 3 chars will be ellipses.
-		/// </summary>
-		/// <param name="str"></param>
-		/// <param name="max"></param>
-		/// <param name="ellipses"></param>
-		/// <returns></returns>
-		public static string Max(this string str, int max, bool ellipses)
-		{
-			if (str == null) return null;
-
-			if (str.Length <= max) return str;
-			if (ellipses)
-				return str.Substring(0, max - 3) + "...";
-			else
-				return str.Substring(0, max);
 		}
 
 		/// <summary>
@@ -355,12 +325,16 @@ namespace BizArk.Core.Extensions.StringExt
 		/// </summary>
 		/// <param name="str"></param>
 		/// <param name="length"></param>
+		/// <param name="ellipses">If true and the string is truncated, adds ellipses to the end of the string.</param>
 		/// <returns></returns>
-		public static string Left(this string str, int length)
+		public static string Left(this string str, int length, bool ellipses = false)
 		{
 			if (str == null) return null;
 			if (str.Length <= length) return str;
-			return str.Substring(0, length);
+			if (ellipses)
+				return str.Substring(0, length - 3) + "...";
+			else
+				return str.Substring(0, length);
 		}
 
 		/// <summary>
@@ -408,7 +382,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <summary>
 		/// Vowels. Used for IsVowel.
 		/// </summary>
-		public static char[] Vowels = { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' };
+		public static char[] Vowels { get; set; } = { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' };
 
 		/// <summary>
 		/// Determines if the character is a vowel.
@@ -576,7 +550,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="sb"></param>
 		/// <param name="condition">If true, appends the value.</param>
 		/// <param name="value">The string to append.</param>
-		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		/// <returns>Simply returns the StringBuilder for chaining purposes.</returns>
 		public static StringBuilder AppendIf(this StringBuilder sb, bool condition, string value)
 		{
 			if (condition)
@@ -589,7 +563,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// </summary>
 		/// <param name="sb"></param>
 		/// <param name="value">The string to append.</param>
-		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		/// <returns>Simply returns the StringBuilder for chaining purposes.</returns>
 		public static StringBuilder AppendIf(this StringBuilder sb, string value)
 		{
 			if (value.HasValue())
@@ -604,7 +578,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="sb"></param>
 		/// <param name="condition">If true, appends the value.</param>
 		/// <param name="value">The string to append.</param>
-		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		/// <returns>Simply returns the StringBuilder for chaining purposes.</returns>
 		public static StringBuilder AppendLineIf(this StringBuilder sb, bool condition, string value)
 		{
 			if (condition)
@@ -619,7 +593,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// </summary>
 		/// <param name="sb"></param>
 		/// <param name="value">The string to append.</param>
-		/// <returns>A reference to this instance after the append operation has completed.</returns>
+		/// <returns>Simply returns the StringBuilder for chaining purposes.</returns>
 		public static StringBuilder AppendLineIf(this StringBuilder sb, string value)
 		{
 			if (value.HasValue())

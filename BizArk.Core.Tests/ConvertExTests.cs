@@ -53,6 +53,8 @@ namespace BizArk.Core.Tests
 			test = ConvertEx.To<ConvertTest>(testPt);
 			Assert.AreEqual(1, test.X);
 			Assert.AreEqual(2, test.Y);
+
+			Assert.AreEqual(0, ConvertEx.To<int>(null));
 		}
 
 		[Test]

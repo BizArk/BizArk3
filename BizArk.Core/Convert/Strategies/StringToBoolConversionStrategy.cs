@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace BizArk.Core.Convert.Strategies
 {
-    /// <summary>
-    /// Converts from a string to a bool.
-    /// </summary>
-    public class StringToBoolConversionStrategy
-        : IConvertStrategy
-    {
+	/// <summary>
+	/// Converts from a string to a bool.
+	/// </summary>
+	public class StringToBoolConversionStrategy
+		: IConvertStrategy
+	{
 
 		/// <summary>
 		/// Changes the type of the value.
@@ -51,5 +50,5 @@ namespace BizArk.Core.Convert.Strategies
 		/// </summary>
 		public string[] TrueValues { get; set; } = new string[] { "true", "t", "yes", "ok", "aye", "yep", "yea" };
 
-    }
+	}
 }

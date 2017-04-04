@@ -121,11 +121,11 @@
   <data name="FormLetter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FormLetter.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="Spirax_Regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\spirax-regular.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="TestImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\testimg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TextTemplateTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TextTemplateTest.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ValidRpcFaultResponse" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\validrpcfaultresponse.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
 using BizArk.Core.Extensions.ObjectExt;
 
 namespace BizArk.Core.Util
@@ -21,7 +20,7 @@ namespace BizArk.Core.Util
 		/// <param name="template"></param>
 		public StringTemplate(string template)
 		{
-			mTemplate = template;
+			Template = template;
 		}
 
 		#endregion
@@ -39,23 +38,15 @@ namespace BizArk.Core.Util
 
 		private string mFormat = null;
 
-		private string mTemplate;
 		/// <summary>
 		/// Gets the template string.
 		/// </summary>
-		public string Template
-		{
-			get { return mTemplate; }
-		}
+		public string Template { get; private set; }
 
-		private string[] mArgNames;
 		/// <summary>
 		/// Gets the names for the arguments.
 		/// </summary>
-		public string[] ArgNames
-		{
-			get { return mArgNames; }
-		}
+		public string[] ArgNames { get; private set; }
 
 		#endregion
 
@@ -72,13 +63,12 @@ namespace BizArk.Core.Util
 				CreateFormat();
 
 			var propBag = values.ToPropertyBag();
-			var fmtArgs = new object[mArgNames.Length];
-			for (int i = 0; i < mArgNames.Length; i++)
+			var fmtArgs = new object[ArgNames.Length];
+			for (int i = 0; i < ArgNames.Length; i++)
 			{
-				var argName = mArgNames[i];
+				var argName = ArgNames[i];
 
-				object value;
-				if (!propBag.TryGetValue(argName, out value))
+				if (!propBag.TryGetValue(argName, out object value))
 					throw new FormatException($"The argument '{argName}' was not found in the format values.");
 
 				fmtArgs[i] = value;
@@ -92,7 +82,7 @@ namespace BizArk.Core.Util
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return mTemplate;
+			return Template;
 		}
 
 		/// <summary>
@@ -114,7 +104,7 @@ namespace BizArk.Core.Util
 		{
 			var sb = new StringBuilder();
 			var argNames = new List<string>();
-			var template = mTemplate.ToCharArray();
+			var template = Template.ToCharArray();
 			var position = 0;
 			while (true)
 			{
@@ -135,7 +125,7 @@ namespace BizArk.Core.Util
 				else
 					sb.Append(GetLiteral(template, ref position));
 			}
-			mArgNames = argNames.ToArray();
+			ArgNames = argNames.ToArray();
 			mFormat = sb.ToString();
 		}
 

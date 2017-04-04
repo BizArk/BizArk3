@@ -209,7 +209,7 @@ namespace BizArk.Core.Tests
 						var name = val as string;
 						if (name.IsEmpty()) return true;
 						return !name[0].IsVowel(); // The name cannot start with a vowel.
-					});
+			});
 
 				Fields["Greeting"].Validators
 					.Required()

@@ -43,12 +43,12 @@ namespace BizArk.ConsoleApp.Sample
 
 		public override int Start()
 		{
-			BaCon.WriteLine("Name={0}".Fmt(Name), ConsoleColor.White);
-			BaCon.WriteLine("Age={0}".Fmt(Age));
-			BaCon.WriteLine("Job={0}".Fmt(Occupation));
-			BaCon.WriteLine("HasHair={0}".Fmt(HasHair));
-			BaCon.WriteLine("Children={0}".Fmt(string.Join(", ", Children)));
-			BaCon.WriteLine("Marital Status={0}".Fmt(Status));
+			BaCon.WriteLine($"Name={Name}", ConsoleColor.White);
+			BaCon.WriteLine($"Age={Age}");
+			BaCon.WriteLine($"Job={Occupation}");
+			BaCon.WriteLine($"HasHair={HasHair}");
+			BaCon.WriteLine($"Children={string.Join(", ", Children)}");
+			BaCon.WriteLine($"Marital Status={Status}");
 
 			return 0; // 0 for success.
 		}

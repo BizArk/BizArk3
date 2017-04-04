@@ -1,6 +1,6 @@
 ﻿using System;
-using BizArk.Core.Extensions.TypeExt;
 using System.Globalization;
+using BizArk.Core.Extensions.TypeExt;
 
 namespace BizArk.Core.Convert.Strategies
 {

@@ -8,7 +8,7 @@ namespace BizArk.Core.DataAnnotations
 	/// Allows for custom validation without having to implement a validation attribute.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-	public class CustomAttribute : DataTypeAttribute
+	public class CustomAttribute : ValidationAttribute
 	{
 
 		#region Initialization and Destruction
@@ -19,7 +19,7 @@ namespace BizArk.Core.DataAnnotations
 		/// <param name="validate">Function used to determine if the value is valid.</param>
 		public CustomAttribute(Func<object, bool> validate)
 			: base("custom")
-        {
+		{
 			Validator = validate;
 		}
 
@@ -28,7 +28,7 @@ namespace BizArk.Core.DataAnnotations
 		#region Fields and Properties
 
 		/// <summary>
-		/// Gets the comparer to use to compare the values. If not set, uses Values[x].Equals(value).
+		/// Gets the function used to validate the value.
 		/// </summary>
 		public Func<object, bool> Validator { get; private set; }
 

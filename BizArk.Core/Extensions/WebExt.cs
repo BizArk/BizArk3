@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using BizArk.Core.Extensions.ObjectExt;
-using BizArk.Core.Extensions.StringExt;
 
 namespace BizArk.Core.Extensions.WebExt
 {

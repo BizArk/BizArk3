@@ -758,6 +758,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="tableName">Gets just the schema for this table.</param>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public DataTable GetSchema(string tableName)
 		{
 			var conn = Connection;

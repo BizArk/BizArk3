@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BizArk.ConsoleApp.Sample
+﻿namespace BizArk.ConsoleApp.Sample
 {
 	class Program
 	{

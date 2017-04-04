@@ -1,8 +1,8 @@
-﻿using BizArk.Core.DataAnnotations;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using BizArk.Core.DataAnnotations;
 
 namespace BizArk.Core.Data
 {
@@ -10,11 +10,16 @@ namespace BizArk.Core.Data
 	/// <summary>
 	/// List of validation attributes for validating BaFields.
 	/// </summary>
-	public class BaValidatorList : List<ValidationAttribute>
+	public sealed class BaValidatorList : List<ValidationAttribute>
 	{
 
 		/// <summary>
-		/// Adds a credit card validation attribute.
+		/// Do not allow this class to be instantiated outside of this assembly.
+		/// </summary>
+		internal BaValidatorList() { }
+
+		/// <summary>
+		/// Adds a CreditCardAttribute.
 		/// </summary>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
@@ -27,7 +32,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a custom validation attribute.
+		/// Adds a CustomAttribute.
 		/// </summary>
 		/// <param name="validate">Function used to determine if the value is valid.</param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
@@ -41,7 +46,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds an email address validation attribute.
+		/// Adds an EmailAddressAttribute.
 		/// </summary>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
@@ -54,7 +59,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a maximum length validation attribute.
+		/// Adds a MaxLengthAttribute.
 		/// </summary>
 		/// <param name="length">The maximum allowable length of array or string data.</param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
@@ -68,7 +73,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a minimum length validation attribute.
+		/// Adds a MinLengthAttribute.
 		/// </summary>
 		/// <param name="length">The minimum allowable length of array or string data.</param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
@@ -82,7 +87,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a phone validation attribute.
+		/// Adds a PhoneAttribute.
 		/// </summary>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
@@ -95,7 +100,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a range validation attribute.
+		/// Adds a RangeAttribute.
 		/// </summary>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
@@ -110,7 +115,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a range validation attribute.
+		/// Adds a RangeAttribute.
 		/// </summary>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
@@ -125,7 +130,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a required validation attribute.
+		/// Adds a RegularExpressionAttribute.
 		/// </summary>
 		/// <param name="pattern">Regular expression used to validate value.</param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
@@ -139,7 +144,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a required validation attribute.
+		/// Adds a RequiredAttribute.
 		/// </summary>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>
@@ -151,12 +156,8 @@ namespace BizArk.Core.Data
 			return this;
 		}
 
-		//public SetAttribute(params object[] values)
-		//public SetAttribute(IEqualityComparer comparer, params object[] values)
-		//public SetAttribute(bool ignoreCase, params string[] values)
-
 		/// <summary>
-		/// Adds a required validation attribute.
+		/// Adds a SetAttribute.
 		/// </summary>
 		/// <param name="values">Values allowed in the set.</param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
@@ -170,7 +171,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a required validation attribute.
+		/// Adds a SetAttribute.
 		/// </summary>
 		/// <param name="values">Values allowed in the set.</param>
 		/// <param name="comparer"></param>
@@ -185,7 +186,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a required validation attribute.
+		/// Adds a SetAttribute.
 		/// </summary>
 		/// <param name="values">Values allowed in the set.</param>
 		/// <param name="ignoreCase"></param>
@@ -200,7 +201,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a string length validation attribute.
+		/// Adds a StringLengthAttribute.
 		/// </summary>
 		/// <param name="max"></param>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
@@ -214,7 +215,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a string length validation attribute.
+		/// Adds a StringLength.
 		/// </summary>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
@@ -230,7 +231,7 @@ namespace BizArk.Core.Data
 		}
 
 		/// <summary>
-		/// Adds a url validation attribute.
+		/// Adds a UrlAttribute.
 		/// </summary>
 		/// <param name="errMsg">Gets or sets an error message to associate with a validation control if validation fails.</param>
 		/// <returns></returns>

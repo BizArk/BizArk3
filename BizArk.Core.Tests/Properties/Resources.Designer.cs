@@ -63,7 +63,7 @@ namespace BizArk.Core.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Date: {Sent:d}
         ///
-        ///{Greeting} {Recipient.Name},
+        ///{Greeting} {Recipient.Name} {Recipient.Numbers[3]:N1},
         ///Thank you for reading this letter.
         ///
         ///Revision {Revision:N0}.
@@ -75,28 +75,22 @@ namespace BizArk.Core.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Spirax_Regular {
+            get {
+                object obj = ResourceManager.GetObject("Spirax_Regular", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap TestImg {
             get {
                 object obj = ResourceManager.GetObject("TestImg", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear ${name},
-        ///
-        ///Thank you for purchasing a ${product}. We received your order on ${orderdate:g} and billed your credit card ${total} on ${billdate}. 
-        ///
-        ///The order ${shipped:has|hasn&apos;t} been shipped.
-        ///
-        ///Sincerely,
-        ///${repname}.
-        /// </summary>
-        internal static string TextTemplateTest {
-            get {
-                return ResourceManager.GetString("TextTemplateTest", resourceCulture);
             }
         }
         

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using BizArk.Core.Extensions.StringExt;
 using System.Text;
-using System.Threading.Tasks;
+using BizArk.Core.Extensions.StringExt;
 
 namespace BizArk.Core.Util
 {
 
 	/// <summary>
-	/// Provides some convenient methods for generating a hash from a string.
+	/// Provides some convenient methods for handling security using industry best practices.
 	/// </summary>
 	public static class Security
 	{
