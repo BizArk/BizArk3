@@ -67,6 +67,14 @@ namespace BizArk.Core.Collections
 			protected set { mIsReadOnly = value; }
 		}
 
+		/// <summary>
+		/// Gets the collection of keys.
+		/// </summary>
+		public ICollection<TKey> Keys
+		{
+			get { return mDictionary.Keys; }
+		}
+
 		#endregion
 
 		#region Methods
@@ -291,14 +299,6 @@ namespace BizArk.Core.Collections
 				if (item.Value == index) return item.Key;
 
 			throw new ArgumentOutOfRangeException("The index was not found in the dictionary.");
-		}
-
-		/// <summary>
-		/// Returns the collection of keys.
-		/// </summary>
-		public ICollection<TKey> Keys
-		{
-			get { return mDictionary.Keys; }
 		}
 
 		/// <summary>

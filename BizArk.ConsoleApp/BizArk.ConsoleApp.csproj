@@ -60,9 +60,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CmdLine.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\BizArk.Core\BizArk.Core.csproj">
       <Project>{8d3e6472-7e47-4266-947b-659f17f641f1}</Project>
       <Name>BizArk.Core</Name>
