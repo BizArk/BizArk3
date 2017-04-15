@@ -4,6 +4,10 @@ using System.Runtime.Serialization;
 
 namespace BizArk.ConsoleApp.Parser
 {
+
+	/// <summary>
+	/// Exception raised when there are multiple arguments that match the name.
+	/// </summary>
 	[Serializable]
 	internal class AmbiguousNameException : CmdLineException
 	{

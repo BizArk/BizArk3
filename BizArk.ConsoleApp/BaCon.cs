@@ -12,10 +12,10 @@ using System.Linq;
 namespace BizArk.ConsoleApp
 {
 
-    /// <summary>
-    /// BizArk Console utility.
-    /// </summary>
-    public static class BaCon
+	/// <summary>
+	/// Static class that provides utility methods for working with the console and BaCon apps.
+	/// </summary>
+	public static class BaCon
     {
 
         #region Command-Line Methods

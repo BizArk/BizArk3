@@ -9,7 +9,7 @@ namespace BizArk.ConsoleApp
 {
 
 	/// <summary>
-	/// Command-line options.
+	/// Command-line options for BaCon apps.
 	/// </summary>
     public class CmdLineOptions
     {

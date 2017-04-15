@@ -373,7 +373,7 @@ namespace BizArk.ConsoleApp.Parser
 	}
 
 	/// <summary>
-	/// Base class for command-line parser results.
+	/// The results from parsing command-line arguments.
 	/// </summary>
 	public class CmdLineParseResults
 	{
@@ -425,7 +425,7 @@ namespace BizArk.ConsoleApp.Parser
 	}
 
 	/// <summary>
-	/// Typed command-line parser results.
+	/// Typed results from parsing command-line arguments.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class CmdLineParseResults<T> : CmdLineParseResults

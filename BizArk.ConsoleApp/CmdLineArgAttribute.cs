@@ -5,7 +5,7 @@ namespace BizArk.ConsoleApp
 {
 
 	/// <summary>
-	/// Command-line object argument attribute.
+	/// Command-line argument attribute for BaCon apps.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 	public class CmdLineArgAttribute : Attribute
