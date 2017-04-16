@@ -170,7 +170,7 @@
     <None Include="app.config" />
     <None Include="BizArk.Core.ruleset" />
     <None Include="BizArk.snk" />
-    <None Include="BizArkCore.nuspec" />
+    <None Include="BizArk.Core.nuspec" />
     <None Include="Mime.Types">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
