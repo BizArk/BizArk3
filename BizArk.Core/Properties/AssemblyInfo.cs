@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BizArk Core")]
-[assembly: AssemblyDescription("Core assembly in the BizArk framework.")]
+[assembly: AssemblyDescription("BizArk Core provides a collection of tools to make building line-of-business applications easier.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BizArk")]
 [assembly: AssemblyProduct("BizArk")]

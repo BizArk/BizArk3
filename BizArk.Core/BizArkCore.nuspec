@@ -13,14 +13,22 @@ using this tokenized nuspec file.
 
 -->
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-  <metadata>
-    <version>$version$</version>
-    <authors>$author$</authors>
-    <owners />
-    <id>$id$</id>
-    <title />
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
-  </metadata>
-  <files />
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<authors>$author$</authors>
+		<owners>bbrewder, borismod</owners>
+		<title />
+		<licenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/BizArk/BizArk3</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>$description$</description>
+		<releaseNotes>MAJOR UPDATE!!! Please see project documentation for details before deciding to upgrade from BizArk ver 2.</releaseNotes>
+		<copyright>Copyright ©2016 BizArk</copyright>
+		<tags>BizArk convert conversion type-conversion tools extension utility</tags>
+		<dependencies>
+			<dependency id="System.ValueTuple" version="4.3" />
+		</dependencies>
+	</metadata>
+	<files />
 </package>
