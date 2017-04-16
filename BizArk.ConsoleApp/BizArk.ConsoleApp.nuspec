@@ -24,7 +24,7 @@ using this tokenized nuspec file.
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<copyright>Copyright © 2017 BizArk</copyright>
-		<tags>BizArk convert conversion type-conversion tools extension utility</tags>
+		<tags>BizArk command-line parsing command-line-parsing console utility click-once</tags>
 		<dependencies>
 			<dependency id="BizArk.Core" version="3.0" />
 		</dependencies>

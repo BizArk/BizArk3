@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BizArk Console App")]
-[assembly: AssemblyDescription("Provides utilities for console applications.")]
+[assembly: AssemblyDescription("A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. Supports Click-Once applications as well.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BizArk")]
 [assembly: AssemblyProduct("BaCon")]
