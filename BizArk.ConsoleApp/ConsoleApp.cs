@@ -40,14 +40,6 @@ namespace BizArk.ConsoleApp
 	{
 
 		/// <summary>
-		/// Performs application-defined tasks associated with 
-		/// freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public void Dispose()
-		{
-		}
-
-		/// <summary>
 		/// The method to call to start running the console application.
 		/// </summary>
 		/// <returns>Environment.ExitCode</returns>

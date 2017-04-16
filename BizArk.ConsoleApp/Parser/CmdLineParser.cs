@@ -375,14 +375,14 @@ namespace BizArk.ConsoleApp.Parser
 	/// <summary>
 	/// The results from parsing command-line arguments.
 	/// </summary>
-	public class CmdLineParseResults
+	public abstract class CmdLineParseResults
 	{
 
 		/// <summary>
 		/// Creates a new instance of CmdLineParseResults.
 		/// </summary>
 		/// <param name="options"></param>
-		public CmdLineParseResults(CmdLineOptions options)
+		protected CmdLineParseResults(CmdLineOptions options)
 		{
 			Options = options;
 		}

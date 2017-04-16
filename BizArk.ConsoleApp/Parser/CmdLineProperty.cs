@@ -18,7 +18,7 @@ namespace BizArk.ConsoleApp.Parser
 		/// <summary>
 		/// Creates an instance of a CmdLineProperty.
 		/// </summary>
-		public CmdLineProperty(PropertyDescriptor prop, object obj)
+		internal CmdLineProperty(PropertyDescriptor prop, object obj)
 		{
 			Property = prop;
 			CmdLineObj = obj;
@@ -142,7 +142,7 @@ namespace BizArk.ConsoleApp.Parser
 		/// Creates an instance of CmdLinePropertyBag.
 		/// </summary>
 		/// <param name="options"></param>
-		public CmdLinePropertyBag(CmdLineOptions options)
+		internal CmdLinePropertyBag(CmdLineOptions options)
 		{
 			Options = options;
 		}
