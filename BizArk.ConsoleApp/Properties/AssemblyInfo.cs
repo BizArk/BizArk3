@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BizArk Console App")]
 [assembly: AssemblyDescription("A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. Supports Click-Once applications as well.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("BizArk")]
+[assembly: AssemblyCompany("Brian Brewder")]
 [assembly: AssemblyProduct("BaCon")]
 [assembly: AssemblyCopyright("Copyright © BizArk 2017")]
 [assembly: AssemblyTrademark("")]

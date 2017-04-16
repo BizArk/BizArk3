@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BizArk Core")]
 [assembly: AssemblyDescription("BizArk Core provides a collection of tools to make building line-of-business applications easier.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("BizArk")]
+[assembly: AssemblyCompany("Brian Brewder")]
 [assembly: AssemblyProduct("BizArk")]
 [assembly: AssemblyCopyright("Copyright © BizArk 2017")]
 [assembly: AssemblyTrademark("")]
