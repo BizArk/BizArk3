@@ -20,7 +20,7 @@ using this tokenized nuspec file.
 		<owners>bbrewder, borismod</owners>
 		<title />
 		<licenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</licenseUrl>
-		<projectUrl>https://github.com/BizArk/BizArk3</projectUrl>
+		<projectUrl>https://github.com/BizArk/BizArk3/wiki</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<copyright>Copyright © 2017 BizArk</copyright>

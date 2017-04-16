@@ -20,7 +20,7 @@ using this tokenized nuspec file.
 		<owners>bbrewder, borismod</owners>
 		<title />
 		<licenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</licenseUrl>
-		<projectUrl>https://github.com/BizArk/BizArk3</projectUrl>
+		<projectUrl>https://github.com/BizArk/BizArk3/wiki</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>MAJOR UPDATE!!! Please see project documentation for details before deciding to upgrade from BizArk ver 2.</releaseNotes>
