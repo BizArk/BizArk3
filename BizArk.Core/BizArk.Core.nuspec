@@ -24,7 +24,7 @@ using this tokenized nuspec file.
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
 		<releaseNotes>MAJOR UPDATE!!! Please see project documentation for details before deciding to upgrade from BizArk ver 2.</releaseNotes>
-		<copyright>Copyright © 2017 BizArk</copyright>
+		<copyright>$copyright$</copyright>
 		<tags>BizArk convert conversion type-conversion tools extension utility</tags>
 		<dependencies>
 			<dependency id="System.ValueTuple" version="4.3" />

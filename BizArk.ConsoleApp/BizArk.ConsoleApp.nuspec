@@ -23,7 +23,7 @@ using this tokenized nuspec file.
 		<projectUrl>https://github.com/BizArk/BizArk3/wiki</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>$description$</description>
-		<copyright>Copyright © 2017 BizArk</copyright>
+		<copyright>$copyright$</copyright>
 		<tags>BizArk command-line parsing command-line-parsing console utility click-once</tags>
 		<dependencies>
 			<dependency id="BizArk.Core" version="3.0" />
