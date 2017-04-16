@@ -1,0 +1,15 @@
+version: 3.0.0.{build}
+image: Visual Studio 2017
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+install:
+- cmd: nuget restore
+nuget:
+  project_feed: true
+build:
+  publish_nuget: true
+  verbosity: minimal
