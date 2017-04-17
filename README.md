@@ -1,4 +1,4 @@
-# BizArk v3 [![build status](http://teamcity.codebetter.com/app/rest/builds/buildType:id:BizArk_Bizark30Test/statusIcon)](http://teamcity.codebetter.com/viewType.html?buildTypeId=BizArk_Bizark30Test&guest=1) [![code coverage](https://img.shields.io/teamcity/coverage/BizArk_Bizark30Test.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=BizArk_Bizark30Test&guest=1) [![Join the chat at https://gitter.im/BizArk/BizArk3](https://badges.gitter.im/BizArk/BizArk3.svg)](https://gitter.im/BizArk/BizArk3?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# BizArk v3 [![Build status](https://ci.appveyor.com/api/projects/status/f81pjw7ggnw8ro61/branch/master?svg=true)](https://ci.appveyor.com/project/BizArk/bizark3/branch/master) [![Join the chat at https://gitter.im/BizArk/BizArk3](https://badges.gitter.im/BizArk/BizArk3.svg)](https://gitter.im/BizArk/BizArk3?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 BizArk provides a collection of tools to make building line-of-business applications easier. 
 
@@ -22,4 +22,4 @@ BizArk is available as a NuGet package.
 
 [BizArk.Core](https://www.nuget.org/packages/BizArk.Core/) - Everything but BaCon.
 
-[BizArk.BaCon] - Get the BizArk Command-Line Parser and the other console utilities.
+[BizArk.ConsoleApp](https://www.nuget.org/packages/BizArk.ConsoleApp/) - Get the BizArk Command-Line Parser and the other console utilities.
