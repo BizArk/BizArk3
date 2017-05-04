@@ -1,4 +1,5 @@
-﻿using BizArk.Core.Util;
+﻿using System.Text;
+using BizArk.Core.Util;
 
 namespace BizArk.Core.Extensions.FormatExt
 {
@@ -191,6 +192,6 @@ namespace BizArk.Core.Extensions.FormatExt
 			var tmpl = new StringTemplate(template);
 			return tmpl.Format(values);
 		}
-
+		
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using BizArk.Core.Extensions.AttributeExt;
@@ -14,33 +15,22 @@ namespace BizArk.Core
 	{
 		static Application()
 		{
-			var asm = Assembly.GetEntryAssembly();
+			var process = Process.GetCurrentProcess();
+			if (process != null)
+			{
+				ProcessID = process.Id;
+				ProcessName = process.ProcessName;
+			}
 
+			var asm = Assembly.GetEntryAssembly();
 			if (asm == null) return;
 
-			var titleAtt = asm.GetAttribute<AssemblyTitleAttribute>();
-			if (titleAtt != null)
-				Title = titleAtt.Title;
-
-			var descAtt = asm.GetAttribute<AssemblyDescriptionAttribute>();
-			if (descAtt != null)
-				Description = descAtt.Description;
-
-			var companyAtt = asm.GetAttribute<AssemblyCompanyAttribute>();
-			if (companyAtt != null)
-				Company = companyAtt.Company;
-
-			var productAtt = asm.GetAttribute<AssemblyProductAttribute>();
-			if (productAtt != null)
-				Product = productAtt.Product;
-
-			var copyrightAtt = asm.GetAttribute<AssemblyCopyrightAttribute>();
-			if (copyrightAtt != null)
-				Copyright = copyrightAtt.Copyright;
-
-			var trademarkAtt = asm.GetAttribute<AssemblyTrademarkAttribute>();
-			if (trademarkAtt != null)
-				Trademark = trademarkAtt.Trademark;
+			Title = asm.GetAttribute<AssemblyTitleAttribute>()?.Title;
+			Description = asm.GetAttribute<AssemblyDescriptionAttribute>()?.Description;
+			Company = asm.GetAttribute<AssemblyCompanyAttribute>()?.Company;
+			Product = asm.GetAttribute<AssemblyProductAttribute>()?.Product;
+			Copyright = asm.GetAttribute<AssemblyCopyrightAttribute>()?.Copyright;
+			Trademark = asm.GetAttribute<AssemblyTrademarkAttribute>()?.Trademark;
 
 			Version = asm.GetName().Version;
 
@@ -97,6 +87,16 @@ namespace BizArk.Core
 		/// Gets the just the name of the exe (without the extension).
 		/// </summary>
 		public static string ExeName { get; private set; }
+
+		/// <summary>
+		/// Gets the ID of the process.
+		/// </summary>
+		public static int ProcessID { get; private set; }
+
+		/// <summary>
+		/// Gets the name of the process.
+		/// </summary>
+		public static string ProcessName { get; private set; } 
 
 		/// <summary>
 		/// Returns an absolute path relative to the ExePath.

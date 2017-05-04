@@ -31,8 +31,10 @@ namespace BizArk.Core.Tests
 		[Test]
 		public void FormLetterTest()
 		{
-			var letter = new Letter();
-			letter.Greeting = "Hello";
+			var letter = new Letter()
+			{
+				Greeting = "Hello"
+			};
 			letter.Recipient.Name = "Johnny";
 			letter.Sent = DateTime.Parse("3/8/2016");
 			letter.Revision = 12345;
@@ -95,10 +97,11 @@ namespace BizArk.Core.Tests
 		[Test]
 		public void DictionaryTest()
 		{
-			var dict = new Dictionary<string, object>();
-			dict.Add("Name", "World");
-			dict.Add("Greeting", "Hello");
-
+			var dict = new Dictionary<string, object>
+			{
+				{ "Name", "World" },
+				{ "Greeting", "Hello" }
+			};
 			var template = new StringTemplate("{Greeting} {Name}");
 			var actual = template.Format(dict);
 			Assert.AreEqual("Hello World", actual);

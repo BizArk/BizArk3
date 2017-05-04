@@ -45,7 +45,7 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 		/// Gets the usage line.
 		/// </summary>
 		/// <returns></returns>
-		public string GetUsage()
+		public virtual string GetUsage()
 		{
 			var usage = new StringBuilder();
 			var options = ParseResults.Options;
@@ -80,7 +80,7 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 		/// </summary>
 		/// <param name="prop"></param>
 		/// <returns></returns>
-		private string GetPropertyTypeDisplay(CmdLineProperty prop)
+		protected string GetPropertyTypeDisplay(CmdLineProperty prop)
 		{
 			if (prop.PropertyType.IsEnum)
 			{
@@ -96,7 +96,7 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 		/// </summary>
 		/// <param name="prop"></param>
 		/// <returns></returns>
-		private string GetUsageName(CmdLineProperty prop)
+		protected string GetUsageName(CmdLineProperty prop)
 		{
 			if (prop.Aliases.Length == 0) return prop.Name;
 			return prop.Aliases[0];
@@ -107,7 +107,7 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 		/// </summary>
 		/// <param name="prop"></param>
 		/// <returns></returns>
-		public string GetPropertyHelp(CmdLineProperty prop)
+		public virtual string GetPropertyHelp(CmdLineProperty prop)
 		{
 			var sb = new StringBuilder();
 
@@ -154,6 +154,53 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 			}
 
 			return sb.ToString();
+		}
+
+		public virtual void WriteHelp(CmdLineParseResults results)
+		{
+
+			if (results.Errors.Length > 0)
+			{
+				if (BaCon.ErrorMessageTitle.HasValue())
+				{
+					using (var clr = BaConColor.Error())
+						(BaCon.Out ?? Console.Out).WriteLine(BaCon.ErrorMessageTitle);
+				}
+				foreach (var err in results.Errors)
+					BaCon.WriteLine(err, BaCon.Theme.ErrorColor, " > ", "\t");
+				BaCon.WriteLine();
+			}
+
+			var usage = GetUsage();
+			if (usage.HasValue())
+			{
+				BaCon.WriteLine();
+				BaCon.WriteLine("[USAGE]");
+				BaCon.WriteLine();
+				BaCon.WriteLine(usage, BaCon.Theme.UsageColor, "", "\t");
+				BaCon.WriteLine();
+			}
+
+			var showSectionTitle = true;
+			foreach (var prop in results.Properties.Where(p => p.ShowInHelp))
+			{
+				var propHelp = GetPropertyHelp(prop);
+				if (propHelp.IsEmpty()) continue;
+
+				if (showSectionTitle)
+				{
+					// We only want to display the section title if we 
+					// are displaying help text for properties.
+					BaCon.WriteLine();
+					BaCon.WriteLine("[LIST OF VALID ARGUMENTS]");
+					showSectionTitle = false;
+				}
+
+				BaCon.WriteLine(); // Place a line break between properties.
+
+				var clr = prop.Required ? BaCon.Theme.RequiredArgColor : BaCon.Theme.StandardArgColor;
+				BaCon.WriteLine(propHelp, clr, "", "\t");
+			}
 		}
 
 		#endregion
