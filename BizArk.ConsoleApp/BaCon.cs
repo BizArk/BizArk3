@@ -42,6 +42,11 @@ namespace BizArk.ConsoleApp
 					Theme = new BaConLightTheme();
 					break;
 			}
+
+			// Default to Console logger. 
+			// This allows the logging functions to work as expected without effort.
+			// If somebody doesn't want the console logger, they can disable it with a line of code.
+			Loggers.Add(new BaConConsoleLogger());
 		}
 
 		#endregion
