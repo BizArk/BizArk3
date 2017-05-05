@@ -4,18 +4,12 @@ using BizArk.Core.Extensions.StringExt;
 
 namespace BizArk.ConsoleApp.Logging
 {
+
+	/// <summary>
+	/// Logs messages to the console using colored text from BaCon.Theme.
+	/// </summary>
 	public class BaConConsoleLogger : BaConFormattedLogger
 	{
-
-		public Dictionary<BaConLogLevel, ConsoleColor?> LevelColors { get; private set; } = new Dictionary<BaConLogLevel, ConsoleColor?>()
-		{
-			{ BaConLogLevel.Trace, BaCon.Theme.LogTraceColor },
-			{ BaConLogLevel.Debug, BaCon.Theme.LogDebugColor },
-			{ BaConLogLevel.Info, BaCon.Theme.LogInfoColor },
-			{ BaConLogLevel.Warn, BaCon.Theme.LogWarnColor },
-			{ BaConLogLevel.Error, BaCon.Theme.LogErrorColor },
-			{ BaConLogLevel.Fatal, BaCon.Theme.LogFatalColor },
-		};
 
 		/// <summary>
 		/// Write the log message.
@@ -36,8 +30,16 @@ namespace BizArk.ConsoleApp.Logging
 
 		private BaConColor GetLevelColor(BaConLogLevel level)
 		{
-			LevelColors.TryGetValue(level, out var clr);
-			return new BaConColor(clr ?? Console.ForegroundColor);
+			switch (level)
+			{
+				case BaConLogLevel.Trace: return new BaConColor(BaCon.Theme.LogTraceColor);
+				case BaConLogLevel.Debug: return new BaConColor(BaCon.Theme.LogDebugColor);
+				case BaConLogLevel.Info: return new BaConColor(BaCon.Theme.LogInfoColor);
+				case BaConLogLevel.Warn: return new BaConColor(BaCon.Theme.LogWarnColor);
+				case BaConLogLevel.Error: return new BaConColor(BaCon.Theme.LogErrorColor);
+				case BaConLogLevel.Fatal: return new BaConColor(BaCon.Theme.LogFatalColor);
+				default: return new BaConColor(null);
+			}
 		}
 
 	}
