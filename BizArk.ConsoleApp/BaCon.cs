@@ -36,10 +36,10 @@ namespace BizArk.ConsoleApp
 				case ConsoleColor.DarkGreen:
 				case ConsoleColor.DarkMagenta:
 				case ConsoleColor.DarkRed:
-					Theme = new BaConDarkTheme();
+					Theme = BaConTheme.DarkTheme;
 					break;
 				default:
-					Theme = new BaConLightTheme();
+					Theme = BaConTheme.LightTheme;
 					break;
 			}
 
@@ -165,7 +165,7 @@ namespace BizArk.ConsoleApp
 		/// <summary>
 		/// Gets or sets the theme. If not set, a theme will be selected based on the background color of the console.
 		/// </summary>
-		public static IBaConTheme Theme { get; set; }
+		public static BaConTheme Theme { get; set; }
 
 		#endregion
 

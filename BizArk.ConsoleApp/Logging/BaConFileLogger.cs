@@ -17,6 +17,7 @@ namespace BizArk.ConsoleApp.Logging
 		{
 			if (filePath.IsEmpty()) throw new ArgumentNullException("filePath");
 
+			MessageTemplate = "{Now} [{Level}] {Message}";
 			FilePath = filePath;
 		}
 

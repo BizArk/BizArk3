@@ -36,8 +36,7 @@ namespace BizArk.ConsoleApp.Logging
 
 		private BaConColor GetLevelColor(BaConLogLevel level)
 		{
-			ConsoleColor? clr = null;
-			LevelColors.TryGetValue(level, out clr);
+			LevelColors.TryGetValue(level, out var clr);
 			return new BaConColor(clr ?? Console.ForegroundColor);
 		}
 
