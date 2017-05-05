@@ -163,8 +163,8 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 			{
 				if (BaCon.ErrorMessageTitle.HasValue())
 				{
-					using (var clr = BaConColor.Error())
-						(BaCon.Out ?? Console.Out).WriteLine(BaCon.ErrorMessageTitle);
+					using (var clr = new BaConColor(BaCon.Theme.ErrorTitleText, BaCon.Theme.ErrorTitleBackground))
+						BaCon.WriteLine(BaCon.ErrorMessageTitle);
 				}
 				foreach (var err in results.Errors)
 					BaCon.WriteLine(err, BaCon.Theme.ErrorColor, " > ", "\t");

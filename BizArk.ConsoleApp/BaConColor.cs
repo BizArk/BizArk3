@@ -235,15 +235,6 @@ namespace BizArk.ConsoleApp
 			return new BaConColor(ConsoleColor.Black, ConsoleColor.Yellow);
 		}
 
-		/// <summary>
-		/// Changes the background color to red and the foreground to white.
-		/// </summary>
-		/// <returns></returns>
-		public static BaConColor Error()
-		{
-			return new BaConColor(ConsoleColor.White, ConsoleColor.Red);
-		}
-
 		#endregion
 
 	}

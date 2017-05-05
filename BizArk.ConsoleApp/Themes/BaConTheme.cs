@@ -8,7 +8,7 @@ namespace BizArk.ConsoleApp.Themes
 {
 
 	/// <summary>
-	/// Provides foreground and background colors for the console.
+	/// Provides the ability to modify the colors used by BaCon when displaying generated text to the screen.
 	/// </summary>
 	public class BaConTheme
 	{
@@ -90,6 +90,16 @@ namespace BizArk.ConsoleApp.Themes
 		/// Gets or sets the color used to display the app description. A null will use the default console text color.
 		/// </summary>
 		public ConsoleColor? AppDescriptionColor { get; set; }
+
+		/// <summary>
+		/// Gets or sets the color used to display the error title text. A null will use the default console text color.
+		/// </summary>
+		public ConsoleColor? ErrorTitleText { get; set; }
+
+		/// <summary>
+		/// Gets or sets the color used to display the error title background. A null will use the default console background color.
+		/// </summary>
+		public ConsoleColor? ErrorTitleBackground { get; set; }
 
 		/// <summary>
 		/// Gets or sets the color used to display the error message. A null will use the default console text color.

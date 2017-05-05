@@ -197,8 +197,8 @@ namespace BizArk.ConsoleApp
 
 			if (ErrorMessageTitle.HasValue())
 			{
-				using (var clr = BaConColor.Error())
-					(Out ?? Console.Out).WriteLine(ErrorMessageTitle);
+				using (var clr = new BaConColor(BaCon.Theme.ErrorTitleText, BaCon.Theme.ErrorTitleBackground))
+					WriteLine(ErrorMessageTitle);
 			}
 
 			while (curEx != null)
