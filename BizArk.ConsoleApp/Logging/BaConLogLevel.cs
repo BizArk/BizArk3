@@ -2,7 +2,7 @@
 {
 
 	/// <summary>
-	/// Log level supported by BaCon.
+	/// Log levels supported by BaCon.
 	/// </summary>
 	public enum BaConLogLevel
 	{

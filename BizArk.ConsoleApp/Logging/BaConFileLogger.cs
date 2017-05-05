@@ -26,7 +26,7 @@ namespace BizArk.ConsoleApp.Logging
 		#region Fields and Properties
 		
 		/// <summary>
-		/// Gets the file path to append the log to.
+		/// Gets and sets the file path to append the log to.
 		/// </summary>
 		public string FilePath { get; set; }
 

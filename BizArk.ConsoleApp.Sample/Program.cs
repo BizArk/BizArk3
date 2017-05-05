@@ -1,9 +1,21 @@
-﻿namespace BizArk.ConsoleApp.Sample
+﻿using System;
+using BizArk.ConsoleApp.Logging;
+
+namespace BizArk.ConsoleApp.Sample
 {
 	class Program
 	{
-		static void Main(string[] args)
-		{
+static void Main(string[] args)
+{
+	Exception ex = null;
+	try { throw new Exception("TEST"); } catch (Exception xex) { ex = xex; }
+	BaCon.Trace("This is a Trace.", ex);
+	BaCon.Debug("This is a Debug.", ex);
+	BaCon.Info("This is a Info.", ex);
+	BaCon.Warn("This is a Warn.", ex);
+	BaCon.Error("This is a Error.", ex);
+	BaCon.Fatal("This is a Fatal.", ex);
+
 
 			/* Recommended approach for building console applications. */
 			// command-line: /Name "Billy Bob" /Age 23 /Occupation "Chicken Catcher" /HasHair /Children Billy Bob Sue /Status ItsComplicated /W
@@ -23,6 +35,14 @@
 			Console.WriteLine(myargs.Name);
 			Console.ReadKey(true);
 			*/
+		}
+	}
+
+	public class MyFancyLogger : BaConLogger
+	{
+		public override void WriteLogMessage(BaConLogLevel level, string msg, Exception ex)
+		{
+			Console.WriteLine(msg);
 		}
 	}
 

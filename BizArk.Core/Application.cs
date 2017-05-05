@@ -13,6 +13,9 @@ namespace BizArk.Core
 	/// </summary>
 	public static class Application
 	{
+
+		#region Initialization and Destruction
+
 		static Application()
 		{
 			var process = Process.GetCurrentProcess();
@@ -42,6 +45,10 @@ namespace BizArk.Core
 
 			ExeName = System.IO.Path.GetFileName(ExePath);
 		}
+
+		#endregion
+
+		#region Fields and Propertiers
 
 		/// <summary>
 		/// Gets the title of the executing assembly from AssemblyTitleAttribute.
@@ -164,6 +171,27 @@ namespace BizArk.Core
 				return AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
 			}
 		}
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Sets the current directory. Place in using statement to return the directory to it's original directory.
+		/// </summary>
+		/// <param name="dir"></param>
+		/// <returns></returns>
+		public static Cleanup SetCurrentDirectory(string dir)
+		{
+			var origDir = Environment.CurrentDirectory;
+			Environment.CurrentDirectory = dir;
+			return new Cleanup(() =>
+			{
+				Environment.CurrentDirectory = origDir;
+			});
+		}
+
+		#endregion
 
 	}
 }

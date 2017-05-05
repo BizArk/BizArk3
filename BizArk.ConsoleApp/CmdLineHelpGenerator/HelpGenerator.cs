@@ -129,8 +129,7 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 			object dflt = prop.DefaultValue;
 			if (!ConvertEx.IsEmpty(dflt) || prop.PropertyType.IsEnum)
 			{
-				var arr = dflt as Array;
-				if (arr != null)
+				if (dflt is Array arr)
 				{
 					var strs = arr.Convert<string>();
 					if (dflt.GetType().GetElementType() == typeof(string))

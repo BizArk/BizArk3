@@ -8,7 +8,7 @@ namespace BizArk.ConsoleApp.Themes
 {
 
 	/// <summary>
-	/// Provides the ability to modify the colors used by BaCon when displaying generated text to the screen.
+	/// Provides the ability to modify the colors used by BaCon when displaying generated text to the console.
 	/// </summary>
 	public class BaConTheme
 	{

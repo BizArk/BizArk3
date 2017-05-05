@@ -4,7 +4,7 @@ namespace BizArk.ConsoleApp.Logging
 {
 
 	/// <summary>
-	/// Interface used to customize logging.
+	/// Base class used to provide logging capabilities.
 	/// </summary>
 	public abstract class BaConLogger
 	{

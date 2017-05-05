@@ -29,7 +29,7 @@ namespace BizArk.ConsoleApp.Logging
 		public string ErrorTemplateN { get; set; } = "********************\n{ExceptionType}: {ExceptionMsg}\n{StackTrace}";
 
 		/// <summary>
-		/// Applies the MessageTemplate to the log message.
+		/// Formats the log message.
 		/// </summary>
 		/// <param name="msg"></param>
 		/// <returns></returns>
@@ -51,7 +51,7 @@ namespace BizArk.ConsoleApp.Logging
 		}
 
 		/// <summary>
-		/// Formats the message.
+		/// Applies the MessageTemplate to the message.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="msg"></param>

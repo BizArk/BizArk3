@@ -12,7 +12,7 @@ namespace BizArk.ConsoleApp.Logging
 	{
 
 		/// <summary>
-		/// Write the log message.
+		/// Write the log message to the console.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="msg"></param>
