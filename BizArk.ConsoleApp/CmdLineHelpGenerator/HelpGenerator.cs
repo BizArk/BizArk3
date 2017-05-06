@@ -7,6 +7,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using BizArk.Core.Extensions.AttributeExt;
+using System.Collections.Generic;
 
 namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 {
@@ -155,6 +157,34 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Gets the help text for exit codes, if defined.
+		/// </summary>
+		/// <returns></returns>
+		public virtual string GetExitCodesDisplay()
+		{
+			var exitCodes = ParseResults.Options.ExitCodes;
+			if (exitCodes == null) return "";
+
+			var values = new List<(string nbr, string desc)>();
+
+			var max = 0;
+			foreach (Enum val in Enum.GetValues(exitCodes))
+			{
+				var desc = val.GetDescription();
+				var nbr = ConvertEx.ToInt(val).ToString();
+				max = Math.Max(max, nbr.Length);
+				values.Add((nbr, desc));
+			}
+
+			var sb = new StringBuilder();
+			foreach (var val in values)
+			{
+				sb.AppendLine($"{val.nbr.PadLeft(max, ' ')} = {val.desc}");
+			}
+			return sb.ToString();
+		}
+
 		public virtual void WriteHelp(CmdLineParseResults results)
 		{
 
@@ -199,6 +229,17 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 
 				var clr = prop.Required ? BaCon.Theme.RequiredArgColor : BaCon.Theme.StandardArgColor;
 				BaCon.WriteLine(propHelp, clr, "", "\t");
+				BaCon.WriteLine();
+			}
+
+			var exitCodes = GetExitCodesDisplay();
+			if (exitCodes.HasValue())
+			{
+				BaCon.WriteLine();
+				BaCon.WriteLine("[EXIT CODES]");
+				BaCon.WriteLine();
+				BaCon.WriteLine(exitCodes);
+				BaCon.WriteLine();
 			}
 		}
 

@@ -26,8 +26,6 @@ namespace BizArk.ConsoleApp
             sb.AppendLine(prompt);
             sb.AppendLine(new string('*', prompt.Length));            
             PressAnyKey = sb.ToString();
-
-            ArgErrorWrapper = "Error: {message}\n*******************************************";
         }
 
 		#endregion
@@ -37,7 +35,7 @@ namespace BizArk.ConsoleApp
 		/// <summary>
 		/// Gets or sets the command-line options for the object.
 		/// </summary>
-		public CmdLineOptions CmdLineOptions { get; set; }
+		public CmdLineOptions CmdLineOptions { get; set; } = new CmdLineOptions();
 
 		/// <summary>
 		/// Gets or sets the value to display before exiting to prompt the user to press any key to exit.
@@ -47,9 +45,9 @@ namespace BizArk.ConsoleApp
         /// <summary>
         /// Gets or sets the text to display an argument error message. Should be formatted with {message} for the error message.
         /// </summary>
-        public string ArgErrorWrapper { get; set; }
+        public string ArgErrorWrapper { get; set; } = "Error: {message}\n*******************************************";
 
-        #endregion
+		#endregion
 
-    }
+	}
 }

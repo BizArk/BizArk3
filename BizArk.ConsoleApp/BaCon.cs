@@ -82,9 +82,9 @@ namespace BizArk.ConsoleApp
 				{
 					WriteHelp(results);
 					if (!consoleApp.Help && results.Errors.Length > 0)
-						Environment.ExitCode = 1; // There were errors, return 1.
+						Environment.ExitCode = options.CmdLineOptions.InvalidArgsExitCode ?? 1; // There were errors, return exit code.
 					else
-						Environment.ExitCode = -1;
+						Environment.ExitCode = 0;
 					return;
 				}
 
@@ -95,7 +95,7 @@ namespace BizArk.ConsoleApp
 				if (consoleApp == null || !consoleApp.Error(ex))
 				{
 					WriteError(ex);
-					Environment.ExitCode = -1;
+					Environment.ExitCode = options?.CmdLineOptions?.FatalErrorExitCode ?? -1;
 				}
 			}
 			finally

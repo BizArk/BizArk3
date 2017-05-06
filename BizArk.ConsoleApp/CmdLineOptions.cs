@@ -41,7 +41,22 @@ namespace BizArk.ConsoleApp
 		/// </summary>
 		public string ArraySeparator { get; set; } = null;
 
-        #endregion
+		/// <summary>
+		/// Gets or sets the enumeration that contains the exit codes. The enumeration should start with a value of 0 for success.
+		/// </summary>
+		public Type ExitCodes { get; set; }
 
-    }
+		/// <summary>
+		/// Gets or sets the exit code used when invalid arguments are found. If null, 1 is returned.
+		/// </summary>
+		public int? InvalidArgsExitCode { get; set; } = null;
+
+		/// <summary>
+		/// Gets or sets the exit code used when a fatal error occurs. If null, -1 is returned.
+		/// </summary>
+		public int? FatalErrorExitCode { get; set; } = null;
+
+		#endregion
+
+	}
 }

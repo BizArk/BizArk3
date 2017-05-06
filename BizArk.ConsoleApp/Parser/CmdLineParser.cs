@@ -73,6 +73,16 @@ namespace BizArk.ConsoleApp.Parser
 		{
 			VerifyCmdLineOptions();
 
+			if (Options.ExitCodes == null)
+				Options.ExitCodes = FindExitCodes();
+			if (Options.ExitCodes != null)
+			{
+				if (Options.InvalidArgsExitCode == null)
+					Options.InvalidArgsExitCode = FindExitCode(Options.ExitCodes, "InvalidArgs");
+				if(Options.FatalErrorExitCode == null)
+					Options.FatalErrorExitCode = FindExitCode(Options.ExitCodes, "FatalError");
+			}
+
 			var results = new CmdLineParseResults<T>(Options);
 			results.Args = obj;
 			var props = results.Properties = GetCmdLineProperties(obj);
@@ -155,6 +165,28 @@ namespace BizArk.ConsoleApp.Parser
 			results.Errors = errors.ToArray();
 
 			return results;
+		}
+
+		private int? FindExitCode(Type exitCodes, string valName)
+		{
+			try
+			{
+				var code = Enum.Parse(exitCodes, valName);
+				return (int)code;
+			}
+			catch(Exception)
+			{
+				// Don't really care what the error is. Just return null.
+				return null;
+			}
+		}
+
+		private Type FindExitCodes()
+		{
+			// Look for an enum called ExitCodes in the same assembly as the app.
+			var types = typeof(T).Assembly.GetTypes();
+			var exitCode = types.Where(t => t.IsEnum && t.Name == "ExitCodes").FirstOrDefault();
+			return exitCode;
 		}
 
 		private void FillCmdLineObjInfo(CmdLineParseResults<T> results)

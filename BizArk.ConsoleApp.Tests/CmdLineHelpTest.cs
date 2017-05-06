@@ -44,6 +44,29 @@ namespace BizArk.ConsoleApp.Tests
 			AssertEx.Contains("\tDefault: [\"One\", \"Two\", \"Three\"]", help);
 		}
 
+		[Test]
+		public void GenerateExitCodesTest()
+		{
+			// No exit codes have been defined.
+			var parser = new CmdLineParser<TestCmdLineObj>();
+			var results = parser.Parse(new string[] { });
+			parser.Options.ExitCodes = null;
+			var generator = new HelpGenerator(results);
+			var help = generator.GetExitCodesDisplay();
+			Assert.AreEqual("", help);
+
+
+			// Verify the parser can find the ExitCodes enum and InvalidArgs value.
+			parser = new CmdLineParser<TestCmdLineObj>();
+			results = parser.Parse(new string[] { });
+			generator = new HelpGenerator(results);
+
+			help = generator.GetExitCodesDisplay();
+			Assert.AreEqual("   0 = Success!!!\r\n1234 = Failed :'(\r\n", help);
+			Assert.AreEqual((int)ExitCodes.InvalidArgs, parser.Options.InvalidArgsExitCode);
+			Assert.IsNull(parser.Options.FatalErrorExitCode);
+		}
+
 		#region TestCmdLineObj
 
 		[CmdLineOptions(DefaultArgNames = new string[] { "Name", "Job" })]
@@ -79,6 +102,14 @@ namespace BizArk.ConsoleApp.Tests
 			Father,
 			Mother,
 			Child
+		}
+
+		private enum ExitCodes
+		{
+			[System.ComponentModel.Description("Success!!!")]
+			Success = 0,
+			[System.ComponentModel.Description("Failed :'(")]
+			InvalidArgs = 1234
 		}
 
 		#endregion
