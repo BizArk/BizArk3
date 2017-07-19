@@ -34,6 +34,111 @@ namespace BizArk.Core.Util
 			TotalBytes = totalBytes;
 		}
 
+		/// <summary>
+		/// Parses the string to determine a memory size. NOTE: Using a floating point number will likely result in a small amount of imprecision. Do not rely on the byte count being exact.
+		/// </summary>
+		/// <param name="fmt">A string that starts with a number and ends with one of the supported format strings. Ex 123GiB</param>
+		/// <returns></returns>
+		public static MemSize Parse(string fmt)
+		{
+			return Parse(fmt, false);
+		}
+
+		/// <summary>
+		/// Parses the string to determine a memory size. NOTE: Using a floating point number will likely result in a small amount of imprecision. Do not rely on the byte count being exact.
+		/// </summary>
+		/// <param name="fmt">A string that starts with a number and ends with one of the supported format strings. Ex 123GiB</param>
+		/// <param name="useIEC">If true, always uses IEC format. So sending in 1KB is interpreted as 1KiB.</param>
+		/// <returns></returns>
+		public static MemSize Parse(string fmt, bool useIEC)
+		{
+			if (fmt.IsEmpty())
+				throw new ArgumentNullException("fmt");
+
+			if (TryParse(fmt, useIEC, out var sz))
+				return sz;
+
+			throw new ArgumentException("Invalid MemSize format.");
+		}
+
+		/// <summary>
+		/// Parses the string to determine a memory size. NOTE: Using a floating point number will likely result in a small amount of imprecision. Do not rely on the byte count being exact.
+		/// </summary>
+		/// <param name="fmt">A string that starts with a number and ends with one of the supported format strings. Ex 123GiB</param>
+		/// <param name="outSz">Output parameter.</param>
+		/// <returns></returns>
+		public static bool TryParse(string fmt, out MemSize outSz)
+		{
+			return TryParse(fmt, false, out outSz);
+		}
+
+		/// <summary>
+		/// Parses the string to determine a memory size. NOTE: Using a floating point number will likely result in a small amount of imprecision. Do not rely on the byte count being exact.
+		/// </summary>
+		/// <param name="fmt">A string that starts with a number and ends with one of the supported format strings. Ex 123GiB</param>
+		/// <param name="useIEC">If true, always uses IEC format. So sending in 1KB is interpreted as 1KiB.</param>
+		/// <param name="outSz">Output parameter.</param>
+		/// <returns></returns>
+		public static bool TryParse(string fmt, bool useIEC, out MemSize outSz)
+		{
+			outSz = null;
+
+			if (fmt.IsEmpty()) return false;
+
+			var re = new Regex(@"^(?<sz>\d+(\.\d+)?)(\s?(?<fmt>[A-Z]+))?$", RegexOptions.IgnoreCase);
+			var m = re.Match(fmt);
+			if (!m.Success) return false;
+
+			if (decimal.TryParse(m.Groups["sz"].Value, out var fmtSz))
+			{
+				var fmtDesignator = m.Groups["fmt"].Value ?? "";
+
+				switch (fmtDesignator.ToUpperInvariant())
+				{
+					case "":
+					case "B":
+					case "BYTE":
+					case "BYTES":
+						; // Leave sz alone
+						break;
+
+					case "TIB":
+						fmtSz *= cNumBytesInTebibyte;
+						break;
+					case "GIB":
+						fmtSz *= cNumBytesInGibibyte;
+						break;
+					case "MIB":
+						fmtSz *= cNumBytesInMebibyte;
+						break;
+					case "KIB":
+						fmtSz *= cNumBytesInKibibyte;
+						break;
+
+					case "TB":
+						fmtSz *= useIEC ? cNumBytesInTebibyte : cNumBytesInTerabyte;
+						break;
+					case "GB":
+						fmtSz *= useIEC ? cNumBytesInGibibyte : cNumBytesInGigabyte;
+						break;
+					case "MB":
+						fmtSz *= useIEC ? cNumBytesInMebibyte : cNumBytesInMegabyte;
+						break;
+					case "KB":
+						fmtSz *= useIEC ? cNumBytesInKibibyte : cNumBytesInKilobyte;
+						break;
+
+					default:
+						return false;
+				}
+
+				outSz = new MemSize((int)Math.Round(fmtSz, 0));
+				return true;
+			}
+
+			return false;
+		}
+
 		#endregion
 
 		#region Fields and Properties
@@ -54,11 +159,11 @@ namespace BizArk.Core.Util
 		/// <summary></summary>
 		public const long cNumBytesInKibibyte = 1024;
 		/// <summary></summary>
-		public const long cNumBytesInMebibyte = cNumBytesInKilobyte * 1024;
+		public const long cNumBytesInMebibyte = cNumBytesInKibibyte * 1024;
 		/// <summary></summary>
-		public const long cNumBytesInGibibyte = cNumBytesInMegabyte * 1024;
+		public const long cNumBytesInGibibyte = cNumBytesInMebibyte * 1024;
 		/// <summary></summary>
-		public const long cNumBytesInTebibyte = cNumBytesInGigabyte * 1024;
+		public const long cNumBytesInTebibyte = cNumBytesInGibibyte * 1024;
 
 		/// <summary>
 		/// Gets the total number of bytes for this MemSize.
