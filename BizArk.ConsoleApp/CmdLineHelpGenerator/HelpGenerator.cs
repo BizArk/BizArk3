@@ -128,18 +128,21 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 			if (prop.Description.HasValue())
 				sb.AppendFormat("\n\t{0}", prop.Description);
 
-			object dflt = prop.DefaultValue;
-			if (!ConvertEx.IsEmpty(dflt) || prop.PropertyType.IsEnum)
+			if (prop.ShowDefaultValue)
 			{
-				if (dflt is Array arr)
+				object dflt = prop.DefaultValue;
+				if (!ConvertEx.IsEmpty(dflt) || prop.PropertyType.IsEnum)
 				{
-					var strs = arr.Convert<string>();
-					if (dflt.GetType().GetElementType() == typeof(string))
-						dflt = "[\"{0}\"]".Fmt(strs.Join("\", \""));
-					else
-						dflt = "[{0}]".Fmt(strs.Join(", "));
+					if (dflt is Array arr)
+					{
+						var strs = arr.Convert<string>();
+						if (dflt.GetType().GetElementType() == typeof(string))
+							dflt = "[\"{0}\"]".Fmt(strs.Join("\", \""));
+						else
+							dflt = "[{0}]".Fmt(strs.Join(", "));
+					}
+					sb.AppendFormat("\n\tDefault: {0}", dflt);
 				}
-				sb.AppendFormat("\n\tDefault: {0}", dflt);
 			}
 
 			foreach (var att in prop.Property.Attributes)

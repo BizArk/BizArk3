@@ -42,6 +42,10 @@ namespace BizArk.ConsoleApp.Tests
 			help = generator.GetPropertyHelp(results.Properties["Children"]);
 			AssertEx.Contains("/Children", help);
 			AssertEx.Contains("\tDefault: [\"One\", \"Two\", \"Three\"]", help);
+
+			help = generator.GetPropertyHelp(results.Properties["Secret"]);
+			AssertEx.Contains("/Secret", help);
+			Assert.IsFalse(help.Contains("Shhh!"));
 		}
 
 		[Test]
@@ -73,12 +77,6 @@ namespace BizArk.ConsoleApp.Tests
 		private class TestCmdLineObj
 		{
 
-			public TestCmdLineObj()
-			{
-				PersonType = PersonType.Father;
-				Children = new string[] { "One", "Two", "Three" };
-			}
-
 			[Required(ErrorMessage = "TEST ERR")]
 			[cm.Description("TEST DESC")]
 			public string Name { get; set; }
@@ -91,10 +89,14 @@ namespace BizArk.ConsoleApp.Tests
 
 			public bool HasHair { get; set; }
 
-			public string[] Children { get; set; }
+			public string[] Children { get; set; } = new string[] { "One", "Two", "Three" };
 
 			[CmdLineArg("Type", ShowInUsage = true)]
-			public PersonType PersonType { get; set; }
+			public PersonType PersonType { get; set; } = PersonType.Father;
+
+			[CmdLineArg(ShowDefaultValue = false)]
+			[cm.Description("Don't show the default secret.")]
+			public string Secret { get; set; } = "Shhh!";
 		}
 
 		private enum PersonType

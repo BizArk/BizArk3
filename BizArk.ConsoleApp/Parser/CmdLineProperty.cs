@@ -22,7 +22,6 @@ namespace BizArk.ConsoleApp.Parser
 		{
 			Property = prop;
 			CmdLineObj = obj;
-			ShowInHelp = true;
 		}
 
 		#endregion
@@ -93,12 +92,17 @@ namespace BizArk.ConsoleApp.Parser
 		/// <summary>
 		/// Gets a value that determines if the property should be shown in the help. Defaults to true if there is a description for the property (DescriptionAttribute).
 		/// </summary>
-		public bool ShowInHelp { get; internal set; }
+		public bool ShowInHelp { get; internal set; } = true;
 
 		/// <summary>
 		/// Gets a value that determins if the property is required. Value comes from System.ComponentModel.DataAnnotations.RequiredAttribute applied to property.
 		/// </summary>
 		public bool Required { get; internal set; }
+
+		/// <summary>
+		/// Gets a value that determines if the default value for the property should be displayed.
+		/// </summary>
+		public bool ShowDefaultValue { get; internal set; } = true;
 
 		#endregion
 

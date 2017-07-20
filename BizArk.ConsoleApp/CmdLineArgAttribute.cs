@@ -37,18 +37,12 @@ namespace BizArk.ConsoleApp
 		/// <summary>
 		/// Gets or sets a flag that determines if the property will be displayed in the help.
 		/// </summary>
-		public bool ShowInHelp { get; set; }
+		public bool ShowInHelp { get; set; } = true;
 
-		// Attributes do not support null properties, so we need to make the field visible internally.
-		internal bool? mShowDefaultValue = null;
 		/// <summary>
 		/// Gets or sets a value that determines if the default value is displayed in the help.
 		/// </summary>
-		public bool ShowDefaultValue
-		{
-			get { return mShowDefaultValue ?? false; }
-			set { mShowDefaultValue = value; }
-		}
+		public bool ShowDefaultValue { get; set; } = true;
 
 		// Attributes do not support null properties, so we need to make the field visible internally.
 		internal bool? mShowInUsage = null;
@@ -57,7 +51,7 @@ namespace BizArk.ConsoleApp
 		/// </summary>
 		public bool ShowInUsage
 		{
-			get { return mShowInUsage ?? false; }
+			get { return mShowInUsage ?? true; }
 			set { mShowInUsage = value; }
 		}
 	}

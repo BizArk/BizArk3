@@ -362,13 +362,12 @@ namespace BizArk.ConsoleApp.Parser
 			var prop = new CmdLineProperty(propDesc, obj);
 			var claAtt = propDesc.GetAttribute<CmdLineArgAttribute>();
 			var showUsage = (bool?)null;
-			var showDflt = (bool?)null;
 			if (claAtt != null)
 			{
 				prop.Aliases = claAtt.Aliases;
-				showDflt = claAtt.mShowDefaultValue; // Use internal field instead of property so we can get null value.
 				showUsage = claAtt.mShowInUsage; // Use internal field instead of property so we can get null value.
 				prop.ShowInHelp = claAtt.ShowInHelp;
+				prop.ShowDefaultValue = claAtt.ShowDefaultValue;
 			}
 
 			prop.Required = propDesc.GetAttribute<RequiredAttribute>() != null;
