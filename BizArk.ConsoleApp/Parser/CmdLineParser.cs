@@ -79,7 +79,7 @@ namespace BizArk.ConsoleApp.Parser
 			{
 				if (Options.InvalidArgsExitCode == null)
 					Options.InvalidArgsExitCode = FindExitCode(Options.ExitCodes, "InvalidArgs");
-				if(Options.FatalErrorExitCode == null)
+				if (Options.FatalErrorExitCode == null)
 					Options.FatalErrorExitCode = FindExitCode(Options.ExitCodes, "FatalError");
 			}
 
@@ -108,7 +108,20 @@ namespace BizArk.ConsoleApp.Parser
 						arrayVals = null;
 
 						var name = arg.Substring(Options.ArgumentPrefix.Length);
+
+						var falseVal = false;
+						if (name.EndsWith("-"))
+						{
+							name = name.Substring(0, name.Length - 1);
+							falseVal = true;
+						}
 						prop = props[name];
+
+						if (falseVal && prop.PropertyType == typeof(bool))
+						{
+							SetPropertyValue(prop, "false", null);
+							prop = null;
+						}
 					}
 					else if (prop != null)
 					{
@@ -174,7 +187,7 @@ namespace BizArk.ConsoleApp.Parser
 				var code = Enum.Parse(exitCodes, valName);
 				return (int)code;
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				// Don't really care what the error is. Just return null.
 				return null;

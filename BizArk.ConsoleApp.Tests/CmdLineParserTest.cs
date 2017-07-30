@@ -51,18 +51,14 @@ namespace BizArk.ConsoleApp.Tests
 
 			args = new string[]
 			{
-				"/Name", "Billy Bob",
-				"/Age", "25",
-				"/Occupation", "Stranger",
 				"/HasHair-", // Use a negation flag.
-				"/Children", "Billy", "Bob", "Betty",
-				"/PersonType", "Father"
 			};
 
 			results = parser.Parse(args);
 			obj = results.Args;
 			Assert.IsNotNull(obj);
 			Assert.AreEqual(false, obj.HasHair);
+			Assert.IsTrue(results.Properties["HasHair"].ValueSet);
 		}
 
 		[Test]
