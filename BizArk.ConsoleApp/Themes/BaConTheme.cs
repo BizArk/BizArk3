@@ -38,7 +38,8 @@ namespace BizArk.ConsoleApp.Themes
 						LogInfoColor = ConsoleColor.Black,
 						LogWarnColor = ConsoleColor.DarkMagenta,
 						LogErrorColor = ConsoleColor.Magenta,
-						LogFatalColor = ConsoleColor.Red
+						LogFatalColor = ConsoleColor.Red,
+						DisabledColor = ConsoleColor.Gray
 					};
 				}
 
@@ -69,7 +70,8 @@ namespace BizArk.ConsoleApp.Themes
 						LogInfoColor = ConsoleColor.White,
 						LogWarnColor = ConsoleColor.Magenta,
 						LogErrorColor = ConsoleColor.Yellow,
-						LogFatalColor = ConsoleColor.Red
+						LogFatalColor = ConsoleColor.Red,
+						DisabledColor = ConsoleColor.DarkGray
 					};
 				}
 
@@ -150,6 +152,11 @@ namespace BizArk.ConsoleApp.Themes
 		/// Gets or sets the color used to display fatal messages.
 		/// </summary>
 		public ConsoleColor? LogFatalColor { get; set; }
+
+		/// <summary>
+		/// Gets or sets the color used to display disabled messages.
+		/// </summary>
+		public ConsoleColor? DisabledColor { get; set; }
 
 		#endregion
 

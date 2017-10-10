@@ -10,6 +10,9 @@ using BizArk.Core;
 using BizArk.Core.Extensions.ExceptionExt;
 using BizArk.Core.Extensions.FormatExt;
 using BizArk.Core.Extensions.StringExt;
+using System.Diagnostics;
+using System.Threading;
+using BizArk.ConsoleApp.Menu;
 
 namespace BizArk.ConsoleApp
 {
@@ -277,6 +280,10 @@ namespace BizArk.ConsoleApp
 				return;
 			}
 
+			// If the cursor isn't in the first column, create a new line.
+			if (Console.CursorLeft != 0)
+				Console.WriteLine();
+
 			using (var clr = new BaConColor(color ?? Console.ForegroundColor))
 			{
 				var displayVal = value;
@@ -289,6 +296,16 @@ namespace BizArk.ConsoleApp
 
 				(Out ?? Console.Out).WriteLine(displayVal);
 			}
+		}
+
+		/// <summary>
+		/// Clears the current line and sets the cursor position to the start of the line.
+		/// </summary>
+		public static void ClearLine()
+		{
+			Console.CursorLeft = 0;
+			Console.Write(new string(' ', Console.BufferWidth));
+			Console.CursorLeft = 0;
 		}
 
 		#endregion
@@ -346,6 +363,146 @@ namespace BizArk.ConsoleApp
 			}
 
 			return args.ToArray();
+		}
+
+		/// <summary>
+		/// Shows a progress indicator.
+		/// </summary>
+		/// <param name="check">A function that is called between each activity update to check the progress (0-100). Anything less than 0 or more than 99 will exit the function.</param>
+		/// <param name="showProgress">If true, shows the percent complete. Otherwise only shows the dots. This is to support when the percent complete is not knowable.</param>
+		/// <returns>Returns the last value returned from check.</returns>
+		public static int ProgressIndicator(Func<TimeSpan, int> check, bool showProgress = true)
+		{
+			const int cMax = 10;
+
+			var sw = new Stopwatch();
+			sw.Start();
+			var origVis = Console.CursorVisible;
+			Console.CursorVisible = false;
+			try
+			{
+				var pct = 0;
+				for (var i = 0; pct >= 0 && pct < 100; i++)
+				{
+					pct = check(sw.Elapsed);
+					// Check to see if the activity was canceled.
+					if (pct < 0) return pct;
+					if (pct > 100) return pct;
+
+					Console.SetCursorPosition(0, Console.CursorTop);
+					var indicator = $"{new string('.', i % cMax)}{new string(' ', cMax - (i % cMax))}";
+					if (showProgress) indicator += $" [ {pct,2:#0}% ]";
+					Console.Write(indicator);
+
+					// Check to see if the activity completed (want to do this after display so that we can show it was completed).
+					if (pct == 100) return pct;
+
+					Thread.Sleep(200);
+
+				}
+
+				return pct;
+			}
+			finally
+			{
+				Console.CursorVisible = origVis;
+			}
+		}
+
+		/// <summary>
+		/// Asks the user to press any key to continue.
+		/// </summary>
+		/// <returns></returns>
+		public static void AskToContinue()
+		{
+			Console.Write("Press any key to continue.");
+			Console.ReadKey(true);
+			Console.WriteLine();
+		}
+
+		/// <summary>
+		/// Displays the menu to the user then processes their choice.
+		/// </summary>
+		/// <param name="menu"></param>
+		/// <returns>The selected option, null if the user presses the Esc key.</returns>
+		public static BaConMenuOption ShowMenu(BaConMenu menu)
+		{
+			if (menu == null) throw new ArgumentNullException("menu");
+			if (menu.Options.Count == 0) throw new InvalidOperationException("There are no menu options available.");
+
+			if (menu.Title.HasValue())
+			{
+				WriteLine(new string('#', menu.Title.Length + 4));
+				WriteLine($"# {menu.Title} #");
+				WriteLine(new string('#', menu.Title.Length + 4));
+				WriteLine();
+			}
+
+			var selectedNbr = 99;
+			while (true)
+			{
+				var nbr = 1;
+				//todo: If there are more than 9 options, page them.
+				foreach (var option in menu.Options)
+				{
+					if (option.DisabledReason.IsEmpty())
+						WriteLine($"{nbr}. {option.Display}");
+					else
+						WriteLine($"{nbr}. {option.Display} (disabled))", BaCon.Theme.DisabledColor);
+
+					nbr++;
+				}
+				WriteLine();
+				WriteLine($"Press [Esc] key to exit");
+
+				WriteLine();
+				Console.Write("Option? ");
+
+				var key = Console.ReadKey();
+				BaCon.WriteLine();
+				switch (key.Key)
+				{
+					case ConsoleKey.Escape:
+						return null;
+				}
+
+				selectedNbr = 99;
+				int.TryParse(key.KeyChar.ToString(), out selectedNbr);
+
+				if (!char.IsDigit(key.KeyChar))
+					WriteLine($"Please enter a number between 1 and {menu.Options.Count}.", BaCon.Theme.ErrorColor);
+				else if (selectedNbr <= 0 || selectedNbr > menu.Options.Count)
+					WriteLine($"{selectedNbr} is not valid number. Please enter a number between 1 and {menu.Options.Count}.", BaCon.Theme.ErrorColor);
+				else
+				{
+					// Valid number.
+					var selected = menu.Options[selectedNbr - 1];
+					if (selected.DisabledReason.IsEmpty())
+					{
+						selected.OnSelected();
+						return selected;
+					}
+
+					WriteLine($"Option {selectedNbr} is disabled: {selected.DisabledReason}", BaCon.Theme.LogWarnColor);
+				}
+
+			}
+
+		}
+
+		/// <summary>
+		/// Asks the user the question and returns the response.
+		/// </summary>
+		/// <param name="question"></param>
+		/// <returns></returns>
+		public static string Ask(string question)
+		{
+			// The question should include the punctuation or separator that the developer wants. This allows it to end in a ? or :.
+			var displayQuestion = question.Trim() + " "; // Make sure there is a single space after the question.
+			WriteLine("Press [ENTER] to cancel");
+			(Out ?? Console.Out).Write(displayQuestion);
+			var response = Console.ReadLine();
+			return response;
 		}
 
 		#endregion

@@ -140,5 +140,17 @@ namespace BizArk.Core.Extensions.AttributeExt
 			return att.Description;
 		}
 
+		/// <summary>
+		/// Gets the value from the DescriptionAttribute for the given enumeration value.
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		public static string GetDescription(this Type e)
+		{
+			var att = GetAttribute<DescriptionAttribute>(e, false);
+			if (att == null) return "";
+			return att.Description;
+		}
+
 	}
 }
