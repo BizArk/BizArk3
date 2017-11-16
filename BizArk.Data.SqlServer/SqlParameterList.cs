@@ -29,16 +29,15 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="values"></param>
 		/// <returns></returns>
-		public int AddValues(object values)
+		public IEnumerable<SqlParameter> AddValues(object values)
 		{
 			var propBag = values.ToPropertyBag();
-			var count = 0;
+			var sqlParams = new List<SqlParameter>();
 			foreach(var prop in propBag)
 			{
-				AddWithValue(prop.Key, prop.Value);
-				count++;
+				sqlParams.Add(AddWithValue(prop.Key, prop.Value));
 			}
-			return count;
+			return sqlParams;
 		}
 
 	}

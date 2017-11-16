@@ -675,7 +675,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <returns></returns>
-		public dynamic[] GetDynamic(string sprocName, object parameters = null)
+		public dynamic GetDynamic(string sprocName, object parameters = null)
 		{
 			var cmd = PrepareSprocCmd(sprocName, parameters);
 			return GetDynamic(cmd);
