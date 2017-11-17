@@ -25,7 +25,9 @@ namespace BizArk.ConsoleApp.Logging
 		/// <summary>
 		/// Determines if the log message should be written or not.
 		/// </summary>
-		/// <param name="level"></param>
+		/// <param name="level">The log level to write.</param>
+		/// <param name="msg">The message to write.</param>
+		/// <param name="ex">The exception to write.</param>
 		/// <returns></returns>
 		protected internal virtual bool ShouldWriteLogMessage(BaConLogLevel level, string msg, Exception ex)
 		{

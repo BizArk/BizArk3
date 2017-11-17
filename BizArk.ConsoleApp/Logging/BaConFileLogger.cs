@@ -13,6 +13,10 @@ namespace BizArk.ConsoleApp.Logging
 
 		#region Initialization and Destruction
 
+		/// <summary>
+		/// Creates an instance of BaConFileLogger.
+		/// </summary>
+		/// <param name="filePath"></param>
 		public BaConFileLogger(string filePath)
 		{
 			if (filePath.IsEmpty()) throw new ArgumentNullException("filePath");

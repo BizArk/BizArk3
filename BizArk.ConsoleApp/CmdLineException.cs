@@ -51,6 +51,11 @@ namespace BizArk.ConsoleApp
 		/// </summary>
         public string ArgName { get; private set; }
 
+		/// <summary>
+		/// Gets serialization information for the exception.
+		/// </summary>
+		/// <param name="info"></param>
+		/// <param name="context"></param>
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("ArgName", ArgName);

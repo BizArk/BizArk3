@@ -31,7 +31,9 @@ namespace BizArk.ConsoleApp.Logging
 		/// <summary>
 		/// Formats the log message.
 		/// </summary>
+		/// <param name="level"></param>
 		/// <param name="msg"></param>
+		/// <param name="ex"></param>
 		/// <returns></returns>
 		protected virtual string FormatMessage(BaConLogLevel level, string msg, Exception ex)
 		{
@@ -72,6 +74,7 @@ namespace BizArk.ConsoleApp.Logging
 		/// <summary>
 		/// Applies the ErrorTemplate to the exception.
 		/// </summary>
+		/// <param name="level"></param>
 		/// <param name="ex"></param>
 		/// <returns></returns>
 		protected virtual string FormatError(BaConLogLevel level, Exception ex)

@@ -4,14 +4,31 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>BizArk.Core</AssemblyName>
     <RootNamespace>BizArk.Core</RootNamespace>
+    <Authors>Brian Brewder</Authors>
+    <Company>BizArk</Company>
+    <Product>BizArk3 Core</Product>
+    <Description>BizArk Core provides a collection of tools to make building line-of-business applications easier.</Description>
+    <Copyright>Copyright © BizArk 2017</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>BizArk convert conversion type-conversion tools extension utility</PackageTags>
+    <PackageReleaseNotes>MAJOR UPDATE!!! Please see project documentation for details before deciding to upgrade from BizArk ver 2.</PackageReleaseNotes>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <Version>3.0.0.36-beta</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>S:\Development\BizArk\Binaries\</OutputPath>
+    <OutputPath>..\Binaries</OutputPath>
+    <DocumentationFile>..\Binaries\BizArk.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>S:\Development\BizArk\Binaries\</OutputPath>
+    <OutputPath>..\Binaries</OutputPath>
+    <DocumentationFile>..\Binaries\BizArk.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

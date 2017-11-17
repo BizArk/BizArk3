@@ -119,17 +119,9 @@ namespace BizArk.ConsoleApp
 		/// <returns></returns>
 		public static CmdLineParseResults<T> ParseArgs<T>(CmdLineOptions options = null) where T : new()
 		{
-			var clickOnceUrl = Application.ClickOnceUrl;
-			if (clickOnceUrl.HasValue())
-			{
-				return ParseArgs<T>(clickOnceUrl);
-			}
-			else
-			{
-				var args = Environment.GetCommandLineArgs();
-				args = args.Skip(1).ToArray(); // MSDN: The first element in the array contains the file name of the executing program. If the file name is not available, the first element is equal to String.Empty. The remaining elements contain any additional tokens entered on the command line.
-				return ParseArgs<T>(args, options);
-			}
+			var args = Environment.GetCommandLineArgs();
+			args = args.Skip(1).ToArray(); // MSDN: The first element in the array contains the file name of the executing program. If the file name is not available, the first element is equal to String.Empty. The remaining elements contain any additional tokens entered on the command line.
+			return ParseArgs<T>(args, options);
 		}
 
 		/// <summary>
@@ -377,7 +369,8 @@ namespace BizArk.ConsoleApp
 		/// <summary>
 		/// Use the BaConConsoleLogger. Sets the min level.
 		/// </summary>
-		/// <param name="minLevel"></param>
+		/// <param name="filePath">Path to the file to write the log to.</param>
+		/// <param name="minLevel">Lowest level of message to log to the file.</param>
 		/// <returns></returns>
 		public static BaConFileLogger UseFileLogger(string filePath, BaConLogLevel minLevel = BaConLogLevel.Trace)
 		{
@@ -391,6 +384,11 @@ namespace BizArk.ConsoleApp
 			return logger;
 		}
 
+		/// <summary>
+		/// Finds the first file logger with the given file path.
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <returns></returns>
 		public static BaConFileLogger FindFileLogger(string filePath)
 		{
 			foreach (var logger in Loggers)
@@ -404,6 +402,11 @@ namespace BizArk.ConsoleApp
 			return null;
 		}
 
+		/// <summary>
+		/// Finds the first instance of the requested logger type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
 		public static T FindLogger<T>() where T : BaConLogger
 		{
 			foreach (var logger in Loggers)

@@ -188,6 +188,10 @@ namespace BizArk.ConsoleApp.CmdLineHelpGenerator
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Writes the console application help to the console.
+		/// </summary>
+		/// <param name="results"></param>
 		public virtual void WriteHelp(CmdLineParseResults results)
 		{
 

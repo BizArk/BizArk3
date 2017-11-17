@@ -39,6 +39,10 @@ namespace BizArk.ConsoleApp
 			GC.SuppressFinalize(this);
 		}
 
+		/// <summary>
+		/// Disposes of the object.
+		/// </summary>
+		/// <param name="disposing"></param>
 		protected virtual void Dispose(bool disposing)
 		{
 			Console.ForegroundColor = OrigForegroundColor;
