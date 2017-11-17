@@ -9,6 +9,7 @@ using BizArk.Core.Extensions.DataExt;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Data.SqlClient;
+using BizArk.Data.SqlServer.DataExt;
 
 namespace BizArk.Data.SqlServer.Tests
 {

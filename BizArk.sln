@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Core", "BizArk.Core\BizArk.Core.csproj", "{8D3E6472-7E47-4266-947B-659F17F641F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.Core", "BizArk.Core\BizArk.Core.csproj", "{8D3E6472-7E47-4266-947B-659F17F641F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp", "BizArk.ConsoleApp\BizArk.ConsoleApp.csproj", "{CD389356-449C-4B7C-82AF-78DA1EC121EA}"
 EndProject
@@ -90,5 +90,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D62CA603-3ED6-4250-8AD4-4ECACD87E703}
 	EndGlobalSection
 EndGlobal

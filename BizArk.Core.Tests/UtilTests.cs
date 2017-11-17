@@ -89,32 +89,6 @@ namespace BizArk.Core.Tests
 		}
 
 		[Test]
-		[Ignore("For some reason the font isn't loading correctly. Can't figure it out right now.")]
-		public void FontUtilTest()
-		{
-			FontUtil.RegisterFont(My.Resources.Spirax_Regular);
-			var fontName = "Spirax";
-			var fontSize = 40;
-
-			using (var myfont = FontUtil.Create(fontName, fontSize, FontStyle.Regular, GraphicsUnit.Point))
-			using (var bmp = new Bitmap(500, 500))
-			using (var g = Graphics.FromImage(bmp))
-			{
-				Assert.AreEqual(fontSize, myfont.Size);
-				Assert.AreEqual(fontName, myfont.Name); // Fails because Spirax isn't loading for some reason (though I did confirm it was registered properly).
-
-				// Make sure we can use the font.
-				g.DrawString("Hello World", myfont, Brushes.Black, 10, 10);
-
-				// Uncomment the following line to visually confirm if the font was used or not.
-				// Do not leave check it in with this open since that will cause problems for
-				// automated testing.
-				//bmp.Open();
-
-			}
-		}
-
-		[Test]
 		public void MemSizeTest()
 		{
 

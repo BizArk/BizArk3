@@ -4,8 +4,9 @@ using BizArk.Core.Extensions.StringExt;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using BizArk.Core.Util;
+using BizArk.Data.SqlServer.DataExt;
 
-namespace BizArk.Core.Tests
+namespace BizArk.Data.SqlServer.Tests
 {
 
 	[TestFixture]

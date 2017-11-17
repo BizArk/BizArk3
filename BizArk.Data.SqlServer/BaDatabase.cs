@@ -2,6 +2,7 @@
 using BizArk.Core.Extensions.DataExt;
 using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Util;
+using BizArk.Data.SqlServer.DataExt;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

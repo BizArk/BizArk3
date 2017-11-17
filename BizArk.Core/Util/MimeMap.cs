@@ -22,37 +22,10 @@ namespace BizArk.Core.Util
 			if (sMimeMap == null)
 				sMimeMap = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
 
-			try
-			{
-				InitializeFromRegistry();
-			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("Failed to initialize MimeMap from the Registry. Error: {0}", ex.Message);
-			}
-
 			var localDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var mimePath = Path.Combine(localDir, "Mime.Types");
 			if (File.Exists(mimePath))
 				Initialize(File.ReadAllText(mimePath));
-		}
-
-		/// <summary>
-		/// Initializes the mime map from the registry.
-		/// </summary>
-		private static void InitializeFromRegistry()
-		{
-			var root = Registry.ClassesRoot;
-			foreach (var keyName in root.GetSubKeyNames())
-			{
-				if (keyName.IsEmpty()) continue;
-				if (!keyName.StartsWith(".")) continue; // not an extension.
-				var extKey = root.OpenSubKey(keyName);
-				if (extKey == null) continue;
-				var mimeType = extKey.GetValue("Content Type") as string;
-				if (mimeType.IsEmpty()) continue;
-				RegisterMimeType(mimeType, keyName);
-			}
 		}
 
 		/// <summary>
