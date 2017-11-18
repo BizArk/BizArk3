@@ -1,19 +1,17 @@
-﻿using NUnit.Framework;
-using BizArk.Core.Extensions.DataExt;
-using BizArk.Core.Extensions.StringExt;
+﻿using BizArk.Core.Extensions.StringExt;
+using BizArk.Data.SqlServer.DataExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using BizArk.Core.Util;
-using BizArk.Data.SqlServer.DataExt;
 
 namespace BizArk.Data.SqlServer.Tests
 {
 
-	[TestFixture]
+	[TestClass]
 	public class DataExtTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void DebugSqlTest()
 		{
 			var cmd = new SqlCommand("SELECT * FROM MyTable WHERE MyField = @MyField");
@@ -24,7 +22,7 @@ namespace BizArk.Data.SqlServer.Tests
 			Assert.IsTrue(sql.Contains(cmd.CommandText));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DebugSqlWithJsonTest()
 		{
 			var cmd = new SqlCommand("SELECT * FROM MyTable WHERE MyField = @MyField");
@@ -35,7 +33,7 @@ namespace BizArk.Data.SqlServer.Tests
 			Assert.IsTrue(sql.Contains(cmd.CommandText));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DebugSqlWithoutVarDesignatorTest()
 		{
 			var cmd = new SqlCommand("SELECT * FROM MyTable WHERE MyField = @MyField");
@@ -46,7 +44,7 @@ namespace BizArk.Data.SqlServer.Tests
 			Assert.IsTrue(sql.Contains(cmd.CommandText));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DebugSqlWithByteArrayTest()
 		{
 			var cmd = new SqlCommand("UPDATE MyTable SET MyField = @SomeValue WHERE MyTableID = @SomeID");
@@ -60,7 +58,7 @@ namespace BizArk.Data.SqlServer.Tests
 			Assert.IsTrue(sql.Contains(cmd.CommandText));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DebugSqlWithSprocTest()
 		{
 			var cmd = new SqlCommand("MySproc");

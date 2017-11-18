@@ -1,12 +1,12 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Data.SqlServer.Tests
 {
-	[TestFixture]
+	[TestClass]
 	public class SelectCmdBuilderTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void SimpleSelectTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -15,7 +15,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual("SELECT *\n\tFROM Person p\n", cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SimpleCountTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -24,7 +24,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual("SELECT COUNT(*)\n\tFROM Person p\n", cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SingleFieldTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -34,7 +34,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual("SELECT p.Name\n\tFROM Person p\n", cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void MultipleFieldTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -49,7 +49,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void FiveFieldTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -71,7 +71,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SingleJoinTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -88,7 +88,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void MultipleJoinTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -106,7 +106,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SingleCriteriaTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -121,7 +121,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void MultipleCriteriaTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -138,7 +138,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SingleOrderByTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -153,7 +153,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void MultipleOrderByTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -169,7 +169,7 @@ namespace BizArk.Data.SqlServer.Tests
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void PagedTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -192,7 +192,7 @@ SELECT *
 			AreEqual(expected, cmd.CommandText);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SingleParameterTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -210,7 +210,7 @@ SELECT *
 			Assert.AreSame(param, cmd.Parameters[0]);
 		}
 
-		[Test]
+		[TestMethod]
 		public void MultipleParameterTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
@@ -233,7 +233,7 @@ SELECT *
 			Assert.AreEqual(1, cmd.Parameters[1].Value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ComplexSelectTest()
 		{
 			var bldr = new SelectCmdBuilder("Person p");
