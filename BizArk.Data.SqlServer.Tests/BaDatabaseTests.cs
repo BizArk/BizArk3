@@ -119,6 +119,7 @@ namespace BizArk.Data.SqlServer.Tests
 		[Test]
 		public void ConnStrFromConfig()
 		{
+			BaDatabase.ConnectionStrings.Add("test", "Wazzup!");
 			using (var db = BaDatabase.Create("test"))
 			{
 				Assert.AreEqual("Wazzup!", db.ConnectionString);

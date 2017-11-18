@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Core.Tests", "BizArk.Core.Tests\BizArk.Core.Tests.csproj", "{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Data.SqlServer", "BizArk.Data.SqlServer\BizArk.Data.SqlServer.csproj", "{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Data.SqlServer.Tests", "BizArk.Data.SqlServer.Tests\BizArk.Data.SqlServer.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ED31A0DB-BB8F-42AF-8140-4354CAC82AFB}"
@@ -23,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ED31A0
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp", "BizArk.ConsoleApp\BizArk.ConsoleApp.csproj", "{61EA82FA-0C12-4DF8-A7B6-BEBA75C80145}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Data.SqlServer", "BizArk.Data.SqlServer\BizArk.Data.SqlServer.csproj", "{15A40BCD-8369-4C9A-B209-BB8E2862002E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,14 +63,6 @@ Global
 		{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}.Release|x86.ActiveCfg = Release|Any CPU
 		{1A817E1B-CCE7-42FC-A6C5-558FB7CE918C}.Release|x86.Build.0 = Release|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Debug|x86.Build.0 = Debug|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|x86.ActiveCfg = Release|Any CPU
-		{66A36EF1-0A21-45FB-B1E8-FD1854FDF8D2}.Release|x86.Build.0 = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -87,6 +79,14 @@ Global
 		{61EA82FA-0C12-4DF8-A7B6-BEBA75C80145}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61EA82FA-0C12-4DF8-A7B6-BEBA75C80145}.Release|x86.ActiveCfg = Release|Any CPU
 		{61EA82FA-0C12-4DF8-A7B6-BEBA75C80145}.Release|x86.Build.0 = Release|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Debug|x86.Build.0 = Debug|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Release|x86.ActiveCfg = Release|Any CPU
+		{15A40BCD-8369-4C9A-B209-BB8E2862002E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

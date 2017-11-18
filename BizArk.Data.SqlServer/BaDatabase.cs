@@ -71,10 +71,20 @@ namespace BizArk.Data.SqlServer
 		/// <returns></returns>
 		public static BaDatabase Create(string name)
 		{
-			var connStrSetting = ConfigurationManager.ConnectionStrings[name];
-			if (connStrSetting == null)
-				throw new InvalidOperationException($"The connection string setting for '{name}' was not found.");
-			return ClassFactory.CreateObject<BaDatabase>(connStrSetting.ConnectionString);
+			if (name.IsEmpty())
+				throw new ArgumentNullException("name");
+
+			if (ConnectionStrings.Count == 0)
+				throw new InvalidOperationException("Add connection strings to BaDatabase.ConnectionStrings before using Create.");
+
+			if(!ConnectionStrings.ContainsKey(name))
+				throw new ArgumentException($"The connection string for '{name}' does not exist.", "name");
+
+			var connStr = ConnectionStrings[name];
+			if (connStr.IsEmpty())
+				throw new ArgumentException($"The connection string for '{name}' was empty.", "name");
+
+			return ClassFactory.CreateObject<BaDatabase>(connStr);
 		}
 
 		#endregion
@@ -85,6 +95,11 @@ namespace BizArk.Data.SqlServer
 		/// Error code for deadlocks in Sql Server.
 		/// </summary>
 		internal const int cSqlError_Deadlock = 1205;
+
+		/// <summary>
+		/// Gets the collection of connection strings that can be used. The key should correspond to the name passed in to Create.
+		/// </summary>
+		public static Dictionary<string, string> ConnectionStrings { get; } = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Gets or sets the default number of times to retry a command if a deadlock is identified.
@@ -586,7 +601,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="cmd"></param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
 		/// <returns></returns>
-		public T[] GetObjects<T>(SqlCommand cmd, Func<SqlDataReader, T> load = null) where T : class
+		public IEnumerable<T> GetObjects<T>(SqlCommand cmd, Func<SqlDataReader, T> load = null) where T : class
 		{
 			var results = new List<T>();
 
@@ -611,7 +626,7 @@ namespace BizArk.Data.SqlServer
 				return true;
 			});
 
-			return results.ToArray();
+			return results;
 		}
 
 		/// <summary>
@@ -622,7 +637,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
 		/// <returns></returns>
-		public T[] GetObjects<T>(string sprocName, object parameters = null, Func<SqlDataReader, T> load = null) where T : class
+		public IEnumerable<T> GetObjects<T>(string sprocName, object parameters = null, Func<SqlDataReader, T> load = null) where T : class
 		{
 			var cmd = PrepareSprocCmd(sprocName, parameters);
 			return GetObjects<T>(cmd, load);
@@ -687,7 +702,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <returns></returns>
-		public dynamic[] GetDynamics(SqlCommand cmd)
+		public IEnumerable<dynamic> GetDynamics(SqlCommand cmd)
 		{
 			var results = new List<dynamic>();
 
@@ -698,7 +713,7 @@ namespace BizArk.Data.SqlServer
 				return true;
 			});
 
-			return results.ToArray();
+			return results;
 		}
 
 		/// <summary>
@@ -707,7 +722,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <returns></returns>
-		public dynamic[] GetDynamics(string sprocName, object parameters = null)
+		public IEnumerable<dynamic> GetDynamics(string sprocName, object parameters = null)
 		{
 			var cmd = PrepareSprocCmd(sprocName, parameters);
 			return GetDynamics(cmd);
