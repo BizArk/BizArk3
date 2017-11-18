@@ -1,18 +1,19 @@
-﻿using System;
-using BizArk.Core.Extensions.TypeExt;
-using NUnit.Framework;
+﻿using BizArk.Core.Extensions.TypeExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace BizArk.Core.Tests
 {
+
 	/// <summary>
 	///This is a test class for StringExtTest and is intended
 	///to contain all StringExtTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class TypeExtTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void IsNullableTest()
 		{
 
@@ -24,7 +25,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetTrueTypeTest()
 		{
 			Assert.AreEqual(typeof(int), typeof(int).GetTrueType());
@@ -33,7 +34,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(typeof(TypeExtTester), typeof(TypeExtTester).GetTrueType());
 		}
 
-		[Test]
+		[TestMethod]
 		public void ImplementsTest()
 		{
 			Assert.IsTrue(typeof(TypeExtTester).Implements(typeof(IDisposable)));

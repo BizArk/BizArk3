@@ -1,18 +1,14 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BizArk.Core.Extensions.WebExt;
+﻿using BizArk.Core.Extensions.WebExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Core.Tests
 {
-	[TestFixture]
+
+	[TestClass]
 	public class WebExtTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void ToQueryString()
 		{
 			var qs = (new
@@ -37,7 +33,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("Nbr=123", qs);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GenerateSlug()
 		{
 			var slug = "".GenerateSlug();

@@ -1,21 +1,19 @@
-﻿using NUnit.Framework;
-using BizArk.Core.Extensions.MathExt;
-using BizArk.Core.Util;
+﻿using BizArk.Core.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
 namespace BizArk.Core.Tests
 {
 
-
 	/// <summary>
 	///This is a test class for FormatExtTest and is intended
 	///to contain all FormatExtTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class ObjectUtilTest
 	{
 
-		[Test]
+		[TestMethod]
 		public void GetBasicValueTest()
 		{
 			var test = CreateTestStructure();
@@ -23,7 +21,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Name, value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetNestedValueTest()
 		{
 			var test = CreateTestStructure();
@@ -31,7 +29,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Test2.Test3.Greeting, value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetIndexedValueTest()
 		{
 			var test = CreateTestStructure();
@@ -42,7 +40,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Test2.Greeters["Maria"].Greeting, strVal);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TryBasicValueTest()
 		{
 			var test = CreateTestStructure();
@@ -51,7 +49,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Name, value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TryNestedValueTest()
 		{
 			var test = CreateTestStructure();
@@ -60,7 +58,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Test2.Test3.Greeting, value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TryIndexedValueTest()
 		{
 			var test = CreateTestStructure();
@@ -73,7 +71,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Test2.Greeters["Maria"].Greeting, strVal);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ObjectDictionaryTest()
 		{
 			var test = CreateTestStructure();
@@ -86,7 +84,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(test.Test2.Greeters["Maria"].Greeting, value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TryGetValueDictionaryKeyWithDotTest()
 		{
 			var dict = new Dictionary<string, object>();
@@ -99,7 +97,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(dict["test.one"], value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetPropertyNamesTest()
 		{
 			var key = "one[two].three";

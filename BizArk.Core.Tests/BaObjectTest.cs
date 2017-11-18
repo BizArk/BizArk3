@@ -1,21 +1,19 @@
 ﻿using BizArk.Core.Data;
-using Microsoft.CSharp.RuntimeBinder;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 using BizArk.Core.Extensions.StringExt;
+using Microsoft.CSharp.RuntimeBinder;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Diagnostics;
+
 
 namespace BizArk.Core.Tests
 {
 
-	[TestFixture]
+	[TestClass]
 	class BaObjectTest
 	{
 
-		[Test]
+		[TestMethod]
 		public void CreateStrictBaObject()
 		{
 			var obj = new BaObject(true);
@@ -32,10 +30,10 @@ namespace BizArk.Core.Tests
 			fld.Value = 321;
 			Assert.IsTrue(fld.IsChanged);
 
-			Assert.Throws<ArgumentOutOfRangeException>(() => { var x = obj["INVALID"]; });
+			Assert.That.Throws<ArgumentOutOfRangeException>(() => { var x = obj["INVALID"]; });
 		}
 
-		[Test]
+		[TestMethod]
 		public void CreateBaObjectWithSchema()
 		{
 			var obj = new BaObject(true, new { Test = 123 });
@@ -49,10 +47,10 @@ namespace BizArk.Core.Tests
 			Assert.IsTrue(fld.IsSet);
 			Assert.IsFalse(fld.IsChanged);
 
-			Assert.Throws<ArgumentOutOfRangeException>(() => { var x = obj["INVALID"]; });
+			Assert.That.Throws<ArgumentOutOfRangeException>(() => { var x = obj["INVALID"]; });
 		}
 
-		[Test]
+		[TestMethod]
 		public void CreateRelaxedBaObject()
 		{
 			var obj = new BaObject(false);
@@ -62,17 +60,17 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(123, obj["VALID"]);
 		}
 
-		[Test]
+		[TestMethod]
 		public void CreateMixedBaObject()
 		{
 			var obj = new BaObject(new BaObjectOptions() { StrictSet = false, StrictGet = true });
 			object test;
-			AssertEx.Throws<ArgumentOutOfRangeException>(() => { test = obj["Test"]; });
+			Assert.That.Throws<ArgumentOutOfRangeException>(() => { test = obj["Test"]; });
 			obj["Test"] = 123;
 			Assert.AreEqual(123, obj["Test"]);
 		}
 
-		[Test]
+		[TestMethod]
 		public void CreateDynamicBaObject()
 		{
 			dynamic obj = new BaObject(false);
@@ -82,12 +80,12 @@ namespace BizArk.Core.Tests
 
 			obj = new BaObject(true, new { VALID = 0 });
 			string invalid; // Just needed to assign to.
-			AssertEx.Throws<RuntimeBinderException>(() => { invalid = obj.INVALID as string; });
+			Assert.That.Throws<RuntimeBinderException>(() => { invalid = obj.INVALID as string; });
 			obj.VALID = 123;
 			Assert.AreEqual(123, obj.VALID);
 		}
 
-		[Test]
+		[TestMethod]
 		public void BaObjectChanges()
 		{
 			var obj = new BaObject(true, new { Name = "", Greeting = "" });
@@ -117,7 +115,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void BaObjectIgnoreChanges()
 		{
 			var obj = new BaObject(true, new { Name = "", Greeting = "" });
@@ -130,17 +128,17 @@ namespace BizArk.Core.Tests
 			Assert.IsFalse(changes.ContainsKey("Greeting"));
 		}
 
-		[Test]
+		[TestMethod]
 		public void SetValueToDifferentType()
 		{
 			var obj = new BaObject(true, new { Str = "", Base = new MyBaseObject(), Derived = new MyDerivedObject() });
 
-			AssertEx.Throws<InvalidOperationException>(() => { obj["Str"] = 123; });
+			Assert.That.Throws<InvalidOperationException>(() => { obj["Str"] = 123; });
 			obj["Base"] = new MyDerivedObject();
-			AssertEx.Throws<InvalidOperationException>(() => { obj["Derived"] = new MyBaseObject(); });
+			Assert.That.Throws<InvalidOperationException>(() => { obj["Derived"] = new MyBaseObject(); });
 		}
 
-		[Test]
+		[TestMethod]
 		public void CustomBaObject()
 		{
 			var obj = new MyObject();
@@ -157,7 +155,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(typeof(string), fld.FieldType);
 		}
 
-		[Test]
+		[TestMethod]
 		public void PropertyChangedEvent()
 		{
 			var obj = new BaObject(true, new { Name = (string)null, Greeting = (string)null });
@@ -172,7 +170,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("Name", lastChanged);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ValidateObject()
 		{
 			var obj = new MyObject();
@@ -209,7 +207,7 @@ namespace BizArk.Core.Tests
 						var name = val as string;
 						if (name.IsEmpty()) return true;
 						return !name[0].IsVowel(); // The name cannot start with a vowel.
-			});
+					});
 
 				Fields["Greeting"].Validators
 					.Required()

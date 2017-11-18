@@ -1,15 +1,16 @@
 ﻿using BizArk.Core.Util;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Threading;
 
 namespace BizArk.Core.Tests
 {
-	[TestFixture]
+
+	[TestClass]
 	public class UtilTests
 	{
-		[Test]
+		[TestMethod]
 		public void RangeIncludesTest()
 		{
 			var range1 = new Range<long>(0, 5);
@@ -27,20 +28,20 @@ namespace BizArk.Core.Tests
 			Assert.IsFalse(range2.Includes("g"));
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Uses Thread.Sleep so it takes too long to run.")]
 		public void RemoteTimeTest()
 		{
 			var remote = new RemoteDateTime(DateTime.Now);
-			AssertEx.AreClose(DateTime.Now, remote.Now, TimeSpan.FromMilliseconds(10));
+			Assert.That.AreClose(DateTime.Now, remote.Now, TimeSpan.FromMilliseconds(10));
 			Thread.Sleep(TimeSpan.FromSeconds(5));
 			DateTime now = DateTime.Now;
 			DateTime remoteNow = remote.Now;
 			Console.WriteLine("Now: {0} Remote: {1}", now.ToString("O"), remoteNow.ToString("O"));
-			AssertEx.AreClose(now, remoteNow, TimeSpan.FromMilliseconds(10));
+			Assert.That.AreClose(now, remoteNow, TimeSpan.FromMilliseconds(10));
 		}
 
-		[Test]
+		[TestMethod]
 		public void EqualityComparerTest()
 		{
 			var comp = new EqualityComparer<int>((val1, val2) =>
@@ -51,14 +52,14 @@ namespace BizArk.Core.Tests
 			Assert.IsFalse(comp.Equals(1, 2));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DeleteFileThatDoesntExistTest()
 		{
 			// This should succeed (though print a Debug message).
 			FileEx.DeleteFile(@"C:\Test\For\Invalid\File.txt");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EnsureDirectoryTest()
 		{
 			var path = @"C:\Garb\Test\Whatever";
@@ -75,7 +76,7 @@ namespace BizArk.Core.Tests
 			Assert.IsTrue(Directory.Exists(path));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DeleteEmptyDirectoriesTest()
 		{
 			var path = @"C:\Garb\Test\Whatever";
@@ -84,7 +85,7 @@ namespace BizArk.Core.Tests
 			FileEx.DeleteEmptyDirectories(path);
 		}
 
-		[Test]
+		[TestMethod]
 		public void MemSizeTest()
 		{
 
@@ -188,7 +189,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(MemSize.cNumBytesInMegabyte, sz.TotalBytes);
 		}
 
-		[Test]
+		[TestMethod]
 		public void BitmaskTest()
 		{
 			var options = new MyOptions(0);

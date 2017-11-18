@@ -1,17 +1,16 @@
-﻿using BizArk.Core.Collections;
+﻿using BizArk.Core.Extensions.StringExt;
 using BizArk.Core.Util;
-using NUnit.Framework;
-using BizArk.Core.Extensions.StringExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Core.Tests
 {
 
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class SecurityTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void Sha256Test()
 		{
 			var actual = "Hello".SHA256("World");
@@ -24,7 +23,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("lPLVG49QpmiXJRYSevbFro8LFsMqoQxQCgwL99vibBg=", actualStr);
 		}
 
-		[Test]
+		[TestMethod]
 		public void Sha512Test()
 		{
 			var actual = "Hello".SHA512("World");
@@ -37,26 +36,26 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("UkGsz9f5MRk3As0Fvvick4Uy1T+OuT0hQHhQCeFvQVBuNIYOu7AELL+MPXoW8585QK863S0G4UO9evLB4uFeyA==", actualStr);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GenerateSaltTest()
 		{
 			var salt1 = Security.GenerateSalt(1);
 			Assert.AreEqual(1, salt1.Length);
 
 			var salt2 = Security.GenerateSalt(1);
-			AssertEx.AreNotEqual(salt1, salt2); // This is likely to fail randomly, but rarely.
+			Assert.That.EnumerablesAreNotEqual(salt1, salt2); // This is likely to fail randomly, but rarely.
 
 			var salt3 = Security.GenerateSalt(20);
 			Assert.AreEqual(20, salt3.Length);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GenerateTokenTest()
 		{
-			var token1 = Security.GenerateToken(1);
+			var token1 = Security.GenerateToken(10);
 			Assert.AreEqual(1, token1.Length);
 
-			var token2 = Security.GenerateToken(1);
+			var token2 = Security.GenerateToken(10);
 			Assert.AreNotEqual(token1, token2); // This is likely to fail randomly, but rarely.
 
 			var token3 = Security.GenerateToken(20);
@@ -64,7 +63,7 @@ namespace BizArk.Core.Tests
 
 			// Ensures that we are using the characters we pass in.
 			var token4 = Security.GenerateToken(5, "a");
-			Assert.AreEqual("aaaaa", token4); 
+			Assert.AreEqual("aaaaa", token4);
 		}
 
 	}

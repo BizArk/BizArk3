@@ -1,19 +1,18 @@
-﻿using NUnit.Framework;
-using BizArk.Core.Extensions.MathExt;
+﻿using BizArk.Core.Extensions.MathExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Core.Tests
 {
-
 
 	/// <summary>
 	///This is a test class for FormatExtTest and is intended
 	///to contain all FormatExtTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class MathExtTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void BetweenTest()
 		{
 			var val = 5.Between(1, 10);
@@ -32,7 +31,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(5, val);
 		}
 
-		[Test]
+		[TestMethod]
 		public void IsBetweenTest()
 		{
 			Assert.IsTrue(5.IsBetween(1, 10));

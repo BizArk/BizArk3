@@ -1,21 +1,19 @@
-﻿using System;
-using System.Data;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Drawing;
-using NUnit.Framework;
 
 namespace BizArk.Core.Tests
 {
-
 
 	/// <summary>
 	///This is a test class for ConvertExTest and is intended
 	///to contain all ConvertExTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class ConvertExTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void IsEmptyTest()
 		{
 			Assert.IsTrue(ConvertEx.IsEmpty(null));
@@ -34,7 +32,7 @@ namespace BizArk.Core.Tests
 			Assert.IsTrue(ConvertEx.IsEmpty(new ConvertTest() { X = 0, Y = 0 }));
 		}
 
-		[Test]
+		[TestMethod]
 		public void ChangeTypeTest()
 		{
 			object value;
@@ -57,7 +55,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(0, ConvertEx.To<int>(null));
 		}
 
-		[Test]
+		[TestMethod]
 		public void TryChangeTypeTest()
 		{
 			DateTime dt;
@@ -67,7 +65,7 @@ namespace BizArk.Core.Tests
 			Assert.IsTrue(ConvertEx.Try("7/4/2008", typeof(DateTime), out obj));
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetDefaultEmptyTest()
 		{
 			object emptyValue;
@@ -95,7 +93,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void InheritanceConversionTest()
 		{
 			var test = new ConvertTest();
@@ -103,7 +101,7 @@ namespace BizArk.Core.Tests
 			Assert.AreSame(test, btest);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TypeCtorTest()
 		{
 			var pt = new Point(5, 10);

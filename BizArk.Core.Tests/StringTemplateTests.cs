@@ -1,19 +1,19 @@
-﻿using System;
-using System.Diagnostics;
-using NUnit.Framework;
+﻿using BizArk.Core.Extensions.FormatExt;
 using BizArk.Core.Util;
-using BizArk.Core.Extensions.FormatExt;
-using My = BizArk.Core.Tests.Properties;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using My = BizArk.Core.Tests.Properties;
 
 namespace BizArk.Core.Tests
 {
 
-	[TestFixture]
+	[TestClass]
 	public class StringTemplateTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void EvalTemplateTest()
 		{
 			var obj = new { Name = "Jane" };
@@ -28,7 +28,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("Hello World", value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void FormLetterTest()
 		{
 			var letter = new Letter()
@@ -45,7 +45,7 @@ namespace BizArk.Core.Tests
 			Assert.IsTrue(value.Contains("Hello Johnny 5.0,"));
 		}
 
-		[Test]
+		[TestMethod]
 		public void DateFormatTest()
 		{
 			var template = new StringTemplate("Test date: {date:d}");
@@ -54,7 +54,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(string.Format("Test date: {0:d}", dt), actual);
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Not an actual test (no asserts). Can also take a long time to run.")]
 		public void PerfTest()
 		{
@@ -94,7 +94,7 @@ namespace BizArk.Core.Tests
 			Console.WriteLine($"Diff: {textTemplateTime.TotalMilliseconds / stringFormatTime.TotalMilliseconds}");
 		}
 
-		[Test]
+		[TestMethod]
 		public void DictionaryTest()
 		{
 			var dict = new Dictionary<string, object>

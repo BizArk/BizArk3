@@ -1,20 +1,19 @@
-﻿using System;
-using System.Data;
-using System.Drawing;
-using System.Threading;
-using BizArk.Core.Convert.Strategies;
-using BizArk.Core.Tests.Properties;
-using NUnit.Framework;
+﻿using BizArk.Core.Convert.Strategies;
+using My = BizArk.Core.Tests.Properties;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 
 namespace BizArk.Core.Tests
 {
-	[TestFixture]
+	[TestClass]
 	public class ConversionStrategyTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void DefaultValueConversionTest()
 		{
 			var strategy = new NullValueConversionStrategy();
@@ -37,7 +36,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void AssignableFromConversionStrategyTest()
 		{
 			var strategy = new AssignableFromConversionStrategy();
@@ -64,7 +63,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConvertibleConversionStrategyTest()
 		{
 			var strategy = new ConvertibleConversionStrategy();
@@ -88,7 +87,7 @@ namespace BizArk.Core.Tests
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void StringToBoolConversionStrategyTest()
 		{
 			var strategy = new StringToBoolConversionStrategy();
@@ -121,7 +120,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(false, newValue);
 		}
 
-		[Test]
+		[TestMethod]
 		public void EnumConversionStrategyTest()
 		{
 			var strategy = new EnumConversionStrategy();
@@ -173,14 +172,14 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(1, newValue);
 
 			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(byte), out newValue));
-			Assert.AreEqual(1, newValue);
+			Assert.AreEqual((byte)1, newValue);
 
 			Assert.IsTrue(strategy.TryConvert(ConvertEnumTest.One, typeof(long), out newValue));
-			Assert.AreEqual(1, newValue);
+			Assert.AreEqual((long)1, newValue);
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void TypeConverterConversionStrategyTest()
 		{
 			var strategy = new TypeConverterConversionStrategy();
@@ -198,7 +197,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(99, ctest.Value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void StaticMethodConversionStrategyTest()
 		{
 			var strategy = new StaticMethodConversionStrategy();
@@ -225,7 +224,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(42, cval2.Value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void CtorConversionStrategyTest()
 		{
 			var strategy = new CtorConversionStrategy();
@@ -239,7 +238,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(42, cval.Value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConvertMethodConversionStrategyTest()
 		{
 			var strategy = new ConvertMethodConversionStrategy();
@@ -249,7 +248,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(42, newValue);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ByteArrayStringConversionStrategyTest()
 		{
 			var strategy = new ByteArrayStringConversionStrategy();
@@ -264,22 +263,26 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("hello", newValue);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ByteArrayImageConversionStrategyTest()
 		{
 			var strategy = new ByteArrayImageConversionStrategy();
 			object newValue;
 
-			Assert.IsTrue(strategy.TryConvert(Resources.TestImg, typeof(byte[]), out newValue));
+			var ms = new MemoryStream(My.Resources.TestImg);
+			ms.Position = 0;
+			var img = Image.FromStream(ms);
+
+			Assert.IsTrue(strategy.TryConvert(img, typeof(byte[]), out newValue));
 			var bytes = newValue as byte[];
 			Assert.IsNotNull(bytes);
 			Assert.IsTrue(bytes.Length > 0);
-
+			
 			Assert.IsTrue(strategy.TryConvert(bytes, typeof(Image), out newValue));
-			var img = newValue as Image;
-			Assert.IsNotNull(img);
-			Assert.AreEqual(Resources.TestImg.Width, img.Width);
-			Assert.AreEqual(Resources.TestImg.Height, img.Height);
+			var newImg = newValue as Image;
+			Assert.IsNotNull(newImg);
+			Assert.AreEqual(img.Width, newImg.Width);
+			Assert.AreEqual(img.Height, newImg.Height);
 		}
 
 		[TypeConverter(typeof(ConvertTestTypeConverter))]

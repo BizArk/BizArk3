@@ -1,22 +1,21 @@
-﻿using System;
-using BizArk.Core.Util;
-using NUnit.Framework;
+﻿using BizArk.Core.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace BizArk.Core.Tests
 {
-
-
+	
 	/// <summary>
 	/// Tests for the Cleanup class.
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class CleanupTest
 	{
 
-		[Test]
+		[TestMethod]
 		public void BasicCleanupTest()
 		{
-			AssertEx.Throws<ArgumentNullException>(() =>
+			Assert.That.Throws<ArgumentNullException>(() =>
 			{
 				using (new Cleanup(null)) { }
 			});

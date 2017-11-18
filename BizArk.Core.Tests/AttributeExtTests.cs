@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using BizArk.Core.Extensions.AttributeExt;
+﻿using BizArk.Core.Extensions.AttributeExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Core.Tests
 {
@@ -9,14 +9,14 @@ namespace BizArk.Core.Tests
 	///This is a test class for FormatExtTest and is intended
 	///to contain all FormatExtTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class AttributeExtTests
 	{
 
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void GetDescriptionTest()
 		{
 			Assert.AreEqual("First", Test.One.GetDescription());

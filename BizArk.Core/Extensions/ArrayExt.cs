@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BizArk.Core.Extensions.ArrayExt
@@ -51,7 +52,7 @@ namespace BizArk.Core.Extensions.ArrayExt
 		/// <returns></returns>
 		public static string[] RemoveEmpties(this string[] arr)
 		{
-			return RemoveEmpties((Array)arr) as string[];
+			return RemoveEmpties((IEnumerable<string>)arr).ToArray();
 		}
 
 		/// <summary>
@@ -59,21 +60,16 @@ namespace BizArk.Core.Extensions.ArrayExt
 		/// </summary>
 		/// <param name="arr"></param>
 		/// <returns></returns>
-		public static Array RemoveEmpties(this Array arr)
+		public static IEnumerable<T> RemoveEmpties<T>(this IEnumerable<T> arr)
 		{
-			var vals = new List<object>();
-			for (int i = 0; i < arr.Length; i++)
+			var vals = new List<T>();
+			foreach(var val in arr)
 			{
-				var val = arr.GetValue(i);
 				if (!ConvertEx.IsEmpty(val))
 					vals.Add(val);
 			}
 
-			Array retArr = Array.CreateInstance(arr.GetType().GetElementType(), vals.Count);
-			for (int i = 0; i < vals.Count; i++)
-				retArr.SetValue(vals[i], i);
-
-			return retArr;
+			return vals;
 		}
 
 		#endregion

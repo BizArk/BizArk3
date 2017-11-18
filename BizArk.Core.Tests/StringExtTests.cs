@@ -1,18 +1,18 @@
-﻿using System;
-using BizArk.Core.Extensions.StringExt;
-using NUnit.Framework;
+﻿using BizArk.Core.Extensions.StringExt;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Core.Tests
 {
+
 	/// <summary>
 	///This is a test class for StringExtTest and is intended
 	///to contain all StringExtTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class StringExtTests
 	{
 
-		[Test]
+		[TestMethod]
 		public void WrapTest()
 		{
 			string expected;
@@ -40,7 +40,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[Test]
+		[TestMethod]
 		public void WrapWithPrefixTest()
 		{
 			var options = new StringWrapOptions() { MaxWidth = 10, TabWidth = 4, Prefix = " >> " };
@@ -49,7 +49,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[Test]
+		[TestMethod]
 		public void WrapWithTabTest()
 		{
 			var options = new StringWrapOptions() { MaxWidth = 12, TabWidth = 4 };
@@ -69,7 +69,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("123456789\r\n1\t9\r\n123456789", actual);
 		}
 
-		[Test]
+		[TestMethod]
 		public void BaConErrorTest()
 		{
 			// This is an error we are getting in the help for the sample console app.
@@ -89,7 +89,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[Test]
+		[TestMethod]
 		public void LeftFindTest()
 		{
 			var actual = "test@asdf".Left("@");
@@ -108,7 +108,7 @@ namespace BizArk.Core.Tests
 			Assert.AreEqual("test", actual);
 		}
 
-		[Test]
+		[TestMethod]
 		public void RightFindTest()
 		{
 			var actual = "test@asdf".Right("@");

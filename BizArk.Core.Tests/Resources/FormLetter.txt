@@ -1,6 +1,0 @@
-Date: {Sent:d}
-
-{Greeting} {Recipient.Name} {Recipient.Numbers[3]:N1},
-Thank you for reading this letter.
-
-Revision {Revision:N0}

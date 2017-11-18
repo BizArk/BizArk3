@@ -1,22 +1,21 @@
 ﻿using BizArk.Core.Extensions.FormatExt;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.Core.Tests
 {
-
 
 	/// <summary>
 	///This is a test class for FormatExtTest and is intended
 	///to contain all FormatExtTest Unit Tests
 	///</summary>
-	[TestFixture]
+	[TestClass]
 	public class FormatExtTests
 	{
 
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void FmtIntTest()
 		{
 			Assert.AreEqual("1", 1.Fmt());
@@ -26,7 +25,7 @@ namespace BizArk.Core.Tests
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void FmtNullIntTest()
 		{
 			int? i = null;
@@ -40,7 +39,7 @@ namespace BizArk.Core.Tests
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void FmtDecimalTest()
 		{
 			Assert.AreEqual("1.00", 1M.Fmt());
@@ -51,7 +50,7 @@ namespace BizArk.Core.Tests
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void FmtNullDecimalTest()
 		{
 			decimal? i = null;
@@ -65,7 +64,7 @@ namespace BizArk.Core.Tests
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void FmtCurrencyTest()
 		{
 			Assert.AreEqual("$1.00", 1M.FmtCurrency());
@@ -76,7 +75,7 @@ namespace BizArk.Core.Tests
 		/// <summary>
 		///A test for Fmt
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void FmtNullCurrencyTest()
 		{
 			decimal? i = null;
@@ -91,7 +90,7 @@ namespace BizArk.Core.Tests
 		/// <summary>
 		///A test for Tmpl
 		///</summary>
-		[Test]
+		[TestMethod]
 		public void TmplTest()
 		{
 			var tmpl = "Hello {name}! You are {age:N0} years old.";
