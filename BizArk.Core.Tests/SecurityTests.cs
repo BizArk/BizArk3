@@ -52,10 +52,10 @@ namespace BizArk.Core.Tests
 		[TestMethod]
 		public void GenerateTokenTest()
 		{
-			var token1 = Security.GenerateToken(10);
+			var token1 = Security.GenerateToken(1);
 			Assert.AreEqual(1, token1.Length);
 
-			var token2 = Security.GenerateToken(10);
+			var token2 = Security.GenerateToken(1);
 			Assert.AreNotEqual(token1, token2); // This is likely to fail randomly, but rarely.
 
 			var token3 = Security.GenerateToken(20);

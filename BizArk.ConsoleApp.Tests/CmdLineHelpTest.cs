@@ -1,17 +1,17 @@
 ﻿using BizArk.ConsoleApp.CmdLineHelpGenerator;
 using BizArk.ConsoleApp.Parser;
 using BizArk.Core;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.DataAnnotations;
 using cm = System.ComponentModel;
 
 namespace BizArk.ConsoleApp.Tests
 {
-	[TestFixture]
+	[TestClass]
 	public class CmdLineHelpTest
 	{
-
-		[Test]
+		
+		[TestMethod]
 		public void GenerateUsageTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -23,7 +23,7 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual("test.exe <Name|String> [/Type <Father|Mother|Child>]", usage);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GeneratePropHelpTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -31,24 +31,24 @@ namespace BizArk.ConsoleApp.Tests
 			var generator = new HelpGenerator(results);
 
 			var help = generator.GetPropertyHelp(results.Properties["Name"]);
-			AssertEx.Contains("/Name <String> REQUIRED", help);
-			AssertEx.Contains("\tTEST DESC", help);
+			Assert.That.Contains("/Name <String> REQUIRED", help);
+			Assert.That.Contains("\tTEST DESC", help);
 
 			// Type doesn't have a description, but the flag is set to show it.
 			help = generator.GetPropertyHelp(results.Properties["Type"]);
-			AssertEx.Contains("/PersonType (/Type) <Father|Mother|Child>", help);
-			AssertEx.Contains("\tDefault: Father", help);
+			Assert.That.Contains("/PersonType (/Type) <Father|Mother|Child>", help);
+			Assert.That.Contains("\tDefault: Father", help);
 
 			help = generator.GetPropertyHelp(results.Properties["Children"]);
-			AssertEx.Contains("/Children", help);
-			AssertEx.Contains("\tDefault: [\"One\", \"Two\", \"Three\"]", help);
+			Assert.That.Contains("/Children", help);
+			Assert.That.Contains("\tDefault: [\"One\", \"Two\", \"Three\"]", help);
 
 			help = generator.GetPropertyHelp(results.Properties["Secret"]);
-			AssertEx.Contains("/Secret", help);
+			Assert.That.Contains("/Secret", help);
 			Assert.IsFalse(help.Contains("Shhh!"));
 		}
 
-		[Test]
+		[TestMethod]
 		public void GenerateExitCodesTest()
 		{
 			// No exit codes have been defined.

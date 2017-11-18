@@ -2,14 +2,14 @@
 using BizArk.Core.Extensions.StringExt;
 using System;
 using System.Diagnostics;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.ConsoleApp.Tests
 {
 	static class AssertEx
 	{
 
-		public static void Throws<T>(Action action, string message = null) where T : Exception
+		public static void Throws<T>(this Assert assert, Action action, string message = null) where T : Exception
 		{
 			try
 			{
@@ -22,10 +22,10 @@ namespace BizArk.ConsoleApp.Tests
 			}
 		}
 
-		public static void Contains(string contains, string actual, string message = null)
+		public static void Contains(this Assert assert, string contains, string actual, string message = null)
 		{
 			if (actual.Contains(contains)) return;
-			Assert.Fail(message.IfEmpty("AssertEx.Contains failed. Actual:<{0}> does not contain <{1}>.".Fmt(actual, contains)));
+			Assert.Fail(message.IfEmpty("Assert.That.Contains failed. Actual:<{0}> does not contain <{1}>.".Fmt(actual, contains)));
 		}
 	}
 }
