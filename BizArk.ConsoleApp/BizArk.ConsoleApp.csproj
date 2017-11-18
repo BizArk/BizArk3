@@ -14,6 +14,10 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk command-line parsing command-line-parsing console utility</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
+    <PackageReleaseNotes>BaCon now supports .Net Standard 2.0. 
+Lost ClickOnce support. Can still process a querystring as command-line arguments, but it is no longer automatic for ClickOnce.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

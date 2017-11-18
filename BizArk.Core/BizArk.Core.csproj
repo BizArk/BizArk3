@@ -14,9 +14,11 @@
     <RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk convert conversion type-conversion tools extension utility</PackageTags>
-    <PackageReleaseNotes>MAJOR UPDATE!!! Please see project documentation for details before deciding to upgrade from BizArk ver 2.</PackageReleaseNotes>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
+    <PackageReleaseNotes>BizArk 3 Core now supports .Net Standard 2.0. 
+Removed support for working with Fonts (not supported by .Net Std 2.0).
+Removed support for getting mime types from registry (not worth extra dependency).</PackageReleaseNotes>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
     <Version>3.0.0.36-beta</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
