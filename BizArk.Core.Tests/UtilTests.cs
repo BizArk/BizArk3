@@ -1,12 +1,8 @@
-﻿using System;
-using System.Threading;
-using BizArk.Core.Util;
+﻿using BizArk.Core.Util;
 using NUnit.Framework;
+using System;
 using System.IO;
-using NUnit.Framework.Compatibility;
-using My = BizArk.Core.Tests.Properties;
-using System.Drawing;
-using BizArk.Core.Extensions.ImageExt;
+using System.Threading;
 
 namespace BizArk.Core.Tests
 {
