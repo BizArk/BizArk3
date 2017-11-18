@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BizArk.ConsoleApp.Sample": {
+      "commandName": "Project",
+      "commandLineArgs": "/Name \"Billy Bob\" /Age 23 /Occupation \"Chicken Catcher\" /HasHair /Children Billy Bob Sue /Status ItsComplicated /W /?"
+    }
+  }
+}
