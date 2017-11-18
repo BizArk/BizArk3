@@ -22,7 +22,7 @@ Lost ClickOnce support. Can still process a querystring as command-line argument
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\Binaries</OutputPath>
-    <DocumentationFile>..\Binaries\BizArk.ConsoleApp.xml</DocumentationFile>
+    <DocumentationFile>..\Binaries\netstandard2.0\BizArk.ConsoleApp.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

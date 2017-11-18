@@ -30,7 +30,7 @@ Removed support for getting mime types from registry (not worth extra dependency
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\Binaries</OutputPath>
-    <DocumentationFile>..\Binaries\BizArk.Core.xml</DocumentationFile>
+    <DocumentationFile>..\Binaries\netstandard2.0\BizArk.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

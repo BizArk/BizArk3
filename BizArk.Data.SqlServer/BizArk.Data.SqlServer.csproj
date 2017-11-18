@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\Binaries\netstandard2.0\</OutputPath>
+    <OutputPath>..\Binaries\</OutputPath>
     <DocumentationFile>..\Binaries\netstandard2.0\\BizArk.Data.SqlServer.xml</DocumentationFile>
   </PropertyGroup>
 
