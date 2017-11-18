@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk sql-server database</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
