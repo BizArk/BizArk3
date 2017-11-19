@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk command-line parsing command-line-parsing console utility</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <FileVersion>3.1.0.0</FileVersion>
     <PackageReleaseNotes>BaCon now supports .Net Standard 2.0. 
