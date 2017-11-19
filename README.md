@@ -23,6 +23,8 @@ BizArk provides many convenient utilities to make everyday things easier. This i
 ## Check It Out on NuGet
 BizArk is available as a NuGet package.
 
-[BizArk.Core](https://www.nuget.org/packages/BizArk.Core/) - Everything but BaCon.
+[BizArk.Core](https://www.nuget.org/packages/BizArk.Core/) - Core libraries and features.
 
 [BizArk.ConsoleApp](https://www.nuget.org/packages/BizArk.ConsoleApp/) - Get the BizArk Command-Line Parser and the other console utilities.
+
+[BizArk.Data.SqlServer](https://www.nuget.org/packages/BizArk.Data.SqlServer/) - Provides some convenient utilities for working with Sql Server databases without an ORM.
