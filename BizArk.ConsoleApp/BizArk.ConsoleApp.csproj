@@ -6,7 +6,7 @@
     <Description>A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. Supports Click-Once applications as well.</Description>
     <Company>BizArk</Company>
     <Authors>Brian Brewder</Authors>
-    <Version>3.0.0.36-beta</Version>
+    <Version>3.1.0</Version>
     <Copyright>Copyright © BizArk 2017</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
