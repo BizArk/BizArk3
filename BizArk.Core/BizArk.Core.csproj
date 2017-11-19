@@ -1,57 +1,58 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>BizArk.Core</AssemblyName>
-    <RootNamespace>BizArk.Core</RootNamespace>
-    <Authors>Brian Brewder</Authors>
-    <Company>BizArk</Company>
-    <Product>BizArk3 Core</Product>
-    <Description>BizArk Core provides a collection of tools to make building line-of-business applications easier.</Description>
-    <Copyright>Copyright © BizArk 2017</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
-    <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>BizArk convert conversion type-conversion tools extension utility</PackageTags>
-    <PackageReleaseNotes>BizArk 3 Core now supports .Net Standard 2.0. 
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>BizArk.Core</AssemblyName>
+		<RootNamespace>BizArk.Core</RootNamespace>
+		<Authors>Brian Brewder</Authors>
+		<Company>BizArk</Company>
+		<Product>BizArk3 Core</Product>
+		<Description>BizArk Core provides a collection of tools to make building line-of-business applications easier.</Description>
+		<Copyright>Copyright © BizArk 2017</Copyright>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
+		<RepositoryType>GitHub</RepositoryType>
+		<PackageTags>BizArk convert conversion type-conversion tools extension utility</PackageTags>
+		<PackageReleaseNotes>BizArk 3 Core now supports .Net Standard 2.0.
 Removed support for working with Fonts (not supported by .Net Std 2.0).
 Removed support for getting mime types from registry (not worth extra dependency).</PackageReleaseNotes>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
-    <Version>3.1.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
+		<AssemblyVersion>3.1.0.0</AssemblyVersion>
+		<FileVersion>3.1.0.0</FileVersion>
+		<Version>3.1.0</Version>
+		<PackageVersion>3.1.0</PackageVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Binaries</OutputPath>
-    <DocumentationFile>..\Binaries\BizArk.Core.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>..\Binaries</OutputPath>
+		<DocumentationFile>..\Binaries\BizArk.Core.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\Binaries</OutputPath>
-    <DocumentationFile>..\Binaries\netstandard2.0\BizArk.Core.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>..\Binaries</OutputPath>
+		<DocumentationFile>..\Binaries\netstandard2.0\BizArk.Core.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-    <Compile Remove="Properties\Settings.Designer.cs" />
-    <Compile Remove="Util\FontUtil.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Properties\AssemblyInfo.cs" />
+		<Compile Remove="Properties\Settings.Designer.cs" />
+		<Compile Remove="Util\FontUtil.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.0-preview1-25914-04" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
+		<PackageReference Include="System.Drawing.Common" Version="4.5.0-preview1-25914-04" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Mime.Types">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Mime.Types">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
 
 </Project>
