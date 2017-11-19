@@ -18,7 +18,7 @@ If you have a need for data type conversions, look no further than ConvertEx. If
 C# 6 provides us with string interpolation which is great, but it only works on literal strings since it is parsed at compile time. BizArk provides string templating to support very similar syntax for non-literal strings.
 
 ## Much More
-BizArk provides many convenient utilities to make everyday things easier. This includes an Application object for easy access to useful information about the environment, help with fonts, strings, xml, images, etc.
+BizArk provides many convenient utilities to make everyday things easier. This includes an Application object for easy access to useful information about the environment, help with strings, xml, images, etc.
 
 ## Check It Out on NuGet
 BizArk is available as a NuGet package.
