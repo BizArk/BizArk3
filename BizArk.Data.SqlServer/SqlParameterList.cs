@@ -1,4 +1,5 @@
 ﻿using BizArk.Core.Extensions.ObjectExt;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
@@ -12,14 +13,14 @@ namespace BizArk.Data.SqlServer
 	{
 
 		/// <summary>
-		/// Add a SqlParameter to the list.
+		/// Add a SqlParameter to the list. If the value is empty, will use DbNull.
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public SqlParameter AddWithValue(string name, object value)
 		{
-			var param = new SqlParameter(name, value);
+			var param = new SqlParameter(name, value.IfEmpty(DBNull.Value));
 			this.Add(param);
 			return param;
 		}

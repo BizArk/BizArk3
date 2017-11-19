@@ -37,6 +37,8 @@ namespace BizArk.Data.SqlServer
 		/// <param name="strict">If true, only fields added can be set or retrieved. If false, getting a field that doesn't exist returns null and setting a field that doesn't exist automatically adds it.</param>
 		public BaTableObject(BaTableObject schema, bool strict) : base(strict, schema)
 		{
+			if (schema.mSchema == null)
+				throw new ArgumentException($"The schema object must be initialized from the database before it can be used as a schema object.", "schema");
 			mSchema = schema.mSchema;
 			TableName = schema.TableName;
 			InitReadonlyFields();

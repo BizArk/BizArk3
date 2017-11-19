@@ -118,5 +118,19 @@ namespace BizArk.Core.Extensions.ObjectExt
 			return ObjectUtil.ToPropertyBag(obj);
 		}
 
+		/// <summary>
+		/// If ConvertEx.IsEmpty() return true, returns the emptyVal. Otherwise returns the original object.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="emptyVal"></param>
+		/// <returns></returns>
+		public static object IfEmpty(this object obj, object emptyVal)
+		{
+			if (ConvertEx.IsEmpty(obj))
+				return emptyVal;
+			else
+				return obj;
+		}
+
 	}
 }

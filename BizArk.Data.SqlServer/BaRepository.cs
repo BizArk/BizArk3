@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BizArk.Data.SqlServer.Crud;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -112,34 +113,6 @@ namespace BizArk.Data.SqlServer
 					Database.ResetConnection();
 				}
 			}
-		}
-
-		/// <summary>
-		/// Saves the table object.
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <param name="restricted"></param>
-		public void Save(BaTableObject obj, params string[] restricted)
-		{
-			if (obj == null) return;
-
-			// Check to see if there are any changes to save.
-			var updates = obj.GetChanges(restricted);
-			if (updates.Count == 0) return;
-
-			if (obj.IsNew)
-			{
-				var values = Database.Insert(obj.TableName, updates);
-				obj.Fill((object)values);
-			}
-			else
-			{
-				var key = new Dictionary<string, object>();
-				foreach (var fld in obj.GetKey())
-					key.Add(fld.Name, fld.Value);
-				Database.Update(obj.TableName, key, updates);
-			}
-			obj.UpdateDefaults();
 		}
 
 		#endregion
