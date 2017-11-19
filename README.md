@@ -2,6 +2,9 @@
 
 BizArk provides a collection of tools to make building line-of-business applications easier. 
 
+## Now Supports .Net Standard 2.0
+All BizArk 3 projects have been updated to use .Net Standard 2.0. This update caused the project to lose the FontUtil class and ClickOnce support, but these were minor features that were deemed worth losing to gain support for .Net Standard.
+
 ## Version 3
 This is the 3rd version of BizArk. Although much of the code was ported from v2, not all of it was and some of it has changed so if you are coming from v2, you might need to make changes to your code. In particular, the command-line parsing was moved into its own project, ConvertEx has been refactored and improved, WebHelper has been removed, and the database utilities have also been removed. If the WebHelper or database utilites were useful to you and you think they should be ported to v3, please leave a comment and we'll consider it.
 
