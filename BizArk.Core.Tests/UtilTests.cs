@@ -194,44 +194,70 @@ namespace BizArk.Core.Tests
 		{
 			var options = new MyOptions(0);
 
-			Assert.AreEqual("[0000][0000][0000][0000][0000][0000][0000][0000]", options.ToString());
+			Assert.AreEqual("[0000][0000]", options.ToString());
 
 			options.Option1 = true;
-			Assert.AreEqual("[0000][0000][0000][0000][0000][0000][0000][0001]", options.ToString());
+			Assert.AreEqual("[0000][0001]", options.ToString());
 
 			options.Option2 = true;
-			Assert.AreEqual("[0000][0000][0000][0000][0000][0000][0000][0011]", options.ToString());
+			Assert.AreEqual("[0000][0011]", options.ToString());
 
 			options.Option3 = true;
-			Assert.AreEqual("[1000][0000][0000][0000][0000][0000][0000][0011]", options.ToString());
+			Assert.AreEqual("[1000][0011]", options.ToString());
+		}
+
+		[TestMethod]
+		public void BitmaskEqualsTest()
+		{
+			var option1 = new MyOptions(0);
+			var option2 = new MyOptions(0);
+
+			Assert.IsTrue(option1.Equals(option2));
+
+			option1.Option1 = true;
+			Assert.IsFalse(option1.Equals(option2));
+
+			Assert.IsTrue(option1.Equals(1));
+
+			Assert.IsTrue(option1 == 1);
 		}
 
 		private class MyOptions : Bitmask
 		{
 			public MyOptions(int value)
-				: base(value)
+				: base(value, 8)
 			{
 			}
 
 			public bool Option1
 			{
 				// Test to make sure right-most bit is set.
-				get { return GetBit(1); }
+				get { return IsSet(1); }
 				set { SetBit(1, value); }
 			}
 
 			public bool Option2
 			{
 				// Test to make sure a bit in the middle is set.
-				get { return GetBit(2); }
+				get { return IsSet(2); }
 				set { SetBit(2, value); }
 			}
 
 			public bool Option3
 			{
 				// Test to make sure left-most bit is set.
-				get { return GetBit(32); }
-				set { SetBit(32, value); }
+				get { return IsSet(8); }
+				set { SetBit(8, value); }
+			}
+
+			public static implicit operator MyOptions(int val)
+			{
+				return new MyOptions(val);
+			}
+
+			public static implicit operator int(MyOptions val)
+			{
+				return (int)val.Value;
 			}
 
 		}
