@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Dynamic;
 
 namespace BizArk.Data.SqlServer
 {
@@ -28,7 +27,7 @@ namespace BizArk.Data.SqlServer
 			if (connStr.IsEmpty()) throw new ArgumentNullException("connStr");
 			ConnectionString = connStr;
 		}
-
+		
 		/// <summary>
 		/// Disposes the BaDatabase.
 		/// </summary>
@@ -346,6 +345,36 @@ namespace BizArk.Data.SqlServer
 
 			return Transaction = new BaTransaction(this);
 		}
+		
+		/// <summary>
+		/// Creates a transaction and executes the batch within it. If a deadlock is detected, rolls the transaction back and tries again.
+		/// </summary>
+		/// <param name="batch">The code to execute within a transaction.</param>
+		public void TryTransaction(Action batch)
+		{
+			var attempt = 1;
+			while (true)
+			{
+				try
+				{
+					using (var trans = BeginTransaction())
+					{
+						batch();
+						trans.Commit();
+						return;
+					}
+				}
+				catch (SqlException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
+				{
+					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
+					attempt++;
+
+					// If the transaction fails it can leave the connection in a poor state. 
+					// Re-establish the connection to be sure we are working from a good connection.
+					ResetConnection();
+				}
+			}
+		}
 
 		#endregion
 
@@ -397,7 +426,7 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Implementing this interface makes it simpler to pass this instance around.
 		/// </summary>
-		BaDatabase ISupportBaDatabase.Database
+		BaDatabase ISupportBaDatabase.DB
 		{
 			get
 			{
@@ -418,7 +447,17 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// The database that is exposed from the object.
 		/// </summary>
-		BaDatabase Database { get; }
+		BaDatabase DB { get; }
+
+	}
+
+	/// <summary>
+	/// Provides a convenient mechanism to hook extension methods up to the BaDatabase 
+	/// class or any class that implements this interface. This encourages the use of
+	/// stateless repository methods, which is considered best practice.
+	/// </summary>
+	public interface IBaRepository : ISupportBaDatabase
+	{
 
 	}
 

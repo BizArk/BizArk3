@@ -1,10 +1,6 @@
 ﻿using BizArk.Core.Extensions.ObjectExt;
 using BizArk.Data.SqlServer.Crud;
-using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Dynamic;
-using System.Text;
 
 namespace BizArk.Data.SqlServer
 {
@@ -12,7 +8,7 @@ namespace BizArk.Data.SqlServer
 	/// <summary>
 	/// Provides repository methods for BaTableObjects.
 	/// </summary>
-	public class BaTableRepository<T> : BaRepository where T : BaTableObject, new()
+	public class BaTableRepository<T> : IBaRepository where T : BaTableObject, new()
 	{
 
 		#region Initialization and Destruction
@@ -20,18 +16,10 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Creates a new instance of BaTableRepository.
 		/// </summary>
-		/// <param name="name"></param>
-		public BaTableRepository(string name) : base(name)
-		{
-			InitTableName();
-		}
-
-		/// <summary>
-		/// Creates a new instance of BaTableRepository.
-		/// </summary>
 		/// <param name="db">The database to use for the repository. The database will not be disposed with the repository.</param>
-		public BaTableRepository(ISupportBaDatabase db) : base(db)
+		public BaTableRepository(ISupportBaDatabase db)
 		{
+			DB = db.DB;
 			InitTableName();
 		}
 
@@ -50,6 +38,11 @@ namespace BizArk.Data.SqlServer
 		/// Gets the name of the table in the database.
 		/// </summary>
 		public string TableName { get; private set; }
+
+		/// <summary>
+		/// Gets the database associated with this repository.
+		/// </summary>
+		public BaDatabase DB { get; private set; }
 
 		#endregion
 
@@ -70,7 +63,7 @@ namespace BizArk.Data.SqlServer
 
 			if (obj.IsNew)
 			{
-				var values = Database.Insert(obj.TableName, updates);
+				var values = DB.Insert(obj.TableName, updates);
 				obj.Fill((object)values);
 			}
 			else
@@ -78,7 +71,7 @@ namespace BizArk.Data.SqlServer
 				var key = new Dictionary<string, object>();
 				foreach (var fld in obj.GetKey())
 					key.Add(fld.Name, fld.Value);
-				Database.Update(obj.TableName, key, updates);
+				DB.Update(obj.TableName, key, updates);
 			}
 			obj.UpdateDefaults();
 		}
@@ -96,7 +89,7 @@ namespace BizArk.Data.SqlServer
 			foreach (var keyFld in keyFlds)
 				key.Add(keyFld.Name, keyFld.Value);
 
-			Database.Delete(obj.TableName, key);
+			DB.Delete(obj.TableName, key);
 		}
 
 		/// <summary>
@@ -126,7 +119,7 @@ namespace BizArk.Data.SqlServer
 			}
 
 			var cmd = selCmd.CreateCmd();
-			return Database.GetObjects<T>(cmd);
+			return DB.GetObjects<T>(cmd);
 		}
 
 		#endregion
