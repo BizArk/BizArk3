@@ -13,7 +13,7 @@ namespace BizArk.Data.SqlServer
 	/// <summary>
 	/// All database calls should be marshalled through this object.
 	/// </summary>
-	public class BaDatabase : IDisposable, ISupportBaDatabase
+	public class BaDatabase : IDisposable, IBaRepository
 	{
 
 		#region Initialization and Destruction
@@ -408,7 +408,7 @@ namespace BizArk.Data.SqlServer
 		/// <remarks>This is internal so it can be called from the unit tests.</remarks>
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		internal SqlCommand PrepareSprocCmd(string sprocName, object parameters)
+		internal static SqlCommand PrepareSprocCmd(string sprocName, object parameters)
 		{
 			var cmd = new SqlCommand(sprocName);
 			cmd.CommandType = CommandType.StoredProcedure;

@@ -13,7 +13,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk sql-server database</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.0.3-local</Version>
+    <Version>3.1.0.5-local</Version>
     <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <FileVersion>3.1.0.0</FileVersion>
   </PropertyGroup>
