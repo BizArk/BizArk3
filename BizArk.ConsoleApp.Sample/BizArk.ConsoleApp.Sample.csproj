@@ -3,6 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+	<AssemblyTitle>BizArk Sample Console App</AssemblyTitle>
+    <Product>BizArk Sample Console App</Product>
+    <Description>__________.__          _____         __    
+\______   \__|_______ /  _  \_______|  | __
+ |    |  _/  \___   //  /_\  \_  __ \  |/ /
+ |    |   \  |/    //    |    \  | \/    &lt; 
+ |______  /__/_____ \____|__  /__|  |__|_ \
+        \/         \/       \/           \/</Description>
+    <PackageId>BizArk.ConsoleApp.Sample</PackageId>
+    <Authors>Brian Brewder</Authors>
+    <Company>BizArk</Company>
   </PropertyGroup>
 
   <ItemGroup>

@@ -259,7 +259,7 @@ namespace BizArk.Data.SqlServer.Crud
 		/// <returns></returns>
 		public static T GetObject<T>(this BaDatabase db, string sprocName, object parameters = null, Func<IDataReader, T> load = null) where T : class
 		{
-			var cmd = db.PrepareSprocCmd(sprocName, parameters);
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
 			return db.GetObject<T>(cmd, load);
 		}
 
@@ -310,7 +310,7 @@ namespace BizArk.Data.SqlServer.Crud
 		/// <returns></returns>
 		public static IEnumerable<T> GetObjects<T>(this BaDatabase db, string sprocName, object parameters = null, Func<SqlDataReader, T> load = null) where T : class
 		{
-			var cmd = db.PrepareSprocCmd(sprocName, parameters);
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
 			return db.GetObjects<T>(cmd, load);
 		}
 
@@ -366,7 +366,7 @@ namespace BizArk.Data.SqlServer.Crud
 		/// <returns></returns>
 		public static dynamic GetDynamic(this BaDatabase db, string sprocName, object parameters = null)
 		{
-			var cmd = db.PrepareSprocCmd(sprocName, parameters);
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
 			return db.GetDynamic(cmd);
 		}
 
@@ -399,7 +399,7 @@ namespace BizArk.Data.SqlServer.Crud
 		/// <returns></returns>
 		public static IEnumerable<dynamic> GetDynamics(this BaDatabase db, string sprocName, object parameters = null)
 		{
-			var cmd = db.PrepareSprocCmd(sprocName, parameters);
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
 			return db.GetDynamics(cmd);
 		}
 
