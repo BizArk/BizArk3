@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Product>BaCon</Product>
-    <Description>A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. Supports Click-Once applications as well.</Description>
+    <Description>[.Net Standard 2.0] A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. See the project WIKI on Git for full list of features and documentation.</Description>
     <Company>BizArk</Company>
     <Authors>Brian Brewder</Authors>
-    <Version>3.1.0.1-local</Version>
+    <Version>3.1.0.16</Version>
     <Copyright>Copyright © BizArk 2017</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
@@ -16,8 +16,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <FileVersion>3.1.0.0</FileVersion>
-    <PackageReleaseNotes>BaCon now supports .Net Standard 2.0. 
-Lost ClickOnce support. Can still process a querystring as command-line arguments, but it is no longer automatic for ClickOnce.</PackageReleaseNotes>
+    <PackageReleaseNotes>The RequiredAttribute on a command-line property must now be defined in the passed in arguments. (https://github.com/BizArk/BizArk3/issues/7)</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

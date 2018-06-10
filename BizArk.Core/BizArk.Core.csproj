@@ -7,19 +7,17 @@
 		<Authors>Brian Brewder</Authors>
 		<Company>BizArk</Company>
 		<Product>BizArk3 Core</Product>
-		<Description>BizArk Core provides a collection of tools to make building line-of-business applications easier.</Description>
+		<Description>[.Net Standard 2.0] BizArk Core provides a collection of tools to make building line-of-business applications easier. See the project WIKI on Git for full list of features and documentation.</Description>
 		<Copyright>Copyright © BizArk 2017</Copyright>
 		<PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
 		<RepositoryType>GitHub</RepositoryType>
 		<PackageTags>BizArk convert conversion type-conversion tools extension utility</PackageTags>
-		<PackageReleaseNotes>BizArk 3 Core now supports .Net Standard 2.0.
-Removed support for working with Fonts (not supported by .Net Std 2.0).
-Removed support for getting mime types from registry (not worth extra dependency).</PackageReleaseNotes>
+		<PackageReleaseNotes>BitMasks now support long. It also supports defining the max bit number that can be set. The formatting of the BitMask is based on this value.</PackageReleaseNotes>
 		<AssemblyVersion>3.1.0.0</AssemblyVersion>
 		<FileVersion>3.1.0.0</FileVersion>
-		<Version>3.1.0.3-local</Version>
+		<Version>3.1.0.16</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 

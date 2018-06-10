@@ -5,7 +5,7 @@
     <Authors>Brian Brewder</Authors>
     <Company>BizArk</Company>
     <Product>BizArk 3</Product>
-    <Description>Utility classes for working with Microsoft Sql Server.</Description>
+    <Description>[.Net Standard 2.0] Utility classes for working with Microsoft Sql Server.</Description>
     <Copyright>Copyright © BizArk 2017</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
@@ -13,9 +13,12 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk sql-server database</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.0.5-local</Version>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
+    <Version>4.0.0.0</Version>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
+    <PackageReleaseNotes>BREAKING CHANGES:
+- Removed BaRepository. Instead, added IBaRepository interface that is implemented by BaDatabase. The intent is for database developers to create a static class with extension methods for IBaRepository. This simplifies object management and enforces good practices for the repository (stateless methods).
+- Moved CRUD methods into an extension class to simplify BaDatabase. BaDatabaseCrud defines extension methods for BaDatabase. Import the namespace BizArk.Data.SqlServer.Crud to use these methods.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
