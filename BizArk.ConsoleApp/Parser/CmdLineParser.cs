@@ -89,6 +89,7 @@ namespace BizArk.ConsoleApp.Parser
 			var errors = new List<string>();
 			CmdLineProperty prop = null;
 			List<string> arrayVals = null;
+			var notSpecifiedRequiredProps = props.Where(p => p.Required).ToList();
 
 			// To keep the parsing logic as simple as possible, 
 			// normalize the argument list.
@@ -116,11 +117,16 @@ namespace BizArk.ConsoleApp.Parser
 							falseVal = true;
 						}
 						prop = props[name];
-
-						if (falseVal && prop.PropertyType == typeof(bool))
+						if (prop != null)
 						{
-							SetPropertyValue(prop, "false", null);
-							prop = null;
+							if (prop.Required)
+								notSpecifiedRequiredProps.Remove(prop);
+
+							if (falseVal && prop.PropertyType == typeof(bool))
+							{
+								SetPropertyValue(prop, "false", null);
+								prop = null;
+							}
 						}
 					}
 					else if (prop != null)
@@ -173,9 +179,18 @@ namespace BizArk.ConsoleApp.Parser
 			// Populate header-level information, such as the title.
 			FillCmdLineObjInfo(results);
 
+			// Set errors for any missing, required properties.
+			// https://github.com/BizArk/BizArk3/issues/7
+			errors.AddRange(notSpecifiedRequiredProps.Select(p =>
+			{
+				var reqAtt = p.Property.GetAttribute<RequiredAttribute>();
+				var msg = reqAtt?.ErrorMessage ?? $"{p.Name} is required.";
+				return msg;
+			}));
+
 			// Validate the object using validation attributes.
 			errors.AddRange(ValidateCmdLineObject(obj));
-			results.Errors = errors.ToArray();
+			results.Errors = errors.Distinct().ToArray(); // Required messages might show up twice.
 
 			return results;
 		}

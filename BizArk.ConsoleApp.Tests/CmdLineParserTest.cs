@@ -161,6 +161,22 @@ namespace BizArk.ConsoleApp.Tests
 		}
 
 		[TestMethod]
+		public void ParseCmdLineIntValidationTest()
+		{
+			//https://github.com/BizArk/BizArk3/issues/7
+
+			var parser = new CmdLineParser<TestCmdLineObj>();
+			var args = new string[]
+			{
+				"/Name", "Billy Bob"
+			};
+
+			var results = parser.Parse(args);
+			Assert.AreEqual(1, results.Errors.Length);
+			Assert.AreEqual("Age is required.", results.Errors[0]);
+		}
+
+		[TestMethod]
 		public void ParseCmdLineParseErrorTest()
 		{
 			var parser = new CmdLineParser<TestCmdLineObj>();
@@ -400,6 +416,7 @@ namespace BizArk.ConsoleApp.Tests
 			[Required(ErrorMessage = "Name is required.")]
 			public string Name { get; set; }
 
+			[Required(ErrorMessage = "Age is required.")]
 			public int Age { get; set; }
 
 			[CmdLineArg("Job")]
