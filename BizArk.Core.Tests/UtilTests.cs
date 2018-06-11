@@ -1,8 +1,10 @@
 ﻿using BizArk.Core.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Threading;
+using My = BizArk.Core.Tests.Properties;
 
 namespace BizArk.Core.Tests
 {
@@ -83,6 +85,39 @@ namespace BizArk.Core.Tests
 			FileEx.EnsureDirectory(path);
 
 			FileEx.DeleteEmptyDirectories(path);
+		}
+
+		[TestMethod]
+		//[Ignore("For some reason the font isn't loading correctly. Can't figure it out right now.")]
+		public void FontUtilTest()
+		{
+			FontUtil.RegisterFont(My.Resources.Drift);
+			var fontName = "Drift Wood";
+			var fontSize = 40;
+
+			var fam = FontUtil.GetFamily(fontName);
+			Assert.AreEqual(fontName, fam.Name);
+			Assert.IsTrue(fam.IsStyleAvailable(FontStyle.Regular));
+
+			using (var myfont = FontUtil.Create(fontName, fontSize, FontStyle.Regular, GraphicsUnit.Point))
+			//using (var myfont = new  Font(fam, fontSize, FontStyle.Regular, GraphicsUnit.Point))
+			using (var bmp = new Bitmap(500, 500))
+			using (var g = Graphics.FromImage(bmp))
+			{
+				Assert.AreEqual(fontSize, myfont.Size);
+				Assert.AreEqual(fontName, myfont.Name); 
+
+				g.FillRectangle(Brushes.White, 0, 0, bmp.Width, bmp.Height);
+
+				// Make sure we can use the font.
+				g.DrawString("Hello World!", myfont, Brushes.Black, 10, 10);
+
+				// Uncomment the following line to visually confirm if the font was used or not.
+				// Do not check this line in since there is nobody to look at the generated file on the test servers
+				// and it might fail.
+				//var path = bmp.Save();
+				//Console.WriteLine(path);
+			}
 		}
 
 		[TestMethod]

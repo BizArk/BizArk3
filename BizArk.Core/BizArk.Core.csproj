@@ -34,12 +34,11 @@
 	<ItemGroup>
 		<Compile Remove="Properties\AssemblyInfo.cs" />
 		<Compile Remove="Properties\Settings.Designer.cs" />
-		<Compile Remove="Util\FontUtil.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
-		<PackageReference Include="System.Drawing.Common" Version="4.5.0-preview1-25914-04" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+		<PackageReference Include="System.Drawing.Common" Version="4.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>

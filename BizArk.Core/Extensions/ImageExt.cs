@@ -14,37 +14,60 @@ namespace BizArk.Core.Extensions.ImageExt
 	{
 
 		/// <summary>
-		/// Saves the image to the temp directory and opens it in the default application.
+		/// Saves the image to the designated directory and opens it in the default application.
 		/// </summary>
 		/// <param name="img"></param>
-		public static bool Open(this Image img)
+		/// <param name="destDir">Path where to save the image to. Defaults to the temp directory.</param>
+		public static bool Open(this Image img, string destDir = null)
 		{
-			if (img == null) return false;
+			var imgPath = Save(img, destDir);
+			if (imgPath == null) return false;
+
+			try
+			{
+				Process.Start(imgPath);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Unable to open image. ERR: {ex.Message}");
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Saves an image to the designated directory.
+		/// </summary>
+		/// <param name="img"></param>
+		/// <param name="destDir">Path where to save the image to. Defaults to the temp directory.</param>
+		/// <returns>Full path to the saved image.</returns>
+		public static string Save(this Image img, string destDir = null)
+		{
+			if (img == null) return null;
 
 			string imgPath;
 			if (img.RawFormat.Equals(ImageFormat.MemoryBmp))
 			{
 				// memory bitmaps cannot be saved, so convert it to a regular bitmap image.
-				imgPath = GetUniqueFileName("bmp");
+				imgPath = GetUniqueFileName("bmp", destDir);
 				img.Save(imgPath, ImageFormat.Bmp);
 			}
 			else
 			{
 				var ext = img.GetExtension();
-				if (string.IsNullOrEmpty(ext)) return false;
-				imgPath = GetUniqueFileName(ext);
+				if (string.IsNullOrEmpty(ext)) return null;
+				imgPath = GetUniqueFileName(ext, destDir);
 				img.Save(imgPath);
 			}
 
-			Process.Start(imgPath);
-			return true;
+			return imgPath;
 		}
 
-		private static string GetUniqueFileName(string ext)
+		private static string GetUniqueFileName(string ext, string dir = null)
 		{
 			int i = 0;
 			string path;
-			string tempDir = Application.GetTempPath();
+			string tempDir = dir ?? Application.GetTempPath();
 			do
 			{
 				i++;

@@ -61,6 +61,16 @@ namespace BizArk.Core.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Drift {
+            get {
+                object obj = ResourceManager.GetObject("Drift", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date: {Sent:d}
         ///
         ///{Greeting} {Recipient.Name} {Recipient.Numbers[3]:N1},
