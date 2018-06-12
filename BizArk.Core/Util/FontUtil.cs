@@ -13,7 +13,6 @@ namespace BizArk.Core.Util
 	public static class FontUtil
 	{
 		private static PrivateFontCollection sCustomFamilies = new PrivateFontCollection();
-		private static Dictionary<string, FontFamily> sFamilies = new Dictionary<string, FontFamily>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Register a font from a byte array. Useful when embedding fonts as a resource in your project.
@@ -53,37 +52,33 @@ namespace BizArk.Core.Util
 		/// <summary>
 		/// Gets the FontFamily based on the name.
 		/// </summary>
-		/// <param name="family"></param>
+		/// <param name="familyName"></param>
 		/// <returns></returns>
-		public static FontFamily GetFamily(string family)
+		public static FontFamily GetFamily(string familyName)
 		{
 			try
 			{
-				// cache the family in a dictionary for fast lookup.
-				if (!sFamilies.ContainsKey(family))
-					sFamilies.Add(family, new FontFamily(family, sCustomFamilies));
+				return new FontFamily(familyName, sCustomFamilies);
 			}
 			catch (ArgumentException)
 			{
 				// Not a private font, use installed font.
-				sFamilies.Add(family, new FontFamily(family));
+				return new FontFamily(familyName);
 			}
-			return sFamilies[family];
 		}
 
 		/// <summary>
 		/// Creates a font. Caller is responsible for disposing of the font. Will create any installed font or custom fonts that were registered with this class.
 		/// </summary>
-		/// <param name="family"></param>
+		/// <param name="familyName"></param>
 		/// <param name="emSize"></param>
 		/// <param name="style"></param>
 		/// <param name="unit"></param>
 		/// <returns></returns>
-		public static Font Create(string family, float emSize, FontStyle style = FontStyle.Regular, GraphicsUnit unit = GraphicsUnit.Pixel)
+		public static Font Create(string familyName, float emSize, FontStyle style = FontStyle.Regular, GraphicsUnit unit = GraphicsUnit.Pixel)
 		{
-			var fam = GetFamily(family);
-			return new Font(fam, emSize, FontStyle.Regular, GraphicsUnit.Point);
-			//return new Font(family, emSize, style, unit);
+			var family = GetFamily(familyName);
+			return new Font(family, emSize, style, unit);
 		}
 	}
 }
