@@ -14,7 +14,7 @@ namespace BizArk.Core.Util
 	public class FontManager : IDisposable
 	{
 
-		/**
+		/*
 		 * Custom fonts aren't supported on Linux.
 		 * https://github.com/dotnet/corefx/issues/30326
 		 */
