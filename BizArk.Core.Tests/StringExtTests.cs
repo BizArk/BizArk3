@@ -1,5 +1,6 @@
 ﻿using BizArk.Core.Extensions.StringExt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace BizArk.Core.Tests
 {
@@ -67,6 +68,36 @@ namespace BizArk.Core.Tests
 			options = new StringWrapOptions() { MaxWidth = 9, TabWidth = 8 };
 			actual = "123456789\n1\t9 123456789".Wrap(options);
 			Assert.AreEqual("123456789\r\n1\t9\r\n123456789", actual);
+		}
+
+		[TestMethod]
+		public void EndWithNewline()
+		{
+			string actual;
+
+			actual = Environment.NewLine.Wrap(5);
+			Assert.AreEqual(Environment.NewLine, actual);
+
+			actual = "\r".Wrap(5);
+			Assert.AreEqual("\r", actual);
+		}
+
+		[TestMethod]
+		public void EndWithWhiteSpace()
+		{
+			string actual;
+
+			actual = "Hello World ".Wrap(50);
+			Assert.AreEqual("Hello World ", actual);
+
+			actual = "Hello World ".Wrap(5);
+			Assert.AreEqual($"Hello{Environment.NewLine}World", actual);
+
+			actual = "Hello World\t".Wrap(50);
+			Assert.AreEqual("Hello World\t", actual);
+
+			actual = "Hello World\t".Wrap(5);
+			Assert.AreEqual($"Hello{Environment.NewLine}World", actual);
 		}
 
 		[TestMethod]

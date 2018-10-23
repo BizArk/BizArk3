@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BizArk.Core.Extensions.ArrayExt;
+using BizArk.Core.Util;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using BizArk.Core.Extensions.ArrayExt;
-using BizArk.Core.Util;
 
 namespace BizArk.Core.Extensions.StringExt
 {
@@ -39,7 +39,21 @@ namespace BizArk.Core.Extensions.StringExt
 		public static string Wrap(this string str, StringWrapOptions options)
 		{
 			var lines = WrappedLines(str, options);
-			return string.Join(Environment.NewLine, lines);
+			var wrapped = string.Join(Environment.NewLine, lines);
+
+			// Any of the line ending combos will be excluded if at the end of the line.
+			if (str == null)
+			{ /* Ignore */ }
+			else if (str.EndsWith("\r\n"))
+				wrapped += "\r\n";
+			else if (str.EndsWith("\n\r"))
+				wrapped += "\r\n";
+			else if (str.EndsWith("\r"))
+				wrapped += "\r";
+			else if (str.EndsWith("\n"))
+				wrapped += "\n";
+
+			return wrapped;
 		}
 
 		/// <summary>
@@ -86,7 +100,8 @@ namespace BizArk.Core.Extensions.StringExt
 
 				// We want to keep any white space at the front of the line, but the
 				// white space at the end could cause an extra line that appears empty.
-				var chars = line.TrimEnd();
+				//var chars = line.TrimEnd();
+				var chars = line;
 
 				var sb = new StringBuilder();
 				// Iterate through each character on the line so that we

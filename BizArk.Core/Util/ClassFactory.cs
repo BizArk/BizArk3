@@ -37,7 +37,7 @@ namespace BizArk.Core
 		}
 
 		/// <summary>
-		/// Get or set the factory to use. Only a single factory can be used at a time. To use the default bahavior, the Factory should return null.
+		/// Get or set the factory to use. Only a single factory can be used at a time. Leave null for default bahavior.
 		/// </summary>
 		public static Func<Type, object[], object> Factory { get; set; }
 

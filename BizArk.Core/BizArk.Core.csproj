@@ -17,7 +17,7 @@
 		<PackageReleaseNotes>BitMasks now support long. It also supports defining the max bit number that can be set. The formatting of the BitMask is based on this value.</PackageReleaseNotes>
 		<AssemblyVersion>3.1.0.0</AssemblyVersion>
 		<FileVersion>3.1.0.0</FileVersion>
-		<Version>3.1.0.16</Version>
+		<Version>3.1.0.17-beta</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
