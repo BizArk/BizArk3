@@ -315,6 +315,9 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <returns></returns>
 		public static string Right(this string str, int length)
 		{
+			if (length < 0)
+				throw new ArgumentException("Length must be greater than or equal to 0.", nameof(length));
+
 			if (str == null) return null;
 			if (str.Length <= length) return str;
 			return str.Substring(str.Length - length);
@@ -329,9 +332,13 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <returns></returns>
 		public static string Left(this string str, int length, bool ellipses = false)
 		{
+			if (length < 0)
+				throw new ArgumentException("Length must be greater than or equal to 0.", nameof(length));
+
 			if (str == null) return null;
+
 			if (str.Length <= length) return str;
-			if (ellipses)
+			if (ellipses && length > 3)
 				return str.Substring(0, length - 3) + "...";
 			else
 				return str.Substring(0, length);
