@@ -57,27 +57,27 @@ namespace BizArk.Data.SqlServer
         /// <summary>
         /// Gets the list of fields that you can add to. Fields are not validated, they are simply added to the list of fields in the SQL.
         /// </summary>
-        public List<string> Fields { get; private set; } = new List<string>();
+        public List<string> Fields { get; } = new List<string>();
 
         /// <summary>
         /// Gets the list of joins that you can add to. Should be in the form of "JOIN MyTable mt ON (mt.SomeID = xx.SomeID)". Joins are not validated, they are simply added to the list of joins in the SQL.
         /// </summary>
-        public List<string> Joins { get; private set; } = new List<string>();
+        public List<string> Joins { get; } = new List<string>();
 
         /// <summary>
         /// Gets the list of criteria that you can add to. Criteria is always put joined using AND. Criteria is not validated, it is simply added to the criteria in the SQL.
         /// </summary>
-        public List<string> Criteria { get; private set; } = new List<string>();
+        public List<string> Criteria { get; } = new List<string>();
 
         /// <summary>
         /// Gets the list of order by fields that you can add to. Should be in the form of "MyField ASC" or "xx.MyField DESC".
         /// </summary>
-        public List<string> OrderBy { get; private set; } = new List<string>();
+        public List<string> OrderBy { get; } = new List<string>();
 
         /// <summary>
         /// Gets the list of parameters that you can add to.
         /// </summary>
-        public SqlParameterList Parameters { get; private set; } = new SqlParameterList();
+        public SqlParameterList Parameters { get; } = new SqlParameterList();
 
         #endregion
 

@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BizArk.Data.SqlServer.Crud
 {
@@ -33,6 +34,19 @@ namespace BizArk.Data.SqlServer.Crud
 		{
 			var cmd = PrepareInsertCmd(tableName, values);
 			return db.GetDynamic(cmd);
+		}
+
+		/// <summary>
+		/// Inserts a new record into the table.
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="tableName">Name of the table to insert into.</param>
+		/// <param name="values">The values that will be added to the table. Can be anything that can be converted to a property bag.</param>
+		/// <returns>The newly inserted row.</returns>
+		public async static Task<dynamic> InsertAsync(this BaDatabase db, string tableName, object values)
+		{
+			var cmd = PrepareInsertCmd(tableName, values);
+			return await db.GetDynamicAsync(cmd).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -91,6 +105,20 @@ namespace BizArk.Data.SqlServer.Crud
 		{
 			var cmd = PrepareUpdateCmd(tableName, key, values);
 			return db.ExecuteNonQuery(cmd);
+		}
+
+		/// <summary>
+		/// Updates the table with the given values.
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="tableName">Name of the table to update.</param>
+		/// <param name="key">Key of the record to update. Can be anything that can be converted to a property bag.</param>
+		/// <param name="values">The values that will be updated. Can be anything that can be converted to a property bag.</param>
+		/// <returns></returns>
+		public async static Task<int> UpdateAsync(this BaDatabase db, string tableName, object key, object values)
+		{
+			var cmd = PrepareUpdateCmd(tableName, key, values);
+			return await db.ExecuteNonQueryAsync(cmd).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -153,6 +181,19 @@ namespace BizArk.Data.SqlServer.Crud
 		{
 			var cmd = PrepareDeleteCmd(tableName, key);
 			return db.ExecuteNonQuery(cmd);
+		}
+
+		/// <summary>
+		/// Deletes the records with the given key.
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="tableName">Name of the table to remove records from.</param>
+		/// <param name="key">Key of the record to delete. Can be anything that can be converted to a property bag.</param>
+		/// <returns></returns>
+		public async static Task<int> DeleteAsync(this BaDatabase db, string tableName, object key)
+		{
+			var cmd = PrepareDeleteCmd(tableName, key);
+			return await db.ExecuteNonQueryAsync(cmd).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -253,6 +294,37 @@ namespace BizArk.Data.SqlServer.Crud
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="db"></param>
+		/// <param name="cmd"></param>
+		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor).</param>
+		/// <returns></returns>
+		public async static Task<T> GetObjectAsync<T>(this BaDatabase db, SqlCommand cmd, Func<IDataReader, Task<T>> load = null) where T : class
+		{
+			T obj = null;
+
+			await db.ExecuteReaderAsync(cmd, async (row) =>
+			{
+				if (load != null)
+				{
+					obj = await load(row).ConfigureAwait(false);
+					return false;
+				}
+
+				// Load doesn't have a value, so use the default loader.
+				obj = ClassFactory.CreateObject<T>();
+				var props = TypeDescriptor.GetProperties(typeof(T));
+				FillObject(row, obj, props);
+
+				return false;
+			}).ConfigureAwait(false);
+
+			return obj;
+		}
+
+		/// <summary>
+		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="db"></param>
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor).</param>
@@ -260,7 +332,22 @@ namespace BizArk.Data.SqlServer.Crud
 		public static T GetObject<T>(this BaDatabase db, string sprocName, object parameters = null, Func<IDataReader, T> load = null) where T : class
 		{
 			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
-			return db.GetObject<T>(cmd, load);
+			return db.GetObject(cmd, load);
+		}
+
+		/// <summary>
+		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="db"></param>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor).</param>
+		/// <returns></returns>
+		public async static Task<T> GetObjectAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<IDataReader, Task<T>> load = null) where T : class
+		{
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
+			return await db.GetObjectAsync(cmd, load).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -304,6 +391,42 @@ namespace BizArk.Data.SqlServer.Crud
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="db"></param>
+		/// <param name="cmd"></param>
+		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
+		/// <returns></returns>
+		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, SqlCommand cmd, Func<SqlDataReader, Task<T>> load = null) where T : class
+		{
+			var results = new List<T>();
+
+			// If load doesn't have a value, use the default loader.
+			if (load == null)
+			{
+				var props = TypeDescriptor.GetProperties(typeof(T));
+				load = async (row) =>
+				{
+					var obj = ClassFactory.CreateObject<T>();
+					FillObject(row, obj, props);
+					return await Task.FromResult(obj).ConfigureAwait(false);
+				};
+			}
+
+			await db.ExecuteReaderAsync(cmd, async (row) =>
+			{
+				var result = await load(row).ConfigureAwait(false);
+				if (result != null)
+					results.Add(result);
+
+				return true;
+			}).ConfigureAwait(false);
+
+			return results;
+		}
+
+		/// <summary>
+		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="db"></param>
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
@@ -311,7 +434,22 @@ namespace BizArk.Data.SqlServer.Crud
 		public static IEnumerable<T> GetObjects<T>(this BaDatabase db, string sprocName, object parameters = null, Func<SqlDataReader, T> load = null) where T : class
 		{
 			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
-			return db.GetObjects<T>(cmd, load);
+			return db.GetObjects(cmd, load);
+		}
+
+		/// <summary>
+		/// Instantiates the object and sets properties based on the field name. Only returns the first row.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="db"></param>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
+		/// <returns></returns>
+		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<SqlDataReader, Task<T>> load = null) where T : class
+		{
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
+			return await db.GetObjectsAsync(cmd, load).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -361,6 +499,25 @@ namespace BizArk.Data.SqlServer.Crud
 		/// Gets the first row as a dynamic object.
 		/// </summary>
 		/// <param name="db"></param>
+		/// <param name="cmd"></param>
+		/// <returns></returns>
+		public async static Task<dynamic> GetDynamicAsync(this BaDatabase db, SqlCommand cmd)
+		{
+			dynamic result = null;
+
+			await db.ExecuteReaderAsync(cmd, async (row) =>
+			{
+				result = SqlDataReaderToDynamic(row);
+				return await Task.FromResult(false).ConfigureAwait(false);
+			}).ConfigureAwait(false);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the first row as a dynamic object.
+		/// </summary>
+		/// <param name="db"></param>
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <returns></returns>
@@ -368,6 +525,19 @@ namespace BizArk.Data.SqlServer.Crud
 		{
 			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
 			return db.GetDynamic(cmd);
+		}
+
+		/// <summary>
+		/// Gets the first row as a dynamic object.
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <returns></returns>
+		public async static Task<dynamic> GetDynamicAsync(this BaDatabase db, string sprocName, object parameters = null)
+		{
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
+			return await db.GetDynamicAsync(cmd).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -394,6 +564,26 @@ namespace BizArk.Data.SqlServer.Crud
 		/// Returns the results of the SQL command as a list of dynamic objects.
 		/// </summary>
 		/// <param name="db"></param>
+		/// <param name="cmd"></param>
+		/// <returns></returns>
+		public async static Task<IEnumerable<dynamic>> GetDynamicsAsync(this BaDatabase db, SqlCommand cmd)
+		{
+			var results = new List<dynamic>();
+
+			await db.ExecuteReaderAsync(cmd, async (row) =>
+			{
+				var result = SqlDataReaderToDynamic(row);
+				results.Add(result);
+				return await Task.FromResult(true).ConfigureAwait(false);
+			}).ConfigureAwait(false);
+
+			return results;
+		}
+
+		/// <summary>
+		/// Returns the results of the SQL command as a list of dynamic objects.
+		/// </summary>
+		/// <param name="db"></param>
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <returns></returns>
@@ -401,6 +591,19 @@ namespace BizArk.Data.SqlServer.Crud
 		{
 			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
 			return db.GetDynamics(cmd);
+		}
+
+		/// <summary>
+		/// Returns the results of the SQL command as a list of dynamic objects.
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="sprocName">Name of the stored procedure to call.</param>
+		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
+		/// <returns></returns>
+		public async static Task<IEnumerable<dynamic>> GetDynamicsAsync(this BaDatabase db, string sprocName, object parameters = null)
+		{
+			var cmd = BaDatabase.PrepareSprocCmd(sprocName, parameters);
+			return await db.GetDynamicsAsync(cmd).ConfigureAwait(false);
 		}
 
 		private static dynamic SqlDataReaderToDynamic(SqlDataReader row)
