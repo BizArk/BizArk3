@@ -1,4 +1,5 @@
 ﻿using BizArk.Core.Extensions.ArrayExt;
+using BizArk.Core.Extensions.EnumerableExt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

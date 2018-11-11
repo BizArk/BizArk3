@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BizArk.Core.Convert.Strategies;
 using BizArk.Core.Extensions.TypeExt;
@@ -60,7 +61,7 @@ namespace BizArk.Core.Convert
 
 		#region IsEmpty
 
-		private Dictionary<Type, object[]> mEmptyValues = new Dictionary<Type, object[]>();
+		private Dictionary<Type, IEnumerable<object>> mEmptyValues = new Dictionary<Type, IEnumerable<object>>();
 		private Dictionary<Type, object> mDefaultEmptyValues = new Dictionary<Type, object>();
 
 		/// <summary>
@@ -109,7 +110,7 @@ namespace BizArk.Core.Convert
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		private object[] GetEmptyValues(Type type)
+		private IEnumerable<object> GetEmptyValues(Type type)
 		{
 			var empties = new List<object>();
 			empties.Add(GetDefaultEmptyValue(type));
@@ -122,7 +123,7 @@ namespace BizArk.Core.Convert
 			emptyVal = GetStaticFieldValue(type, "Empty");
 			if (emptyVal != null) empties.Add(emptyVal);
 
-			return empties.ToArray();
+			return empties;
 		}
 
 		/// <summary>

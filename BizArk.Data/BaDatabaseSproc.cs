@@ -225,7 +225,7 @@ namespace BizArk.Data.Sproc
 		/// <returns></returns>
 		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<DbDataReader, Task<T>> load = null) where T : class
 		{
-			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters);
+			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters).ConfigureAwait(false);
 			return await db.GetObjectsAsync(cmd, load).ConfigureAwait(false);
 		}
 
@@ -255,7 +255,7 @@ namespace BizArk.Data.Sproc
 		/// <returns></returns>
 		public async static Task<dynamic> GetDynamicAsync(this BaDatabase db, string sprocName, object parameters = null)
 		{
-			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters);
+			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters).ConfigureAwait(false);
 			return await db.GetDynamicAsync(cmd).ConfigureAwait(false);
 		}
 
@@ -281,7 +281,7 @@ namespace BizArk.Data.Sproc
 		/// <returns></returns>
 		public async static Task<IEnumerable<dynamic>> GetDynamicsAsync(this BaDatabase db, string sprocName, object parameters = null)
 		{
-			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters);
+			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters).ConfigureAwait(false);
 			return await db.GetDynamicsAsync(cmd).ConfigureAwait(false);
 		}
 
@@ -321,7 +321,7 @@ namespace BizArk.Data.Sproc
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		internal static async Task<DbCommand> PrepareSprocCmdAsync(this BaDatabase db, string sprocName, object parameters)
 		{
-			var conn = await db.GetConnectionAsync();
+			var conn = await db.GetConnectionAsync().ConfigureAwait(false);
 			var cmd = conn.CreateCommand();
 			cmd.CommandText = sprocName;
 			cmd.CommandType = CommandType.StoredProcedure;

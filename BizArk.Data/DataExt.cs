@@ -1,5 +1,5 @@
 ﻿using BizArk.Core;
-using BizArk.Core.Extensions.ArrayExt;
+using BizArk.Core.Extensions.EnumerableExt;
 using BizArk.Core.Util;
 using System;
 using System.Collections.Generic;
@@ -25,15 +25,22 @@ namespace BizArk.Data.DataExt
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <param name="setNull">If true, sets the value to DBNull if it ConvertEx.IsEmpty is true.</param>
+		/// <param name="dbType"></param>
+		/// <param name="size"></param>
 		/// <returns></returns>
-		public static DbParameter AddParameter(this DbCommand cmd, string name, object value, bool setNull)
+		public static DbParameter AddParameter(this DbCommand cmd, string name, object value, bool setNull, DbType? dbType = null, int? size = null)
 		{
 			if (setNull && ConvertEx.IsEmpty(value))
 				value = DBNull.Value;
 
 			var param = cmd.CreateParameter();
+
 			param.ParameterName = name;
 			param.Value = value;
+
+			if (dbType.HasValue) param.DbType = dbType.Value;
+			if (size.HasValue) param.Size = size.Value;
+
 			cmd.Parameters.Add(param);
 			return param;
 		}

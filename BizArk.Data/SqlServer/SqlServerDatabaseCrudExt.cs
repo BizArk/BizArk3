@@ -38,7 +38,7 @@ namespace BizArk.Data.SqlServer.CrudExt
 		/// <returns>The newly inserted row.</returns>
 		public async static Task<dynamic> InsertAsync(this BaDatabase db, string tableName, object values)
 		{
-			var conn = await db.GetConnectionAsync();
+			var conn = await db.GetConnectionAsync().ConfigureAwait(false);
 			var cmd = conn.CreateCommand();
 			PrepareInsertCmd(cmd, tableName, values);
 			return await db.GetDynamicAsync(cmd).ConfigureAwait(false);
@@ -108,7 +108,7 @@ namespace BizArk.Data.SqlServer.CrudExt
 		/// <returns></returns>
 		public async static Task<int> UpdateAsync(this BaDatabase db, string tableName, object key, object values)
 		{
-			var conn = await db.GetConnectionAsync();
+			var conn = await db.GetConnectionAsync().ConfigureAwait(false);
 			var cmd = conn.CreateCommand();
 			PrepareUpdateCmd(cmd, tableName, key, values);
 			return await db.ExecuteNonQueryAsync(cmd).ConfigureAwait(false);

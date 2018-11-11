@@ -140,7 +140,7 @@ namespace BizArk.Core.Extensions.TypeExt
 		/// <param name="type"></param>
 		/// <param name="flags"></param>
 		/// <returns></returns>
-		public static FieldInfo[] GetFields<T>(this Type type, BindingFlags flags = BindingFlags.Default)
+		public static IEnumerable<FieldInfo> GetFields<T>(this Type type, BindingFlags flags = BindingFlags.Default)
 		{
 			var flds = new List<FieldInfo>();
 			foreach (var fld in type.GetFields(flags))
@@ -149,7 +149,7 @@ namespace BizArk.Core.Extensions.TypeExt
 					flds.Add(fld);
 			}
 
-			return flds.ToArray();
+			return flds;
 		}
 
 		/// <summary>

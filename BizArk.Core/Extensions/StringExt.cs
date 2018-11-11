@@ -1,8 +1,10 @@
 ﻿using BizArk.Core.Extensions.ArrayExt;
+using BizArk.Core.Extensions.EnumerableExt;
 using BizArk.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace BizArk.Core.Extensions.StringExt
@@ -63,7 +65,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="maxWidth">The maximum number of characters per line.</param>
 		/// <param name="prefix">Adds this string to the beginning of each line that has been broken (used for indenting text).</param>
 		/// <returns></returns>
-		public static string[] WrappedLines(this string str, int maxWidth, string prefix)
+		public static IEnumerable<string> WrappedLines(this string str, int maxWidth, string prefix)
 		{
 			return WrappedLines(str, new StringWrapOptions() { MaxWidth = maxWidth, Prefix = prefix });
 		}
@@ -74,7 +76,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="str">The string to wrap.</param>
 		/// <param name="options">The options used for wrapping a string.</param>
 		/// <returns></returns>
-		public static string[] WrappedLines(this string str, StringWrapOptions options)
+		public static IEnumerable<string> WrappedLines(this string str, StringWrapOptions options)
 		{
 			if (string.IsNullOrEmpty(str)) return new string[] { };
 			if (options.MaxWidth <= 0) return new string[] { str };
@@ -186,7 +188,7 @@ namespace BizArk.Core.Extensions.StringExt
 					lines.Add(sb.ToString());
 			}
 
-			return lines.ToArray();
+			return lines;
 		}
 
 		/// <summary>
@@ -233,7 +235,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		public static string[] Lines(this string str)
+		public static IEnumerable<string> Lines(this string str)
 		{
 			var lines = new List<string>();
 			using (var sr = new StringReader(str))
@@ -246,7 +248,7 @@ namespace BizArk.Core.Extensions.StringExt
 				}
 			}
 
-			return lines.ToArray();
+			return lines;
 		}
 
 		/// <summary>
@@ -254,7 +256,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		public static string[] Words(this string str)
+		public static IEnumerable<string> Words(this string str)
 		{
 			return str.Split(new char[] { }, StringSplitOptions.RemoveEmptyEntries);
 		}
@@ -634,18 +636,18 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="separator">The char used to split the string.</param>
 		/// <param name="trim">If true, removes leading and trailing whitespace characters from each element.</param>
 		/// <returns></returns>
-		public static string[] Split(this string str, char separator, bool trim)
+		public static IEnumerable<string> Split(this string str, char separator, bool trim)
 		{
 			return Split(str, separator, trim, false);
 		}
 
 		/// <summary>
-		/// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element.
+		/// Splits a string on the given char and if trim is true, removes leading and trailing whitespace characters from each element, then converts it to the given type.
 		/// </summary>
 		/// <param name="str">The string to split.</param>
 		/// <param name="separator">The char used to split the string.</param>
 		/// <returns></returns>
-		public static T[] Split<T>(this string str, char separator)
+		public static IEnumerable<T> Split<T>(this string str, char separator)
 		{
 			return Split(str, separator, true, false).Convert<T>();
 		}
@@ -658,9 +660,9 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="trim">If true, removes leading and trailing whitespace characters from each element.</param>
 		/// <param name="removeEmpties">Removes empty elements from the string.</param>
 		/// <returns></returns>
-		public static string[] Split(this string str, char separator, bool trim, bool removeEmpties)
+		public static IEnumerable<string> Split(this string str, char separator, bool trim, bool removeEmpties)
 		{
-			string[] strs;
+			IEnumerable<string> strs;
 			if (removeEmpties)
 				strs = str.Split(new char[] { separator }, StringSplitOptions.RemoveEmptyEntries);
 			else
@@ -669,9 +671,9 @@ namespace BizArk.Core.Extensions.StringExt
 			if (trim)
 			{
 				var strl = new List<string>();
-				for (int i = 0; i < strs.Length; i++)
+				for (int i = 0; i < strs.Count(); i++)
 				{
-					var s = strs[i].Trim();
+					var s = strs.ElementAt(i).Trim();
 					if (removeEmpties && s == "")
 					{
 						// don't add this value.
@@ -679,7 +681,7 @@ namespace BizArk.Core.Extensions.StringExt
 					else
 						strl.Add(s);
 				}
-				strs = strl.ToArray();
+				strs = strl;
 			}
 			return strs;
 		}
@@ -691,7 +693,7 @@ namespace BizArk.Core.Extensions.StringExt
 		/// <param name="separator">The char used to split the string.</param>
 		/// <param name="removeEmpties">Removes empty elements from the string.</param>
 		/// <returns></returns>
-		public static T[] Split<T>(this string str, char separator, bool removeEmpties)
+		public static IEnumerable<T> Split<T>(this string str, char separator, bool removeEmpties)
 		{
 			return Split(str, separator, true, removeEmpties).Convert<T>();
 		}

@@ -52,24 +52,7 @@ namespace BizArk.Core.Extensions.ArrayExt
 		/// <returns></returns>
 		public static string[] RemoveEmpties(this string[] arr)
 		{
-			return RemoveEmpties((IEnumerable<string>)arr).ToArray();
-		}
-
-		/// <summary>
-		/// Creates a new array that contains the non-empty elements of the given array.
-		/// </summary>
-		/// <param name="arr"></param>
-		/// <returns></returns>
-		public static IEnumerable<T> RemoveEmpties<T>(this IEnumerable<T> arr)
-		{
-			var vals = new List<T>();
-			foreach(var val in arr)
-			{
-				if (!ConvertEx.IsEmpty(val))
-					vals.Add(val);
-			}
-
-			return vals;
+			return EnumerableExt.EnumerableExt.RemoveEmpties(arr).ToArray();
 		}
 
 		#endregion
@@ -87,7 +70,7 @@ namespace BizArk.Core.Extensions.ArrayExt
 			var vals = new List<string>();
 			foreach (var val in arr)
 				vals.Add(ConvertEx.ToString(val));
-			return string.Join(separator, vals.ToArray());
+			return string.Join(separator, vals);
 		}
 
 		#endregion
@@ -136,19 +119,6 @@ namespace BizArk.Core.Extensions.ArrayExt
 			var newArr = Array.CreateInstance(arr.GetType().GetElementType(), arr.Length);
 			arr.CopyTo(newArr, 0);
 			return newArr;
-		}
-
-		/// <summary>
-		/// Converts the collection of bytes into a hex strings (no prefix).
-		/// </summary>
-		/// <param name="bytes"></param>
-		/// <returns></returns>
-		public static string ToHex(this IEnumerable<byte> bytes)
-		{
-			var hex = new StringBuilder();
-			foreach (byte b in bytes)
-				hex.AppendFormat("{0:X2}", b);
-			return hex.ToString();
 		}
 
 	}

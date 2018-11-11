@@ -96,7 +96,7 @@ namespace BizArk.Core.Extensions.ObjectExt
 		/// Uses DataAnnotations to validate the properties of the object.
 		/// </summary>
 		/// <param name="obj"></param>
-		public static ValidationResult[] Validate(this object obj)
+		public static IEnumerable<ValidationResult> Validate(this object obj)
 		{
 			var baObj = obj as BaObject;
 			if (baObj != null)
@@ -105,7 +105,7 @@ namespace BizArk.Core.Extensions.ObjectExt
 			var ctx = new ValidationContext(obj, null, null);
 			var results = new List<ValidationResult>();
 			Validator.TryValidateObject(obj, ctx, results, true);
-			return results.ToArray();
+			return results;
 		}
 
 		/// <summary>

@@ -325,7 +325,7 @@ namespace BizArk.Core.Data
 		/// Uses DataAnnotations to validate the properties of the object.
 		/// </summary>
 		/// <param name="changedOnly">Only validates changed fields.</param>
-		public ValidationResult[] Validate(bool changedOnly = true)
+		public IEnumerable<ValidationResult> Validate(bool changedOnly = true)
 		{
 			var ctx = new ValidationContext(this, null, null);
 			var results = new List<ValidationResult>();
@@ -337,7 +337,7 @@ namespace BizArk.Core.Data
 				ctx.DisplayName = fld.Name;
 				Validator.TryValidateValue(fld.Value, ctx, results, fld.Validators);
 			}
-			return results.ToArray();
+			return results;
 		}
 
 		/// <summary>

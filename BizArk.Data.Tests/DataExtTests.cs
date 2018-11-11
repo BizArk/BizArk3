@@ -3,6 +3,7 @@ using BizArk.Data.DataExt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BizArk.Data.Tests
 {
@@ -53,8 +54,8 @@ namespace BizArk.Data.Tests
 			var sql = cmd.DebugText();
 			Debug.WriteLine(sql);
 			var lines = sql.Lines();
-			Assert.IsTrue(lines.Length > 0);
-			Assert.AreEqual("DECLARE @MyField AS VARBINARY(4) = 0x01FF0001", lines[0]);
+			Assert.IsTrue(lines.Count() > 0);
+			Assert.AreEqual("DECLARE @MyField AS VARBINARY(4) = 0x01FF0001", lines.First());
 			Assert.IsTrue(sql.Contains(cmd.CommandText));
 		}
 

@@ -75,7 +75,7 @@ namespace BizArk.Data
 			{
 				var key = GetKey();
 				if (key == null) return true;
-				if (key.Length == 0) return true;
+				if (key.Count() == 0) return true;
 
 				// To be an update, all of the key fields must be set.
 				return key.All(fld => !fld.IsSet);
@@ -112,12 +112,12 @@ namespace BizArk.Data
 			return base.GetChanges(ignore.ToArray());
 		}
 
-		private BaField[] mKey;
+		private IEnumerable<BaField> mKey;
 		/// <summary>
 		/// Gets the key that can be used to save the object.
 		/// </summary>
 		/// <returns></returns>
-		public BaField[] GetKey()
+		public IEnumerable<BaField> GetKey()
 		{
 			if (mKey == null)
 			{
@@ -129,7 +129,7 @@ namespace BizArk.Data
 					key.Add(fld);
 				}
 
-				mKey = key.ToArray();
+				mKey = key;
 			}
 
 			return mKey;

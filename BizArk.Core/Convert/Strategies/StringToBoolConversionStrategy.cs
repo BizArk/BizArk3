@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BizArk.Core.Convert.Strategies
 {
@@ -48,7 +49,7 @@ namespace BizArk.Core.Convert.Strategies
 		/// <summary>
 		/// Gets the list of values that will equate to True. Everything else is false.
 		/// </summary>
-		public string[] TrueValues { get; set; } = new string[] { "true", "t", "yes", "ok", "aye", "yep", "yea" };
+		public IEnumerable<string> TrueValues { get; set; } = new[] { "true", "t", "yes", "ok", "aye", "yep", "yea" };
 
 	}
 }

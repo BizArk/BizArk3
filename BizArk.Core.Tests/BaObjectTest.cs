@@ -4,7 +4,7 @@ using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
-
+using System.Linq;
 
 namespace BizArk.Core.Tests
 {
@@ -176,15 +176,15 @@ namespace BizArk.Core.Tests
 			var obj = new MyObject();
 			obj.Name = "Bart";
 			obj.Greeting = "";
-			var errs = obj.Validate();
+			var errs = obj.Validate().ToArray();
 			Assert.AreEqual(1, errs.Length);
 
 			obj.Greeting = "Hello";
-			errs = obj.Validate();
+			errs = obj.Validate().ToArray();
 			Assert.AreEqual(0, errs.Length);
 
 			obj.Name = "Al";
-			errs = obj.Validate();
+			errs = obj.Validate().ToArray();
 			Assert.AreEqual(1, errs.Length);
 		}
 

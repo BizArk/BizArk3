@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace BizArk.Data
+namespace BizArk.Data.SqlServer
 {
 
 	/// <summary>
-	/// Build a complex SqlCommand object.
+	/// Build a complex SELECT SqlCommand object.
 	/// </summary>
 	public class SelectCmdBuilder
     {

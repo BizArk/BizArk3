@@ -1,8 +1,8 @@
-﻿using System;
+﻿using BizArk.Core.Extensions.TypeExt;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using BizArk.Core.Extensions.TypeExt;
 
 namespace BizArk.Core.Extensions.AttributeExt
 {
@@ -33,7 +33,7 @@ namespace BizArk.Core.Extensions.AttributeExt
 		/// <typeparam name="T"></typeparam>
 		/// <param name="prop"></param>
 		/// <returns></returns>
-		public static T[] GetAttributes<T>(this PropertyDescriptor prop) where T : Attribute
+		public static IEnumerable<T> GetAttributes<T>(this PropertyDescriptor prop) where T : Attribute
 		{
 			var atts = new List<T>();
 			foreach (Attribute att in prop.Attributes)
@@ -42,7 +42,7 @@ namespace BizArk.Core.Extensions.AttributeExt
 				if (tAtt != null)
 					atts.Add(tAtt);
 			}
-			return atts.ToArray();
+			return atts;
 		}
 
 		/// <summary>
