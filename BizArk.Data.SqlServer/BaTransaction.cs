@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 
-namespace BizArk.Data.SqlServer
+namespace BizArk.Data
 {
 
 	/// <summary>
@@ -52,7 +52,7 @@ namespace BizArk.Data.SqlServer
 		/// <summary>
 		/// Gets the transaction that this object wraps.
 		/// </summary>
-		public SqlTransaction Transaction { get; private set; }
+		public DbTransaction Transaction { get; private set; }
 
 		#endregion
 

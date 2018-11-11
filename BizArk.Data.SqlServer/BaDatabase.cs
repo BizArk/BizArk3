@@ -1,33 +1,23 @@
 ﻿using BizArk.Core;
 using BizArk.Core.Extensions.StringExt;
-using BizArk.Data.SqlServer.DataExt;
+using BizArk.Data.DataExt;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace BizArk.Data.SqlServer
+namespace BizArk.Data
 {
 
 	/// <summary>
 	/// All database calls should be marshalled through this object.
 	/// </summary>
-	public class BaDatabase : IDisposable, IBaRepository
+	public abstract class BaDatabase : IDisposable, IBaRepository
 	{
 
 		#region Initialization and Destruction
-
-		/// <summary>
-		/// Creates a new instance of BaDatabase.
-		/// </summary>
-		/// <param name="connStr">The connection string to use for the database.</param>
-		public BaDatabase(string connStr)
-		{
-			if (connStr.IsEmpty()) throw new ArgumentNullException("connStr");
-			ConnectionString = connStr;
-		}
 
 		/// <summary>
 		/// Disposes the BaDatabase.
@@ -50,11 +40,6 @@ namespace BizArk.Data.SqlServer
 				mConnection.Dispose();
 				mConnection = null;
 			}
-
-			// Once the database has been disposed, we shouldn't need this anymore.
-			// Null it out so it will fail if anybody attempts to access it after 
-			// it's been disposed.
-			ConnectionString = null;
 		}
 
 		/// <summary>
@@ -82,12 +67,25 @@ namespace BizArk.Data.SqlServer
 
 		#endregion
 
+		#region Abstract Methods
+
+		/// <summary>
+		/// Instantiate the Connection object. Should not be opened.
+		/// </summary>
+		/// <returns></returns>
+		protected abstract DbConnection InstantiateConnection();
+
+		#endregion
+
+
 		#region Fields and Properties
 
 		/// <summary>
 		/// Error code for deadlocks in Sql Server.
 		/// </summary>
 		internal const int cSqlError_Deadlock = 1205;
+
+		private DbConnection mConnection;
 
 		/// <summary>
 		/// Gets the collection of connection strings that can be used. The key should correspond to the name passed in to Create.
@@ -104,21 +102,16 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		public short RetriesOnDeadlock { get; set; } = DefaultRetriesOnDeadlock;
 
-		// Internal so it can be viewed in the unit tests.
-		internal string ConnectionString { get; private set; }
-
-		private SqlConnection mConnection;
-
 		/// <summary>
 		/// Gets the connection to use for this database. Only a single instance per BaDatabase instance is supported.
 		/// </summary>
-		public virtual SqlConnection Connection
+		public DbConnection Connection
 		{
 			get
 			{
 				if (mConnection == null)
 				{
-					mConnection = new SqlConnection(ConnectionString);
+					mConnection = InstantiateConnection();
 					mConnection.Open();
 				}
 				return mConnection;
@@ -139,7 +132,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="execute"></param>
-		protected virtual void ExecuteCommand(SqlCommand cmd, Action<SqlCommand> execute)
+		protected virtual void ExecuteCommand(DbCommand cmd, Action<DbCommand> execute)
 		{
 			// Nothing to do, just exit.
 			if (cmd == null) return;
@@ -156,14 +149,14 @@ namespace BizArk.Data.SqlServer
 					execute(cmd);
 					return;
 				}
-				catch (SqlException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
+				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
 				}
 				finally
 				{
-					// We don't want to leave the connection and transaction on the SqlCommand
+					// We don't want to leave the connection and transaction on the DbCommand
 					// in case it is reused and the connection/transaction are no longer valid.
 					if (cmd.Connection != Connection)
 						cmd.Connection = null;
@@ -178,7 +171,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="execute"></param>
-		protected async virtual Task ExecuteCommandAsync(SqlCommand cmd, Func<SqlCommand, Task> execute)
+		protected async virtual Task ExecuteCommandAsync(DbCommand cmd, Func<DbCommand, Task> execute)
 		{
 			// Nothing to do, just exit.
 			if (cmd == null) return;
@@ -195,14 +188,14 @@ namespace BizArk.Data.SqlServer
 					await execute(cmd).ConfigureAwait(false);
 					return;
 				}
-				catch (SqlException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
+				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
 				}
 				finally
 				{
-					// We don't want to leave the connection and transaction on the SqlCommand
+					// We don't want to leave the connection and transaction on the DbCommand
 					// in case it is reused and the connection/transaction are no longer valid.
 					if (cmd.Connection != Connection)
 						cmd.Connection = null;
@@ -218,7 +211,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <returns></returns>
-		public int ExecuteNonQuery(SqlCommand cmd)
+		public int ExecuteNonQuery(DbCommand cmd)
 		{
 			var count = 0;
 			ExecuteCommand(cmd, (exeCmd) =>
@@ -234,7 +227,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <returns></returns>
-		public async Task<int> ExecuteNonQueryAsync(SqlCommand cmd)
+		public async Task<int> ExecuteNonQueryAsync(DbCommand cmd)
 		{
 			var count = 0;
 			await ExecuteCommandAsync(cmd, async (exeCmd) =>
@@ -245,39 +238,13 @@ namespace BizArk.Data.SqlServer
 		}
 
 		/// <summary>
-		/// Executes a Transact-SQL statement against the connection and returns the number
-		/// of rows affected.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <returns></returns>
-		public int ExecuteNonQuery(string sprocName, object parameters = null)
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			return ExecuteNonQuery(cmd);
-		}
-
-		/// <summary>
-		/// Executes a Transact-SQL statement against the connection and returns the number
-		/// of rows affected.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <returns></returns>
-		public async Task<int> ExecuteNonQueryAsync(string sprocName, object parameters = null)
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			return await ExecuteNonQueryAsync(cmd).ConfigureAwait(false);
-		}
-
-		/// <summary>
 		/// Executes the query, and returns the first column of the first row in the result
 		/// set returned by the query. Additional columns or rows are ignored.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="dflt"></param>
 		/// <returns></returns>
-		public object ExecuteScalar(SqlCommand cmd, object dflt = null)
+		public object ExecuteScalar(DbCommand cmd, object dflt = null)
 		{
 			var result = dflt;
 			ExecuteCommand(cmd, (exeCmd) =>
@@ -294,7 +261,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="cmd"></param>
 		/// <param name="dflt"></param>
 		/// <returns></returns>
-		public async Task<object> ExecuteScalarAsync(SqlCommand cmd, object dflt = null)
+		public async Task<object> ExecuteScalarAsync(DbCommand cmd, object dflt = null)
 		{
 			var result = dflt;
 			await ExecuteCommandAsync(cmd, async (exeCmd) =>
@@ -308,39 +275,11 @@ namespace BizArk.Data.SqlServer
 		/// Executes the query, and returns the first column of the first row in the result
 		/// set returned by the query. Additional columns or rows are ignored.
 		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <param name="dflt"></param>
-		/// <returns></returns>
-		public object ExecuteScalar(string sprocName, object parameters = null, object dflt = null)
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			return ExecuteScalar(cmd, dflt);
-		}
-
-		/// <summary>
-		/// Executes the query, and returns the first column of the first row in the result
-		/// set returned by the query. Additional columns or rows are ignored.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <param name="dflt"></param>
-		/// <returns></returns>
-		public async Task<object> ExecuteScalarAsync(string sprocName, object parameters = null, object dflt = null)
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			return await ExecuteScalarAsync(cmd, dflt).ConfigureAwait(false);
-		}
-
-		/// <summary>
-		/// Executes the query, and returns the first column of the first row in the result
-		/// set returned by the query. Additional columns or rows are ignored.
-		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="cmd"></param>
 		/// <param name="dflt"></param>
 		/// <returns></returns>
-		public T ExecuteScalar<T>(SqlCommand cmd, T dflt = default(T))
+		public T ExecuteScalar<T>(DbCommand cmd, T dflt = default(T))
 		{
 			var result = ExecuteScalar(cmd);
 			if (result == null) return dflt;
@@ -356,7 +295,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="cmd"></param>
 		/// <param name="dflt"></param>
 		/// <returns></returns>
-		public async Task<T> ExecuteScalarAsync<T>(SqlCommand cmd, T dflt = default(T))
+		public async Task<T> ExecuteScalarAsync<T>(DbCommand cmd, T dflt = default(T))
 		{
 			var result = await ExecuteScalarAsync(cmd).ConfigureAwait(false);
 			if (result == null) return dflt;
@@ -365,43 +304,13 @@ namespace BizArk.Data.SqlServer
 		}
 
 		/// <summary>
-		/// Executes the query, and returns the first column of the first row in the result
-		/// set returned by the query. Additional columns or rows are ignored.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <param name="dflt"></param>
-		/// <returns></returns>
-		public T ExecuteScalar<T>(string sprocName, object parameters = null, T dflt = default(T))
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			return ExecuteScalar(cmd, dflt);
-		}
-
-		/// <summary>
-		/// Executes the query, and returns the first column of the first row in the result
-		/// set returned by the query. Additional columns or rows are ignored.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <param name="dflt"></param>
-		/// <returns></returns>
-		public async Task<T> ExecuteScalarAsync<T>(string sprocName, object parameters = null, T dflt = default(T))
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			return await ExecuteScalarAsync(cmd, dflt).ConfigureAwait(false);
-		}
-
-		/// <summary>
-		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
-		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
+		/// Sends the System.Data.SqlClient.DbCommand.CommandText to the System.Data.SqlClient.DbCommand.Connection
+		/// and builds a System.Data.SqlClient.DbDataReader. The reader is only valid during execution of the method. 
 		/// Use processRow to process each row in the reader.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public void ExecuteReader(SqlCommand cmd, Func<SqlDataReader, bool> processRow)
+		public void ExecuteReader(DbCommand cmd, Func<DbDataReader, bool> processRow)
 		{
 			ExecuteCommand(cmd, (exeCmd) =>
 			{
@@ -418,13 +327,13 @@ namespace BizArk.Data.SqlServer
 		}
 
 		/// <summary>
-		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
-		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
+		/// Sends the System.Data.SqlClient.DbCommand.CommandText to the System.Data.SqlClient.DbCommand.Connection
+		/// and builds a System.Data.SqlClient.DbDataReader. The reader is only valid during execution of the method. 
 		/// Use processRow to process each row in the reader.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public async Task ExecuteReaderAsync(SqlCommand cmd, Func<SqlDataReader, Task<bool>> processRow)
+		public async Task ExecuteReaderAsync(DbCommand cmd, Func<DbDataReader, Task<bool>> processRow)
 		{
 			await ExecuteCommandAsync(cmd, async (exeCmd) =>
 			{
@@ -438,60 +347,6 @@ namespace BizArk.Data.SqlServer
 					}
 				}
 			}).ConfigureAwait(false);
-		}
-
-		/// <summary>
-		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
-		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
-		/// Use processRow to process each row in the reader.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public void ExecuteReader(string sprocName, Func<SqlDataReader, bool> processRow)
-		{
-			var cmd = PrepareSprocCmd(sprocName, null);
-			ExecuteReader(cmd, processRow);
-		}
-
-		/// <summary>
-		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
-		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
-		/// Use processRow to process each row in the reader.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public async Task ExecuteReaderAsync(string sprocName, Func<SqlDataReader, Task<bool>> processRow)
-		{
-			var cmd = PrepareSprocCmd(sprocName, null);
-			await ExecuteReaderAsync(cmd, processRow).ConfigureAwait(false);
-		}
-
-		/// <summary>
-		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
-		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
-		/// Use processRow to process each row in the reader.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public void ExecuteReader(string sprocName, object parameters, Func<SqlDataReader, bool> processRow)
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			ExecuteReader(cmd, processRow);
-		}
-
-		/// <summary>
-		/// Sends the System.Data.SqlClient.SqlCommand.CommandText to the System.Data.SqlClient.SqlCommand.Connection
-		/// and builds a System.Data.SqlClient.SqlDataReader. The reader is only valid during execution of the method. 
-		/// Use processRow to process each row in the reader.
-		/// </summary>
-		/// <param name="sprocName">Name of the stored procedure to call.</param>
-		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
-		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public async Task ExecuteReaderAsync(string sprocName, object parameters, Func<SqlDataReader, Task<bool>> processRow)
-		{
-			var cmd = PrepareSprocCmd(sprocName, parameters);
-			await ExecuteReaderAsync(cmd, processRow).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -558,7 +413,7 @@ namespace BizArk.Data.SqlServer
 						return;
 					}
 				}
-				catch (SqlException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
+				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
@@ -588,7 +443,7 @@ namespace BizArk.Data.SqlServer
 						return;
 					}
 				}
-				catch (SqlException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
+				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
@@ -612,16 +467,7 @@ namespace BizArk.Data.SqlServer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public DataTable GetSchema(string tableName)
 		{
-			var conn = Connection;
-			if (conn.State == ConnectionState.Closed)
-				conn.Open();
-
-			using (var da = new SqlDataAdapter($"SELECT * FROM {tableName} WHERE 0 = 1", conn))
-			{
-				var ds = new DataSet();
-				da.FillSchema(ds, SchemaType.Source, tableName);
-				return ds.Tables[tableName];
-			}
+			return Connection.GetSchema(tableName);
 		}
 
 		/// <summary>
@@ -632,48 +478,20 @@ namespace BizArk.Data.SqlServer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public async Task<DataTable> GetSchemaAsync(string tableName)
 		{
-			var conn = Connection;
-			if (conn.State == ConnectionState.Closed)
-				await conn.OpenAsync().ConfigureAwait(false);
-
-			using (var da = new SqlDataAdapter($"SELECT * FROM {tableName} WHERE 0 = 1", conn))
-			{
-				var ds = new DataSet();
-				da.FillSchema(ds, SchemaType.Source, tableName);
-				return ds.Tables[tableName];
-			}
-		}
-
-		/// <summary>
-		/// Creates a SqlCommand to execute a stored procedure.
-		/// </summary>
-		/// <param name="sprocName"></param>
-		/// <param name="parameters"></param>
-		/// <remarks>This is internal so it can be called from the unit tests.</remarks>
-		/// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		internal static SqlCommand PrepareSprocCmd(string sprocName, object parameters)
-		{
-			var cmd = new SqlCommand(sprocName);
-			cmd.CommandType = CommandType.StoredProcedure;
-
-			if (parameters != null)
-				cmd.AddParameters(parameters);
-
-			return cmd;
+			var conn = await GetConnectionAsync();
+			return conn.GetSchema(tableName);
 		}
 
 		/// <summary>
 		/// Gets the connection instance. If there isn't one, instantiates it and opens it asynchronously.
 		/// </summary>
 		/// <returns></returns>
-		public async Task<SqlConnection> GetConnectionAsync()
+		public async Task<DbConnection> GetConnectionAsync()
 		{
-			if (mConnection == null)
-			{
-				mConnection = new SqlConnection(ConnectionString);
-				await mConnection.OpenAsync().ConfigureAwait(false);
-			}
+			if (mConnection != null) return mConnection;
+
+			mConnection = InstantiateConnection();
+			await mConnection.OpenAsync();
 			return mConnection;
 		}
 

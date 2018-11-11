@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BizArk.Data.SqlServer\BizArk.Data.SqlServer.csproj" />
+    <ProjectReference Include="..\BizArk.Data.SqlServer\BizArk.Data.csproj" />
   </ItemGroup>
 
 </Project>

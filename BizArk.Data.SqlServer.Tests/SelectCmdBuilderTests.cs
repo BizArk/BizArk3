@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BizArk.Data.SqlServer.Tests
+namespace BizArk.Data.Tests
 {
 	[TestClass]
 	public class SelectCmdBuilderTests

@@ -14,15 +14,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ED31A0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.ConsoleApp", "BizArk.ConsoleApp\BizArk.ConsoleApp.csproj", "{61EA82FA-0C12-4DF8-A7B6-BEBA75C80145}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.Data.SqlServer", "BizArk.Data.SqlServer\BizArk.Data.SqlServer.csproj", "{15A40BCD-8369-4C9A-B209-BB8E2862002E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.Data", "BizArk.Data.SqlServer\BizArk.Data.csproj", "{15A40BCD-8369-4C9A-B209-BB8E2862002E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Core.Tests", "BizArk.Core.Tests\BizArk.Core.Tests.csproj", "{4FA02D49-CC47-4C84-AE05-8A201535749F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.Core.Tests", "BizArk.Core.Tests\BizArk.Core.Tests.csproj", "{4FA02D49-CC47-4C84-AE05-8A201535749F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp.Tests", "BizArk.ConsoleApp.Tests\BizArk.ConsoleApp.Tests.csproj", "{43619FF4-72CB-4CDE-AA97-450D66BA78E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.ConsoleApp.Tests", "BizArk.ConsoleApp.Tests\BizArk.ConsoleApp.Tests.csproj", "{43619FF4-72CB-4CDE-AA97-450D66BA78E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.Data.SqlServer.Tests", "BizArk.Data.SqlServer.Tests\BizArk.Data.SqlServer.Tests.csproj", "{42299282-0DBC-45E5-8E12-35E9666D531D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.Data.SqlServer.Tests", "BizArk.Data.SqlServer.Tests\BizArk.Data.SqlServer.Tests.csproj", "{42299282-0DBC-45E5-8E12-35E9666D531D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizArk.ConsoleApp.Sample", "BizArk.ConsoleApp.Sample\BizArk.ConsoleApp.Sample.csproj", "{E72AEF2F-4296-4CC9-A0F1-3037C3D148A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizArk.ConsoleApp.Sample", "BizArk.ConsoleApp.Sample\BizArk.ConsoleApp.Sample.csproj", "{E72AEF2F-4296-4CC9-A0F1-3037C3D148A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

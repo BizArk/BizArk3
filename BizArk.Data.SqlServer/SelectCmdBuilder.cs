@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace BizArk.Data.SqlServer
+namespace BizArk.Data
 {
 
 	/// <summary>

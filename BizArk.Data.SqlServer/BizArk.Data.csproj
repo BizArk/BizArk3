@@ -40,8 +40,4 @@
     <ProjectReference Include="..\BizArk.Core\BizArk.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
 </Project>

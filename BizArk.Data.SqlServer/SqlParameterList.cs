@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BizArk.Data.SqlServer
+namespace BizArk.Data
 {
 
 	/// <summary>

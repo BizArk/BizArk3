@@ -1,10 +1,10 @@
 ﻿using BizArk.Core.Extensions.StringExt;
-using BizArk.Data.SqlServer.DataExt;
+using BizArk.Data.DataExt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
-namespace BizArk.Data.SqlServer.Tests
+namespace BizArk.Data.Tests
 {
 
 	[TestClass]

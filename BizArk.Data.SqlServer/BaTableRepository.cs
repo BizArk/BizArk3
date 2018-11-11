@@ -1,9 +1,9 @@
 ﻿using BizArk.Core.Extensions.ObjectExt;
-using BizArk.Data.SqlServer.Crud;
+using BizArk.Data.Crud;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BizArk.Data.SqlServer
+namespace BizArk.Data
 {
 
 	/// <summary>
