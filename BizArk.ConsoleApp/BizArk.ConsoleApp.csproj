@@ -6,7 +6,7 @@
     <Description>[.Net Standard 2.0] A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. See the project WIKI on Git for full list of features and documentation.</Description>
     <Company>BizArk</Company>
     <Authors>Brian Brewder</Authors>
-    <Version>3.1.0.16</Version>
+    <Version>4.0.0.0</Version>
     <Copyright>Copyright © BizArk 2017</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
@@ -14,8 +14,8 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>BizArk command-line parsing command-line-parsing console utility</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
     <PackageReleaseNotes>The RequiredAttribute on a command-line property must now be defined in the passed in arguments. (https://github.com/BizArk/BizArk3/issues/7)</PackageReleaseNotes>
   </PropertyGroup>
 
