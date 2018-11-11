@@ -5,7 +5,7 @@
     <Authors>Brian Brewder</Authors>
     <Company>BizArk</Company>
     <Product>BizArk 3</Product>
-    <Description>[.Net Standard 2.0] Utility classes for working with Microsoft Sql Server.</Description>
+    <Description>Utility classes for working with databases. There is an implementation for Sql Server, but other databases can be easily made to work.</Description>
     <Copyright>Copyright © BizArk 2017</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
