@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BizArk.Data
@@ -41,29 +42,6 @@ namespace BizArk.Data
 			}
 		}
 
-		/// <summary>
-		/// Creates the BaDatabase from the connection string named in the config file.
-		/// </summary>
-		/// <param name="name">The name or key of the connection string in the config file.</param>
-		/// <returns></returns>
-		public static BaDatabase Create(string name)
-		{
-			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
-
-			if (ConnectionStrings.Count == 0)
-				throw new InvalidOperationException("Add connection strings to BaDatabase.ConnectionStrings before using Create.");
-
-			if (!ConnectionStrings.ContainsKey(name))
-				throw new ArgumentException($"The connection string for '{name}' does not exist.", "name");
-
-			var connStr = ConnectionStrings[name];
-			if (connStr.IsEmpty())
-				throw new ArgumentException($"The connection string for '{name}' was empty.", "name");
-
-			return ClassFactory.CreateObject<BaDatabase>(connStr);
-		}
-
 		#endregion
 
 		#region Abstract/Virtual Methods
@@ -95,11 +73,6 @@ namespace BizArk.Data
 		internal const int cSqlError_Deadlock = 1205;
 
 		private DbConnection mConnection;
-
-		/// <summary>
-		/// Gets the collection of connection strings that can be used. The key should correspond to the name passed in to Create.
-		/// </summary>
-		public static Dictionary<string, string> ConnectionStrings { get; } = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Gets or sets the default number of times to retry a command if a deadlock is identified.
@@ -509,6 +482,72 @@ namespace BizArk.Data
 			{
 				return this;
 			}
+		}
+
+		#endregion
+
+		#region Factory Methods
+
+		private static Dictionary<string, Func<BaDatabase>> sDbFactories;
+
+		/// <summary>
+		/// Gets the registered factories.
+		/// </summary>
+		public static IEnumerable<KeyValuePair<string, Func<BaDatabase>>> DbFactories
+		{
+			get
+			{
+				// Return an empty array so that the property always returns a valid value.
+				if (sDbFactories == null) return new KeyValuePair<string, Func<BaDatabase>>[] { };
+				
+				// We don't want to return a reference to the dictionary in order to prevent others from updating it directly.
+				return sDbFactories.ToArray(); 
+			}
+		}
+
+		/// <summary>
+		/// Register a factory method to instantiate the appropriate BaDatabase.
+		/// </summary>
+		/// <param name="name">The name of the factory.</param>
+		/// <param name="create">Creates a new instance.</param>
+		public static void Register(string name, Func<BaDatabase> create)
+		{
+			// Only create the dictionary if we are actually using factories.
+			if (sDbFactories == null)
+				sDbFactories = new Dictionary<string, Func<BaDatabase>>();
+
+			if (sDbFactories.ContainsKey(name))
+				sDbFactories[name] = create;
+			else
+				sDbFactories.Add(name, create);
+		}
+
+		/// <summary>
+		/// Unregisters a factory method.
+		/// </summary>
+		/// <param name="name"></param>
+		public static void Unregister(string name)
+		{
+			if (sDbFactories.ContainsKey(name))
+				sDbFactories.Remove(name);
+		}
+
+		/// <summary>
+		/// Creates the BaDatabase from the connection string named in the config file.
+		/// </summary>
+		/// <param name="name">The name or key of the connection string in the config file.</param>
+		/// <returns></returns>
+		public static BaDatabase Create(string name)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException("name");
+
+			if (sDbFactories == null) throw new InvalidOperationException($"No factory methods have been registered. Call {nameof(BaDatabase)}.{nameof(Register)} to register new {nameof(BaDatabase)} factory methods.");
+
+			if (!sDbFactories.ContainsKey(name))
+				throw new ArgumentException($"The factory method for '{name}' does not exist. Call {nameof(BaDatabase)}.{nameof(Register)} to register new {nameof(BaDatabase)} factory methods.", nameof(name));
+
+			return sDbFactories[name]();
 		}
 
 		#endregion

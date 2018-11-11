@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Product>BaCon</Product>
-    <Description>[.Net Standard 2.0] A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. See the project WIKI on Git for full list of features and documentation.</Description>
+    <Description>A simple, but very powerful, command-line parsing utility that automatically populates properties in your argument object. Handles data type conversions and data validation. Provides help text optimized for the console. See the project WIKI on Git for full list of features and documentation.</Description>
     <Company>BizArk</Company>
     <Authors>Brian Brewder</Authors>
     <Version>4.0.0.0</Version>

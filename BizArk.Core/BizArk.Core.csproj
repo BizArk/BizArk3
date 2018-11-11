@@ -7,7 +7,7 @@
 		<Authors>Brian Brewder</Authors>
 		<Company>BizArk</Company>
 		<Product>BizArk3 Core</Product>
-		<Description>[.Net Standard 2.0] BizArk Core provides a collection of tools to make building line-of-business applications easier. See the project WIKI on Git for full list of features and documentation.</Description>
+		<Description>BizArk Core provides a collection of tools to make building line-of-business applications easier. See the project WIKI on Git for full list of features and documentation.</Description>
 		<Copyright>Copyright © BizArk 2017</Copyright>
 		<PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
