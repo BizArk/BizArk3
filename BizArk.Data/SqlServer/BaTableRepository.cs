@@ -1,9 +1,10 @@
 ﻿using BizArk.Core.Extensions.ObjectExt;
-using BizArk.Data.Crud;
+using BizArk.Data.ExtractExt;
+using BizArk.Data.SqlServer.CrudExt;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BizArk.Data
+namespace BizArk.Data.SqlServer
 {
 
 	/// <summary>

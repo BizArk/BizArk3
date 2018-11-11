@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BizArk.Data.SqlServer\BizArk.Data.csproj" />
+    <ProjectReference Include="..\BizArk.Core\BizArk.Core.csproj" />
+    <ProjectReference Include="..\BizArk.Data\BizArk.Data.csproj" />
   </ItemGroup>
 
 </Project>
