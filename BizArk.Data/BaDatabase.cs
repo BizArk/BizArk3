@@ -1,6 +1,5 @@
 ﻿using BizArk.Core;
 using BizArk.Core.Extensions.StringExt;
-using BizArk.Data.DataExt;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -67,13 +66,23 @@ namespace BizArk.Data
 
 		#endregion
 
-		#region Abstract Methods
+		#region Abstract/Virtual Methods
 
 		/// <summary>
 		/// Instantiate the Connection object. Should not be opened.
 		/// </summary>
 		/// <returns></returns>
 		protected abstract DbConnection InstantiateConnection();
+
+		/// <summary>
+		/// Override in order to do something with the command before it is executed.
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <remarks>This method is called before the connection and transaction have been set on it.</remarks>
+		protected virtual void PrepareCommand(DbCommand cmd)
+		{
+			// This is just so derived classes have an opportunity to do something with the command before it is executed.
+		}
 
 		#endregion
 
@@ -137,7 +146,7 @@ namespace BizArk.Data
 			// Nothing to do, just exit.
 			if (cmd == null) return;
 
-			Debug.WriteLine(cmd.DebugText());
+			PrepareCommand(cmd);
 
 			var attempt = 1;
 			while (true)
@@ -176,7 +185,7 @@ namespace BizArk.Data
 			// Nothing to do, just exit.
 			if (cmd == null) return;
 
-			Debug.WriteLine(cmd.DebugText());
+			PrepareCommand(cmd);
 
 			var attempt = 1;
 			while (true)
@@ -374,7 +383,7 @@ namespace BizArk.Data
 		/// </summary>
 		/// <returns></returns>
 		public BaTransaction BeginTransaction()
-		{			
+		{
 			return Transaction = BaTransaction.Begin(this);
 		}
 

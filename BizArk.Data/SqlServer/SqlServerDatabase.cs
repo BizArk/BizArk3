@@ -1,7 +1,9 @@
 ﻿using BizArk.Core.Extensions.StringExt;
+using BizArk.Data.SqlServer.SqlClientExt;
 using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace BizArk.Data.SqlServer
@@ -58,8 +60,20 @@ namespace BizArk.Data.SqlServer
 			return new SqlConnection(ConnectionString);
 		}
 
-		#endregion
+		/// <summary>
+		/// Displays the SqlCommand.DebugText in the debug window.
+		/// </summary>
+		/// <param name="cmd"></param>
+		protected override void PrepareCommand(DbCommand cmd)
+		{
+			var sqlcmd = cmd as SqlCommand;
+			if (sqlcmd != null)
+				Debug.WriteLine(sqlcmd.DebugText());
 
+			base.PrepareCommand(cmd);
+		}
+
+		#endregion
 
 	}
 }

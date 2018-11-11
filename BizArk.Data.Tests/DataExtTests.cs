@@ -1,5 +1,5 @@
 ﻿using BizArk.Core.Extensions.StringExt;
-using BizArk.Data.DataExt;
+using BizArk.Data.SqlServer.SqlClientExt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data.SqlClient;
 using System.Diagnostics;
