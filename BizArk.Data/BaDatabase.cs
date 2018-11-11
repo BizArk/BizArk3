@@ -374,12 +374,8 @@ namespace BizArk.Data
 		/// </summary>
 		/// <returns></returns>
 		public BaTransaction BeginTransaction()
-		{
-			var conn = Connection;
-			if (conn.State == ConnectionState.Closed)
-				conn.Open();
-
-			return Transaction = new BaTransaction(this);
+		{			
+			return Transaction = BaTransaction.Begin(this);
 		}
 
 		/// <summary>
@@ -388,11 +384,7 @@ namespace BizArk.Data
 		/// <returns></returns>
 		public async Task<BaTransaction> BeginTransactionAsync()
 		{
-			var conn = Connection;
-			if (conn.State == ConnectionState.Closed)
-				await conn.OpenAsync().ConfigureAwait(false);
-
-			return Transaction = new BaTransaction(this);
+			return Transaction = await BaTransaction.BeginAsync(this);
 		}
 
 		/// <summary>
@@ -478,7 +470,7 @@ namespace BizArk.Data
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public async Task<DataTable> GetSchemaAsync(string tableName)
 		{
-			var conn = await GetConnectionAsync();
+			var conn = await GetConnectionAsync().ConfigureAwait(false);
 			return conn.GetSchema(tableName);
 		}
 
@@ -491,7 +483,7 @@ namespace BizArk.Data
 			if (mConnection != null) return mConnection;
 
 			mConnection = InstantiateConnection();
-			await mConnection.OpenAsync();
+			await mConnection.OpenAsync().ConfigureAwait(false);
 			return mConnection;
 		}
 

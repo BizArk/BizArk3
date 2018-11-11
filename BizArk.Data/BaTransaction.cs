@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace BizArk.Data
 {
@@ -12,10 +13,35 @@ namespace BizArk.Data
 
 		#region Initialization and Destruction
 
-		internal BaTransaction(BaDatabase db)
+		private BaTransaction(BaDatabase db)
 		{
 			Database = db;
-			Transaction = db.Connection.BeginTransaction();
+		}
+
+		/// <summary>
+		/// Starts a new transaction.
+		/// </summary>
+		internal static BaTransaction Begin(BaDatabase db)
+		{
+			var bat = new BaTransaction(db);
+			bat.mPreviousTransaction = db.Transaction; // Support nested transactions.
+
+			bat.Transaction = db.Connection.BeginTransaction();
+			return bat;
+		}
+
+		/// <summary>
+		/// Starts a new transaction.
+		/// </summary>
+		/// <returns></returns>
+		internal static async Task<BaTransaction> BeginAsync(BaDatabase db)
+		{
+			var bat = new BaTransaction(db);
+			bat.mPreviousTransaction = db.Transaction; // Support nested transactions.
+
+			var conn = await db.GetConnectionAsync().ConfigureAwait(false);
+			bat.Transaction = conn.BeginTransaction();
+			return bat;
 		}
 
 		/// <summary>
@@ -35,14 +61,15 @@ namespace BizArk.Data
 		{
 			if (Transaction != null)
 			{
-				Transaction.Rollback();
-				CloseTransaction();
+				Rollback();
 			}
 		}
 
 		#endregion
 
 		#region Fields and Properties
+
+		private BaTransaction mPreviousTransaction;
 
 		/// <summary>
 		/// Gets the database this transaction belongs to.
@@ -80,7 +107,8 @@ namespace BizArk.Data
 		{
 			Transaction.Dispose();
 			Transaction = null;
-			Database.Transaction = null;
+			Database.Transaction = mPreviousTransaction;
+			mPreviousTransaction = null;
 		}
 
 		#endregion
