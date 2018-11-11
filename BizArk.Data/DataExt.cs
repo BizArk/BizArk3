@@ -1,11 +1,9 @@
 ﻿using BizArk.Core;
-using BizArk.Core.Extensions.EnumerableExt;
 using BizArk.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Text;
 
 namespace BizArk.Data.DataExt
 {
@@ -55,7 +53,7 @@ namespace BizArk.Data.DataExt
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public static IEnumerable<DbParameter> AddParameters<T>(this DbCommand cmd, string paramNameRoot, params T[] values)
 		{
-			return AddParameters<T>(cmd, paramNameRoot, values, 1);
+			return AddParameters<T>(cmd, paramNameRoot, values, null, null);
 		}
 
 		/// <summary>
@@ -63,32 +61,43 @@ namespace BizArk.Data.DataExt
 		/// Use the returned value for the IN part of your SQL call. (i.e. SELECT * FROM table WHERE field IN ({paramNameRoot}))
 		/// </summary>
 		/// <param name="cmd">The DbCommand object to add parameters to.</param>
-		/// <param name="values">The array of strings that need to be added as parameters.</param>
 		/// <param name="paramNameRoot">What the parameter should be named followed by a unique value for each value. This value surrounded by {} in the CommandText will be replaced.</param>
-		/// <param name="start">The beginning number to append to the end of paramNameRoot for each value.</param>
-		/// <param name="separator">The string that separates the parameter names in the sql command.</param>
+		/// <param name="values">The array of strings that need to be added as parameters.</param>
+		/// <param name="dbType">One of the System.Data.DbType values. If null, determines type based on T.</param>
+		/// <param name="size">The maximum size, in bytes, of the data within the column. The default value is inferred from the parameter value.</param>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public static IEnumerable<DbParameter> AddParameters<T>(this DbCommand cmd, string paramNameRoot, IEnumerable<T> values, int start = 1, string separator = ", ")
+		public static IEnumerable<DbParameter> AddParameters<T>(this DbCommand cmd, string paramNameRoot, IEnumerable<T> values, DbType? dbType = null, int? size = null)
 		{
-			/* An array cannot be simply added as a parameter to a DbCommand so we need to loop through things and add it manually. 
-			 * Each item in the array will end up being it's own DbParameter so the return value for this must be used as part of the
+			/* An array cannot be simply added as a parameter to a SqlCommand so we need to loop through things and add it manually. 
+			 * Each item in the array will end up being it's own SqlParameter so the return value for this must be used as part of the
 			 * IN statement in the CommandText.
 			 */
-			var newParams = new List<DbParameter>();
+			var parameters = new List<DbParameter>();
 			var paramNames = new List<string>();
-			var paramNbr = start;
+			var paramNbr = 1;
 			foreach (var value in values)
 			{
-				var paramName = $"@{paramNameRoot}{paramNbr}";
+				var paramName = string.Format("@{0}{1}", paramNameRoot, paramNbr);
 				paramNames.Add(paramName);
-				newParams.Add(cmd.AddParameter(paramName, value, true));
+
+				var param = cmd.CreateParameter();
+				param.ParameterName = paramName;
+				param.Value = value;
+
+				if (dbType.HasValue)
+					param.DbType = dbType.Value;
+				if (size.HasValue)
+					param.Size = size.Value;
+
+				cmd.Parameters.Add(param);
+				parameters.Add(param);
 
 				paramNbr++;
 			}
 
-			cmd.CommandText = cmd.CommandText.Replace("{" + paramNameRoot + "}", string.Join(separator, paramNames));
+			cmd.CommandText = cmd.CommandText.Replace("{" + paramNameRoot + "}", string.Join(",", paramNames));
 
-			return newParams;
+			return parameters;
 		}
 
 		/// <summary>
