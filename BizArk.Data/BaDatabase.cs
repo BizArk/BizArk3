@@ -62,6 +62,14 @@ namespace BizArk.Data
 			// This is just so derived classes have an opportunity to do something with the command before it is executed.
 		}
 
+		/// <summary>
+		/// Gets a DataTable with no rows that represents the table. Recommended: SELECT * FROM {tableName} WHERE 0 = 1.
+		/// </summary>
+		/// <param name="conn"></param>
+		/// <param name="tableName"></param>
+		/// <returns></returns>
+		protected abstract DataTable GetSchema(DbConnection conn, string tableName);
+
 		#endregion
 
 
@@ -441,7 +449,7 @@ namespace BizArk.Data
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public DataTable GetSchema(string tableName)
 		{
-			return Connection.GetSchema(tableName);
+			return GetSchema(Connection, tableName);
 		}
 
 		/// <summary>
@@ -453,7 +461,7 @@ namespace BizArk.Data
 		public async Task<DataTable> GetSchemaAsync(string tableName)
 		{
 			var conn = await GetConnectionAsync().ConfigureAwait(false);
-			return conn.GetSchema(tableName);
+			return GetSchema(conn, tableName);
 		}
 
 		/// <summary>

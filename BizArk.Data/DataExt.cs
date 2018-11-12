@@ -95,7 +95,7 @@ namespace BizArk.Data.DataExt
 				paramNbr++;
 			}
 
-			cmd.CommandText = cmd.CommandText.Replace("{" + paramNameRoot + "}", string.Join(",", paramNames));
+			cmd.CommandText = cmd.CommandText.Replace("{" + paramNameRoot + "}", string.Join(", ", paramNames));
 
 			return parameters;
 		}

@@ -1,6 +1,7 @@
 ﻿using BizArk.Core.Extensions.StringExt;
 using BizArk.Data.SqlServer.SqlClientExt;
 using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -71,6 +72,22 @@ namespace BizArk.Data.SqlServer
 				Debug.WriteLine(sqlcmd.DebugText());
 
 			base.PrepareCommand(cmd);
+		}
+		
+		/// <summary>
+		/// Gets the schema for the table.
+		/// </summary>
+		/// <param name="conn"></param>
+		/// <param name="tableName"></param>
+		/// <returns></returns>
+		protected override DataTable GetSchema(DbConnection conn, string tableName)
+		{
+			using (var da = new SqlDataAdapter($"SELECT * FROM {tableName} WHERE 0 = 1", conn as SqlConnection))
+			{
+				var ds = new DataSet();
+				da.FillSchema(ds, SchemaType.Source, tableName);
+				return ds.Tables[tableName];
+			}
 		}
 
 		#endregion

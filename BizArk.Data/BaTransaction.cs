@@ -24,7 +24,7 @@ namespace BizArk.Data
 		internal static BaTransaction Begin(BaDatabase db)
 		{
 			var bat = new BaTransaction(db);
-			bat.mPreviousTransaction = db.Transaction; // Support nested transactions.
+			bat.mPreviousTransaction = db.Transaction; // Support nested transactions. NOTE: Sql Server does not support nested tranactions.
 
 			bat.Transaction = db.Connection.BeginTransaction();
 			return bat;

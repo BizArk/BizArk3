@@ -5,7 +5,7 @@
     <Authors>Brian Brewder</Authors>
     <Company>BizArk</Company>
     <Product>BizArk 3</Product>
-    <Description>Utility classes for working with databases. There is an implementation for Sql Server, but other databases can be easily made to work by creating a vendor specific version of BaDatabase (there is only a single method that you must implement).</Description>
+    <Description>Utility classes for working with databases. There is an implementation for Sql Server, but other databases can be easily made to work by creating a vendor specific implementation of BaDatabase.</Description>
     <Copyright>Copyright © BizArk 2017</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/BizArk/BizArk3/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BizArk/BizArk3/wiki</PackageProjectUrl>
