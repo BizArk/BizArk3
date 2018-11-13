@@ -11,6 +11,7 @@ namespace BizArk.Data.Tests
 {
 
 	[TestClass]
+	[Ignore] // These tests require a database to be setup first.
 	public class SqlServerDatabaseTests
 	{
 
