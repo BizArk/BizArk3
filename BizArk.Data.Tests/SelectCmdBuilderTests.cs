@@ -12,7 +12,7 @@ namespace BizArk.Data.Tests
 		{
 			var bldr = new SelectCmdBuilder("Person p");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			AreEqual("SELECT *\n\tFROM Person p\n", cmd.CommandText);
 		}
 
@@ -21,7 +21,7 @@ namespace BizArk.Data.Tests
 		{
 			var bldr = new SelectCmdBuilder("Person p");
 
-			var cmd = bldr.CreateCountCmd();
+			var cmd = bldr.BuildCounter();
 			AreEqual("SELECT COUNT(*)\n\tFROM Person p\n", cmd.CommandText);
 		}
 
@@ -31,7 +31,7 @@ namespace BizArk.Data.Tests
 			var bldr = new SelectCmdBuilder("Person p");
 			bldr.Fields.Add("p.Name");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			AreEqual("SELECT p.Name\n\tFROM Person p\n", cmd.CommandText);
 		}
 
@@ -42,7 +42,7 @@ namespace BizArk.Data.Tests
 			bldr.Fields.Add("p.Name");
 			bldr.Fields.Add("p.PersonTypeID");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT p.Name, p.PersonTypeID
 	FROM Person p
@@ -60,7 +60,7 @@ namespace BizArk.Data.Tests
 			bldr.Fields.Add("p.AddressID");
 			bldr.Fields.Add("p.Nickname");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT p.ID,
 		p.Name,
@@ -79,7 +79,7 @@ namespace BizArk.Data.Tests
 			bldr.Joins.Add("JOIN Address a ON (p.AddressID = a.AddressID)");
 			bldr.Fields.Add("*");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -97,7 +97,7 @@ namespace BizArk.Data.Tests
 			bldr.Joins.Add("JOIN PersonType pt ON (p.PersonTypeID = pt.PersonTypeID)");
 			bldr.Fields.Add("*");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -113,7 +113,7 @@ namespace BizArk.Data.Tests
 			var bldr = new SelectCmdBuilder("Person p");
 			bldr.Criteria.Add("p.Name = 'Jill'");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -129,7 +129,7 @@ namespace BizArk.Data.Tests
 			bldr.Criteria.Add("p.Name = 'Jill'");
 			bldr.Criteria.Add("p.PersonTypeID = 1");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -145,7 +145,7 @@ namespace BizArk.Data.Tests
 			var bldr = new SelectCmdBuilder("Person p");
 			bldr.OrderBy.Add("p.Name");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -161,7 +161,7 @@ namespace BizArk.Data.Tests
 			bldr.OrderBy.Add("p.Name");
 			bldr.OrderBy.Add("p.PersonTypeID");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -176,7 +176,7 @@ namespace BizArk.Data.Tests
 			var bldr = new SelectCmdBuilder("Person p");
 			bldr.OrderBy.Add("p.Name");
 
-			var cmd = bldr.CreateCmd(0, 10);
+			var cmd = bldr.Build(0, 10);
 			var expected =
 @"WITH qry AS
 (
@@ -200,7 +200,7 @@ SELECT *
 			bldr.Criteria.Add("p.Name = @Name");
 			var param = bldr.Parameters.AddWithValue("Name", "Jill");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -219,7 +219,7 @@ SELECT *
 			bldr.Criteria.Add("p.PersonTypeID = @PersonTypeID");
 			var param = bldr.Parameters.AddValues(new { Name = "Jill", PersonTypeID = 1 });
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT *
 	FROM Person p
@@ -256,7 +256,7 @@ SELECT *
 			bldr.OrderBy.Add("p.Name");
 			bldr.OrderBy.Add("a.City");
 
-			var cmd = bldr.CreateCmd();
+			var cmd = bldr.Build();
 			var expected =
 @"SELECT p.ID,
 		p.Name,

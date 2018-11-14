@@ -8,7 +8,7 @@ namespace BizArk.Data.SqlServer
 {
 
 	/// <summary>
-	/// Provides some useful functions for a list of SqlParameters.
+	/// Used in `SelectCmdBuilder` to hold parameters while building the command.
 	/// </summary>
 	public class SqlParameterList : List<SqlParameter>
 	{

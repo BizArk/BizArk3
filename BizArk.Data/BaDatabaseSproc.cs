@@ -10,7 +10,7 @@ namespace BizArk.Data.Sproc
 {
 
 	/// <summary>
-	/// All database calls should be marshalled through this object.
+	/// Extension methods for `BaDatabase` to support calling stored procedures.
 	/// </summary>
 	public static class BaDatabaseSproc
 	{

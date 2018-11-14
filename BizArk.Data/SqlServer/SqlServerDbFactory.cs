@@ -1,5 +1,9 @@
 ﻿namespace BizArk.Data.SqlServer
 {
+
+	/// <summary>
+	/// Factory class for building `SqlServerDatabase` objects. Intended for use with `BaDatabase.Register()`.
+	/// </summary>
 	public class SqlServerDbFactory
 	{
 

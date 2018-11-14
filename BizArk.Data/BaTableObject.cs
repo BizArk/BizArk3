@@ -1,17 +1,14 @@
 ﻿using BizArk.Core.Data;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BizArk.Data
 {
 
 	/// <summary>
-	/// Represents a database table.
+	/// Derived from `BaObject`. Provides a container for working with database tables in an ORM-like fashion.
 	/// </summary>
 	public class BaTableObject : BaObject
 	{

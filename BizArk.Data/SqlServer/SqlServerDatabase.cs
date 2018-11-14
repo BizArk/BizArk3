@@ -11,7 +11,7 @@ namespace BizArk.Data.SqlServer
 {
 
 	/// <summary>
-	/// Sql Server implementation of BaDatabase.
+	/// Derived from `BaDatabase` to support Microsoft Sql Server.
 	/// </summary>
 	public class SqlServerDatabase : BaDatabase
 	{

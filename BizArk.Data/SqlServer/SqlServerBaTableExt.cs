@@ -8,7 +8,7 @@ namespace BizArk.Data.SqlServer.BaTableExt
 {
 
 	/// <summary>
-	/// Provides repository methods for BaTableObjects.
+	/// Extension methods for `IBaRepository` to work with `BaTableObject`.
 	/// </summary>
 	public static class SqlServerBaTableExt
 	{
@@ -134,7 +134,7 @@ namespace BizArk.Data.SqlServer.BaTableExt
 				selCmd.Parameters.AddWithValue(prop.Key, prop.Value);
 			}
 
-			var cmd = selCmd.CreateCmd();
+			var cmd = selCmd.Build();
 			return rep.DB.GetObjects<T>(cmd);
 		}
 
@@ -165,7 +165,7 @@ namespace BizArk.Data.SqlServer.BaTableExt
 				selCmd.Parameters.AddWithValue(prop.Key, prop.Value);
 			}
 
-			var cmd = selCmd.CreateCmd();
+			var cmd = selCmd.Build();
 			return await rep.DB.GetObjectsAsync<T>(cmd).ConfigureAwait(false);
 		}
 

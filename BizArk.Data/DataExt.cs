@@ -9,7 +9,7 @@ namespace BizArk.Data.DataExt
 {
 
 	/// <summary>
-	/// Extension methods for working with sql objects.
+	/// Extension methods for `DbCommand`.
 	/// </summary>
 	public static class DataExt
 	{

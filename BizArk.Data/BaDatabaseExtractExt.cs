@@ -16,7 +16,7 @@ namespace BizArk.Data.ExtractExt
 {
 
 	/// <summary>
-	/// Provides methods for doing CRUD using basic objects.
+	/// Extension methods for `BaDatabase` to pull data out in either strongly-typed or dynamic objects.
 	/// </summary>
 	public static class BaDatabaseExtractExt
 	{

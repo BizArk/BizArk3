@@ -8,7 +8,7 @@ namespace BizArk.Data.SqlServer
 {
 
 	/// <summary>
-	/// Build a complex SELECT SqlCommand object.
+	/// Builds a complex SELECT SqlCommand object. Supports paging, COUNT, TOP, and DISTINCT.
 	/// </summary>
 	public class SelectCmdBuilder
     {
@@ -148,7 +148,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public SqlCommand CreateCmd()
+		public SqlCommand Build()
         {
             var cmd = new SqlCommand(GetSql());
             cmd.Parameters.AddRange(Parameters.ToArray());
@@ -160,7 +160,7 @@ namespace BizArk.Data.SqlServer
 		/// </summary>
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public SqlCommand CreateCountCmd()
+		public SqlCommand BuildCounter()
         {
             var cmd = new SqlCommand(GetSql(true));
             cmd.Parameters.AddRange(Parameters.ToArray());
@@ -174,7 +174,7 @@ namespace BizArk.Data.SqlServer
 		/// <param name="take">The number of results per page.</param>
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public SqlCommand CreateCmd(int skip, int take)
+		public SqlCommand Build(int skip, int take)
 		{
             if (OrderBy.Count == 0)
                 throw new InvalidOperationException("The OrderBy fields must be specified in order to use paging.");

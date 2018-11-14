@@ -6,7 +6,7 @@ namespace BizArk.Data
 {
 
 	/// <summary>
-	/// Provides a wrapper around SqlTransaction to support BaDatabase.
+	/// A wrapper around `DbTransaction` to make working with transactions simpler. Can only be created by calling `BaDatabase.BeginTransaction`.
 	/// </summary>
 	public class BaTransaction : IDisposable
 	{

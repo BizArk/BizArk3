@@ -10,7 +10,7 @@ namespace BizArk.Data.SqlServer.CrudExt
 {
 
 	/// <summary>
-	/// Provides SqlServer specific extension methods for CRUD operations.
+	/// Extension methods for `BaDatabase` to support `INSERT`/`UPDATE`/`DELETE` in Sql Server.
 	/// </summary>
 	public static class SqlServerDatabaseCrudExt
 	{

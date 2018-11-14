@@ -12,7 +12,11 @@ namespace BizArk.Data
 {
 
 	/// <summary>
-	/// All database calls should be marshalled through this object.
+	/// Abstract base class for working with databases. Encapsulates the `DbConnection` object and 
+	/// manages the lifetime of it, including closing it and recreating it as necessary. Provides 
+	/// some basic methods for accessing the database that are similar to what is found directly on 
+	/// DbCommand, such as ExecuteNonQuery, ExecuteScalar, and ExecuteReader. There are async 
+	/// versions of these methods as well.
 	/// </summary>
 	public abstract class BaDatabase : IDisposable, IBaRepository
 	{
@@ -44,23 +48,13 @@ namespace BizArk.Data
 
 		#endregion
 
-		#region Abstract/Virtual Methods
+		#region Abstract Methods
 
 		/// <summary>
-		/// Instantiate the Connection object. Should not be opened.
+		/// Instantiate the Connection object. The connection should not be opened.
 		/// </summary>
 		/// <returns></returns>
 		protected abstract DbConnection InstantiateConnection();
-
-		/// <summary>
-		/// Override in order to do something with the command before it is executed.
-		/// </summary>
-		/// <param name="cmd"></param>
-		/// <remarks>This method is called before the connection and transaction have been set on it.</remarks>
-		protected virtual void PrepareCommand(DbCommand cmd)
-		{
-			// This is just so derived classes have an opportunity to do something with the command before it is executed.
-		}
 
 		/// <summary>
 		/// Gets a DataTable with no rows that represents the table. Recommended: SELECT * FROM {tableName} WHERE 0 = 1.
@@ -93,7 +87,8 @@ namespace BizArk.Data
 		public short RetriesOnDeadlock { get; set; } = DefaultRetriesOnDeadlock;
 
 		/// <summary>
-		/// Gets the connection to use for this database. Only a single instance per BaDatabase instance is supported.
+		/// Gets the connection to use for this database. If not set, calls `InstantiateConnection` 
+		/// and opens it. For async, use `GetConnectionAsync` instead.
 		/// </summary>
 		public DbConnection Connection
 		{
@@ -118,7 +113,9 @@ namespace BizArk.Data
 		#region Basic Database Methods
 
 		/// <summary>
-		/// All database calls should go through this method.
+		/// All database calls should go through this method. It ensures the connection is properly 
+		/// established and the command is setup correctly. Also handles deadlock detection for 
+		/// non-transactional commands.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="execute"></param>
@@ -196,8 +193,7 @@ namespace BizArk.Data
 		}
 
 		/// <summary>
-		/// Executes a Transact-SQL statement against the connection and returns the number
-		/// of rows affected.
+		/// Executes the command and returns the number of rows that were changed.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <returns></returns>
@@ -212,8 +208,7 @@ namespace BizArk.Data
 		}
 
 		/// <summary>
-		/// Executes a Transact-SQL statement against the connection and returns the number
-		/// of rows affected.
+		/// Executes the command and returns the number of rows that were changed.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <returns></returns>
@@ -228,8 +223,8 @@ namespace BizArk.Data
 		}
 
 		/// <summary>
-		/// Executes the query, and returns the first column of the first row in the result
-		/// set returned by the query. Additional columns or rows are ignored.
+		/// Executes the command, and returns the first column of the first row in the result
+		/// set. Additional columns or rows are ignored.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="dflt"></param>
@@ -294,9 +289,8 @@ namespace BizArk.Data
 		}
 
 		/// <summary>
-		/// Sends the System.Data.SqlClient.DbCommand.CommandText to the System.Data.SqlClient.DbCommand.Connection
-		/// and builds a System.Data.SqlClient.DbDataReader. The reader is only valid during execution of the method. 
-		/// Use processRow to process each row in the reader.
+		/// Executes the command and processes the returned DbDataReader. The reader is only valid 
+		/// during execution of the method. Use processRow to process each row in the reader.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
@@ -317,9 +311,8 @@ namespace BizArk.Data
 		}
 
 		/// <summary>
-		/// Sends the System.Data.SqlClient.DbCommand.CommandText to the System.Data.SqlClient.DbCommand.Connection
-		/// and builds a System.Data.SqlClient.DbDataReader. The reader is only valid during execution of the method. 
-		/// Use processRow to process each row in the reader.
+		/// Executes the command and processes the returned DbDataReader. The reader is only valid 
+		/// during execution of the method. Use processRow to process each row in the reader.
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
@@ -411,7 +404,7 @@ namespace BizArk.Data
 		/// Creates a transaction and executes the batch within it. If a deadlock is detected, rolls the transaction back and tries again.
 		/// </summary>
 		/// <param name="batch">The code to execute within a transaction.</param>
-		public async void TryTransactionAsync(Func<Task> batch)
+		public async Task TryTransactionAsync(Func<Task> batch)
 		{
 			var attempt = 1;
 			while (true)
@@ -437,9 +430,52 @@ namespace BizArk.Data
 			}
 		}
 
+		/// <summary>
+		/// Creates a transaction and executes the batch within it. If a deadlock is detected, rolls the transaction back and tries again. Returns the value returned from the batch.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="txn"></param>
+		/// <returns></returns>
+		public T TryTransaction<T>(Func<T> txn)
+		{
+			var ret = default(T);
+			TryTransaction(() =>
+			{
+				ret = txn();
+			});
+			return ret;
+		}
+
+		/// <summary>
+		/// Creates a transaction and executes the batch within it. If a deadlock is detected, rolls the transaction back and tries again. Returns the value returned from the batch.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="txn"></param>
+		/// <returns></returns>
+		public async Task<T> TryTransactionAsync<T>(Func<Task<T>> txn)
+		{
+			var ret = default(T);
+			await TryTransactionAsync(async () =>
+			{
+				ret = await txn().ConfigureAwait(false);
+			}).ConfigureAwait(false);
+			return ret;
+		}
+
 		#endregion
 
 		#region Utility Methods
+
+		/// <summary>
+		/// Called from `ExecuteCommand` before executing it. Override in order to do something 
+		/// with the command before it is executed.
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <remarks>This method is called before the connection and transaction have been set on it.</remarks>
+		protected virtual void PrepareCommand(DbCommand cmd)
+		{
+			// This is just so derived classes have an opportunity to do something with the command before it is executed.
+		}
 
 		/// <summary>
 		/// Gets the schema for a table from the database.
@@ -563,13 +599,13 @@ namespace BizArk.Data
 	}
 
 	/// <summary>
-	/// Provides a way to get a database instance from the object. Useful for keeping only a single connection open at a time and participating in transactions.
+	/// Provides a way to get a database instance from the object. Useful for passing a single BaDatabase instance around.
 	/// </summary>
 	public interface ISupportBaDatabase
 	{
 
 		/// <summary>
-		/// The database that is exposed from the object.
+		/// The database instance that is exposed from the object.
 		/// </summary>
 		BaDatabase DB { get; }
 

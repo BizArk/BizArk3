@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
 
 namespace BizArk.Data.SqlServer.SqlClientExt
 {
 
 	/// <summary>
-	/// Extension methods for working with sql objects.
+	/// Extension methods for working with objects in the System.Data.SqlClient namespace.
 	/// </summary>
 	public static class SqlClientExt
 	{
@@ -34,7 +33,7 @@ namespace BizArk.Data.SqlServer.SqlClientExt
 			var sqlparams = new List<SqlParameter>();
 
 			// We need to convert the parameters to SqlParameter and set the SqlDbType and Size properties.
-			foreach(var param in parameters)
+			foreach (var param in parameters)
 			{
 				var sqlparam = param as SqlParameter;
 				sqlparams.Add(sqlparam);
