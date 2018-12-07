@@ -45,6 +45,11 @@ namespace BizArk.Data.SqlServer
 
 		#region Fields and Properties
 
+		/// <summary>
+		/// Error code for deadlocks in Sql Server.
+		/// </summary>
+		internal const int cSqlError_Deadlock = 1205;
+
 		// Internal so it can be viewed in the unit tests.
 		internal string ConnectionString { get; private set; }
 
@@ -88,6 +93,18 @@ namespace BizArk.Data.SqlServer
 				da.FillSchema(ds, SchemaType.Source, tableName);
 				return ds.Tables[tableName];
 			}
+		}
+
+		/// <summary>
+		/// Retry on deadlock.
+		/// </summary>
+		/// <param name="ex"></param>
+		/// <returns></returns>
+		protected override bool ShouldRetry(Exception ex)
+		{
+			var sqlex = ex as SqlException;
+			if (sqlex == null) return false;
+			return sqlex.ErrorCode == cSqlError_Deadlock;
 		}
 
 		#endregion

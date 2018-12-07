@@ -64,27 +64,34 @@ namespace BizArk.Data
 		/// <returns></returns>
 		protected abstract DataTable GetSchema(DbConnection conn, string tableName);
 
+		/// <summary>
+		/// Determines if this exception represents something we should retry. Typically for 
+		/// deadlocks, but can be used for other types of exceptions if the derived class wants to 
+		/// support other types of errors to retry.
+		/// </summary>
+		/// <param name="ex"></param>
+		/// <returns></returns>
+		protected abstract bool ShouldRetry(Exception ex);
+
 		#endregion
 
 
 		#region Fields and Properties
 
-		/// <summary>
-		/// Error code for deadlocks in Sql Server.
-		/// </summary>
-		internal const int cSqlError_Deadlock = 1205;
-
 		private DbConnection mConnection;
 
 		/// <summary>
-		/// Gets or sets the default number of times to retry a command if a deadlock is identified.
+		/// Gets or sets the default number of times to retry a command if an exception is thrown 
+		/// that should be retried.
 		/// </summary>
-		public static short DefaultRetriesOnDeadlock { get; set; } = 1;
+		public static short DefaultRetries { get; set; } = 1;
 
 		/// <summary>
-		/// Gets or sets the number of times to retry a command if a deadlock is identified. By default, only non-transactional commands will be retried. Use BaRepository.TryTransaction() to retry entire transactions.
+		/// Gets or sets the number of times to retry a command if an exception is thrown that 
+		/// should be retried. By default, only non-transactional commands will be retried. Use 
+		/// BaRepository.TryTransaction() to retry entire transactions.
 		/// </summary>
-		public short RetriesOnDeadlock { get; set; } = DefaultRetriesOnDeadlock;
+		public short Retries { get; set; } = DefaultRetries;
 
 		/// <summary>
 		/// Gets the connection to use for this database. If not set, calls `InstantiateConnection` 
@@ -136,7 +143,7 @@ namespace BizArk.Data
 					execute(cmd);
 					return;
 				}
-				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
+				catch (DbException ex) when (cmd.Transaction == null && attempt <= Retries && ShouldRetry(ex))
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
@@ -175,7 +182,7 @@ namespace BizArk.Data
 					await execute(cmd).ConfigureAwait(false);
 					return;
 				}
-				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock && cmd.Transaction == null)
+				catch (DbException ex) when (cmd.Transaction == null && attempt <= Retries && ShouldRetry(ex))
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
@@ -388,7 +395,7 @@ namespace BizArk.Data
 						return;
 					}
 				}
-				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
+				catch (DbException ex) when (attempt <= Retries && ShouldRetry(ex))
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
@@ -418,7 +425,7 @@ namespace BizArk.Data
 						return;
 					}
 				}
-				catch (DbException ex) when (ex.ErrorCode == cSqlError_Deadlock && attempt <= RetriesOnDeadlock)
+				catch (DbException ex) when (attempt <= Retries && ShouldRetry(ex))
 				{
 					Debug.WriteLine($"Deadlock identified on attempt {attempt}. Retrying.");
 					attempt++;
