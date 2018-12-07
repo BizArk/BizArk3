@@ -16,7 +16,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <FileVersion>4.0.0.0</FileVersion>
-    <PackageReleaseNotes>The RequiredAttribute on a command-line property must now be defined in the passed in arguments. (https://github.com/BizArk/BizArk3/issues/7)</PackageReleaseNotes>
+    <PackageReleaseNotes>No changes. This is the downside of putting multiple projects in the same repository.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

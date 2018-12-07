@@ -14,7 +14,14 @@
 		<RepositoryUrl>https://github.com/BizArk/BizArk3</RepositoryUrl>
 		<RepositoryType>GitHub</RepositoryType>
 		<PackageTags>BizArk convert conversion type-conversion tools extension utility</PackageTags>
-		<PackageReleaseNotes>BitMasks now support long. It also supports defining the max bit number that can be set. The formatting of the BitMask is based on this value.</PackageReleaseNotes>
+		<PackageReleaseNotes>BREAKING CHANGES:
+- Changed from arrays to IEnumerable in many places. This is just to be more in-line with modern practices in .Net and to avoid unnecessary conversions.
+
+NON-BREAKING CHANGES:
+- BizArk.Core.Extensions.ImageExt.ImageExt - Added Save().
+- BizArk.Core.Extensions.StringExt.StringExt - Improved Wrap() method to better support various newline combinations.
+- BizArk.Core.Extensions.EnumerableExt.EnumerableExt - New class to provide some useful extension methods to IEnumerable.
+- BizArk.Core.Util.FontManager - Brought back the ability to manage fonts. Custom fonts are not supported in Linux using this class.</PackageReleaseNotes>
 		<AssemblyVersion>4.0.0.0</AssemblyVersion>
 		<FileVersion>4.0.0.0</FileVersion>
 		<Version>4.0.0.0-beta</Version>
