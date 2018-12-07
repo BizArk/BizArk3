@@ -20,7 +20,10 @@
 - Project renamed from BizArk.Data.SqlServer to just BizArk.Data (can now support other databases, though SqlServer is the only implementation).
 - Using base database classes (such as DbConnection instead of SqlConnection) within BaDatabase.
 - Removed BaRepository. Instead, added IBaRepository interface that is implemented by BaDatabase. The intent is for database developers to create a static class with extension methods for IBaRepository. This simplifies object management and enforces good practices for the repository (stateless methods).
-- Moved CRUD methods into an extension class to simplify BaDatabase. BaDatabaseCrud defines extension methods for BaDatabase. Import the namespace BizArk.Data.SqlServer.Crud to use these methods.</PackageReleaseNotes>
+- Moved CRUD methods into an extension class to simplify BaDatabase. BaDatabaseCrud defines extension methods for BaDatabase. Import the namespace BizArk.Data.SqlServer.Crud to use these methods.
+
+NON-BREAKING CHANGES:
+- All BaDatabase operations should have an Async version available.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
