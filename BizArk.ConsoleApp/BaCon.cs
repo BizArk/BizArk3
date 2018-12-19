@@ -296,6 +296,8 @@ namespace BizArk.ConsoleApp
 		/// <returns></returns>
 		internal static string[] QueryStringToArgs(string queryString, CmdLineOptions options)
 		{
+			if (options == null) throw new ArgumentNullException(nameof(options));
+
 			if (queryString.IsEmpty()) return new string[] { };
 
 			var args = new List<string>();

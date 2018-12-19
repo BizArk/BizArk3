@@ -22,6 +22,19 @@ namespace BizArk.ConsoleApp.Tests
 			}
 		}
 
+		public static void Throws<T>(this Assert assert, Action action, Func<T, bool> when, string message = null) where T : Exception
+		{
+			try
+			{
+				action();
+				Assert.Fail(message.IfEmpty("Expecting to throw {0}.".Fmt(typeof(T).Name)));
+			}
+			catch (T ex) when (when(ex))
+			{
+				Debug.WriteLine(ex.Message);
+			}
+		}
+
 		public static void Contains(this Assert assert, string contains, string actual, string message = null)
 		{
 			if (actual.Contains(contains)) return;

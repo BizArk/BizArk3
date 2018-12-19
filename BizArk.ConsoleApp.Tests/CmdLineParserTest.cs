@@ -1,8 +1,8 @@
-﻿using System;
-using BizArk.ConsoleApp.Parser;
+﻿using BizArk.ConsoleApp.Parser;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BizArk.ConsoleApp.Tests
 {
@@ -297,6 +297,8 @@ namespace BizArk.ConsoleApp.Tests
 		{
 			var options = new CmdLineOptions();
 
+			Assert.That.Throws<ArgumentNullException>(() => { BaCon.QueryStringToArgs(null, null); }, (ex) => ex.ParamName == "options");
+
 			// No arguments.
 			var args = BaCon.QueryStringToArgs(null, options);
 			Assert.AreEqual(0, args.Length);
@@ -386,6 +388,11 @@ namespace BizArk.ConsoleApp.Tests
 			Assert.AreEqual(2, args.Length);
 			Assert.AreEqual("/hello", args[0]);
 			Assert.AreEqual("\"Aardvarks lurk, OK?\"", args[1]);
+
+			qs = "Name=Bob&Age=35";
+			var results = BaCon.ParseArgs<TestCmdLineObj>(qs);
+			Assert.AreEqual("Bob", results.Args.Name);
+			Assert.AreEqual(35, results.Args.Age);
 		}
 
 		[TestMethod]
