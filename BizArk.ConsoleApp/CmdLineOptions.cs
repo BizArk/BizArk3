@@ -1,9 +1,5 @@
-﻿using BizArk.Core;
-using BizArk.Core.Extensions.StringExt;
+﻿using BizArk.Core.Extensions.AttributeExt;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace BizArk.ConsoleApp
 {
@@ -11,15 +7,33 @@ namespace BizArk.ConsoleApp
 	/// <summary>
 	/// Command-line options for BaCon apps.
 	/// </summary>
-    public class CmdLineOptions
-    {
+	public class CmdLineOptions
+	{
 
-        #region Fields and Properties
+		#region Initialization and Destruction
 
-        /// <summary>
-        /// Gets or sets the names/aliases of the default properties for the command-line.
-        /// </summary>
-        public string[] DefaultArgNames { get; set; }
+		/// <summary>
+		/// Gets the default options for the type. 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static CmdLineOptions GetOptions<T>()
+		{
+			// Check to see if we can get options from the class attribute.
+			var att = typeof(T).GetAttribute<CmdLineOptionsAttribute>(false);
+			return att?.CmdLineOptions 
+				?? new CmdLineOptions(); // We must have options for parsing.
+		}
+
+		#endregion
+
+
+		#region Fields and Properties
+
+		/// <summary>
+		/// Gets or sets the names/aliases of the default properties for the command-line.
+		/// </summary>
+		public string[] DefaultArgNames { get; set; }
 
 		/// <summary>
 		/// Gets or sets the string used to identify argument names. Default value is '/'.

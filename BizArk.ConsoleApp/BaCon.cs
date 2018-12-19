@@ -146,6 +146,7 @@ namespace BizArk.ConsoleApp
 		/// <returns></returns>
 		public static CmdLineParseResults<T> ParseArgs<T>(string queryString, CmdLineOptions options = null) where T : new()
 		{
+			options = options ?? CmdLineOptions.GetOptions<T>();
 			var args = QueryStringToArgs(queryString, options);
 			return ParseArgs<T>(args, options);
 		}

@@ -29,14 +29,7 @@ namespace BizArk.ConsoleApp.Parser
 		/// <param name="options"></param>
 		public CmdLineParser(CmdLineOptions options = null)
 		{
-			if (options == null)
-			{
-				// Check to see if we can get options from the class attribute.
-				var att = typeof(T).GetAttribute<CmdLineOptionsAttribute>(false);
-				if (att != null)
-					options = att.CmdLineOptions;
-			}
-			Options = options ?? new CmdLineOptions(); // We must have options for parsing.
+			Options = options ?? CmdLineOptions.GetOptions<T>(); // We must have options for parsing.
 		}
 
 		#endregion
