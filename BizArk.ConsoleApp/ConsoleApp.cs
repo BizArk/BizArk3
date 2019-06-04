@@ -71,7 +71,17 @@ namespace BizArk.ConsoleApp
             return false;
         }
 
-        public BaseConsoleApp()
+        /// <summary>
+        /// Default constructor will pull configurations from the traditional .NET Framework configuration provider.
+        /// </summary>
+        public BaseConsoleApp() : this(new NetFrameworkConfigProvider()) { }
+
+        /// <summary>
+        /// If an alternate provider is required (Net Core's ConfigurationBuilder, for example, or for unit testing) 
+        /// this constructor can be used. 
+        /// </summary>
+        /// <param name="config">Configuration Provider to be used (</param>
+        public BaseConsoleApp(IConfigurationProvider config)
         {
             LogProps = TypeDescriptor.GetProperties(this.GetType());
             foreach (var p in this.GetType().GetProperties())
@@ -80,13 +90,18 @@ namespace BizArk.ConsoleApp
                 {
                     if (a is ConfigAttribute)
                     {
-                        this[p.Name] = ConfigurationManager.AppSettings[p.Name];
+                        this[p.Name] = config.GetSetting(p.Name);
                         break;
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// BaseConsoleApp implements IStringIndexedObject, meaning it provides this[string i]
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns>Property value as a string or the Empty String if the value is not set</returns>
         public string this[string propertyName]
         {
             get { return LogProps[propertyName]?.GetValue(this)?.ToString() ?? ""; }
