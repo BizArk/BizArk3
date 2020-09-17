@@ -255,6 +255,7 @@ namespace BizArk.ConsoleApp
 		 * that it is printing on in order for line wrapping to work correctly. 
 		 */
 
+		private static object mConsoleLock = new object();
 		/// <summary>
 		/// Writes the value to the console using the given options.
 		/// </summary>
@@ -266,7 +267,8 @@ namespace BizArk.ConsoleApp
 		{
 			if (value.IsEmpty())
 			{
-				(Out ?? Console.Out).WriteLine();
+				lock (mConsoleLock)
+					(Out ?? Console.Out).WriteLine();
 				return;
 			}
 
@@ -280,7 +282,8 @@ namespace BizArk.ConsoleApp
 				var options = new StringWrapOptions() { MaxWidth = ConsoleWidth, TabWidth = ConsoleTabWidth, Prefix = indentN };
 				displayVal = displayVal.Wrap(options);
 
-				(Out ?? Console.Out).WriteLine(displayVal);
+				lock (mConsoleLock)
+					(Out ?? Console.Out).WriteLine(displayVal);
 			}
 		}
 

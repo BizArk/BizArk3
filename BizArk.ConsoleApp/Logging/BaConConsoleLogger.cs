@@ -11,6 +11,8 @@ namespace BizArk.ConsoleApp.Logging
 	public class BaConConsoleLogger : BaConFormattedLogger
 	{
 
+		private object mLock = new object();
+
 		/// <summary>
 		/// Write the log message to the console.
 		/// </summary>
@@ -22,10 +24,11 @@ namespace BizArk.ConsoleApp.Logging
 			var log = FormatMessage(level, msg, ex);
 			if (!log.HasValue()) return;
 
-			using (GetLevelColor(level))
-			{
-				BaCon.WriteLine(log, indentN: "\t");
-			}
+			lock (mLock)
+				using (GetLevelColor(level))
+				{
+					BaCon.WriteLine(log, indentN: "\t");
+				}
 		}
 
 		private BaConColor GetLevelColor(BaConLogLevel level)
