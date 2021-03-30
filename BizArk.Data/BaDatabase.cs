@@ -323,7 +323,7 @@ namespace BizArk.Data
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public async Task ExecuteReaderAsync(DbCommand cmd, Func<DbDataReader, Task<bool>> processRow)
+		public async Task ExecuteReaderAsync(DbCommand cmd, Func<DbDataReader, bool> processRow)
 		{
 			await ExecuteCommandAsync(cmd, async (exeCmd) =>
 			{
@@ -332,7 +332,7 @@ namespace BizArk.Data
 					while (await rdr.ReadAsync().ConfigureAwait(false))
 					{
 						// Once processRow returns false, exit.
-						if (!await processRow(rdr).ConfigureAwait(false))
+						if (!processRow(rdr))
 							return;
 					}
 				}

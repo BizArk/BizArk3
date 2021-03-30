@@ -1,5 +1,5 @@
-﻿using BizArk.Data.ExtractExt;
-using BizArk.Data.DataExt;
+﻿using BizArk.Data.DataExt;
+using BizArk.Data.ExtractExt;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -129,7 +129,7 @@ namespace BizArk.Data.SprocExt
 		/// <param name="db"></param>
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public static async Task ExecuteReaderAsync(this BaDatabase db, string sprocName, Func<DbDataReader, Task<bool>> processRow)
+		public static async Task ExecuteReaderAsync(this BaDatabase db, string sprocName, Func<DbDataReader, bool> processRow)
 		{
 			var cmd = db.PrepareSprocCmd(sprocName, null);
 			await db.ExecuteReaderAsync(cmd, processRow).ConfigureAwait(false);
@@ -159,7 +159,7 @@ namespace BizArk.Data.SprocExt
 		/// <param name="sprocName">Name of the stored procedure to call.</param>
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <param name="processRow">Called for each row in the data reader. Return true to continue processing more rows.</param>
-		public static async Task ExecuteReaderAsync(this BaDatabase db, string sprocName, object parameters, Func<DbDataReader, Task<bool>> processRow)
+		public static async Task ExecuteReaderAsync(this BaDatabase db, string sprocName, object parameters, Func<DbDataReader, bool> processRow)
 		{
 			var cmd = db.PrepareSprocCmd(sprocName, parameters);
 			await db.ExecuteReaderAsync(cmd, processRow).ConfigureAwait(false);
@@ -193,7 +193,7 @@ namespace BizArk.Data.SprocExt
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor).</param>
 		/// <returns></returns>
-		public async static Task<T> GetObjectAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<IDataReader, Task<T>> load = null) where T : class
+		public async static Task<T> GetObjectAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<IDataReader, T> load = null) where T : class
 		{
 			var cmd = db.PrepareSprocCmd(sprocName, parameters);
 			return await db.GetObjectAsync(cmd, load).ConfigureAwait(false);
@@ -223,7 +223,7 @@ namespace BizArk.Data.SprocExt
 		/// <param name="parameters">An object that contains the properties to add as SQL parameters to the SQL command.</param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
 		/// <returns></returns>
-		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<DbDataReader, Task<T>> load = null) where T : class
+		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, string sprocName, object parameters = null, Func<DbDataReader, T> load = null) where T : class
 		{
 			var cmd = await db.PrepareSprocCmdAsync(sprocName, parameters).ConfigureAwait(false);
 			return await db.GetObjectsAsync(cmd, load).ConfigureAwait(false);

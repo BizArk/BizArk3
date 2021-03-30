@@ -58,15 +58,15 @@ namespace BizArk.Data.ExtractExt
 		/// <param name="cmd"></param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor).</param>
 		/// <returns></returns>
-		public async static Task<T> GetObjectAsync<T>(this BaDatabase db, DbCommand cmd, Func<IDataReader, Task<T>> load = null) where T : class
+		public async static Task<T> GetObjectAsync<T>(this BaDatabase db, DbCommand cmd, Func<IDataReader, T> load = null) where T : class
 		{
 			T obj = null;
 
-			await db.ExecuteReaderAsync(cmd, async (row) =>
+			await db.ExecuteReaderAsync(cmd, (row) =>
 			{
 				if (load != null)
 				{
-					obj = await load(row).ConfigureAwait(false);
+					obj = load(row);
 					return false;
 				}
 
@@ -76,7 +76,7 @@ namespace BizArk.Data.ExtractExt
 				FillObject(row, obj, props);
 
 				return false;
-			}).ConfigureAwait(false);
+			});
 
 			return obj;
 		}
@@ -125,7 +125,7 @@ namespace BizArk.Data.ExtractExt
 		/// <param name="cmd"></param>
 		/// <param name="load">A method that will create an object and fill it. If null, the object will be instantiated based on its type using the ClassFactory (must have a default ctor). If this returns null, it will not be added to the results.</param>
 		/// <returns></returns>
-		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, DbCommand cmd, Func<DbDataReader, Task<T>> load = null) where T : class
+		public async static Task<IEnumerable<T>> GetObjectsAsync<T>(this BaDatabase db, DbCommand cmd, Func<DbDataReader, T> load = null) where T : class
 		{
 			var results = new List<T>();
 
@@ -133,17 +133,17 @@ namespace BizArk.Data.ExtractExt
 			if (load == null)
 			{
 				var props = TypeDescriptor.GetProperties(typeof(T));
-				load = async (row) =>
+				load = (row) =>
 				{
 					var obj = ClassFactory.CreateObject<T>();
 					FillObject(row, obj, props);
-					return await Task.FromResult(obj).ConfigureAwait(false);
+					return obj;
 				};
 			}
 
-			await db.ExecuteReaderAsync(cmd, async (row) =>
+			await db.ExecuteReaderAsync(cmd, (row) =>
 			{
-				var result = await load(row).ConfigureAwait(false);
+				var result = load(row);
 				if (result != null)
 					results.Add(result);
 
@@ -206,10 +206,10 @@ namespace BizArk.Data.ExtractExt
 		{
 			dynamic result = null;
 
-			await db.ExecuteReaderAsync(cmd, async (row) =>
+			await db.ExecuteReaderAsync(cmd, (row) =>
 			{
 				result = DbDataReaderToDynamic(row);
-				return await Task.FromResult(false).ConfigureAwait(false);
+				return false;
 			}).ConfigureAwait(false);
 
 			return result;
@@ -245,11 +245,11 @@ namespace BizArk.Data.ExtractExt
 		{
 			var results = new List<dynamic>();
 
-			await db.ExecuteReaderAsync(cmd, async (row) =>
+			await db.ExecuteReaderAsync(cmd, (row) =>
 			{
 				var result = DbDataReaderToDynamic(row);
 				results.Add(result);
-				return await Task.FromResult(true).ConfigureAwait(false);
+				return true;
 			}).ConfigureAwait(false);
 
 			return results;

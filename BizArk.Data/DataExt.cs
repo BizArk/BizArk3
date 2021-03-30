@@ -111,8 +111,11 @@ namespace BizArk.Data.DataExt
 			var propBag = ObjectUtil.ToPropertyBag(parameters);
 			foreach (var prop in propBag)
 			{
-				var newParam = cmd.AddParameter(prop.Key, prop.Value, true);
-				newParams.Add(newParam);
+				// Support sending already prepared DB parameters in via object.
+				var parameter = prop.Value as DbParameter
+					?? cmd.AddParameter(prop.Key, prop.Value, true);
+
+				newParams.Add(parameter);
 			}
 
 			return newParams;
